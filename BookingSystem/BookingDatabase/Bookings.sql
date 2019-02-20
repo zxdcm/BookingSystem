@@ -2,9 +2,9 @@
 (
 	[BookingId] INT NOT NULL PRIMARY KEY,
 	[Created] DATETIME2 NOT NULL,
-	[MoveIn] DATETIME2 NOT NULL,
-	[MoveOut] DATETIME2 NOT NULL,
-	[TotalPrice] DECIMAL NOT NULL,
+	[MoveIn] DATETIME2,
+	[MoveOut] DATETIME2,
+	[TotalPrice] DECIMAL(18, 4),
 	[Status] TINYINT NOT NULL,
 	[RoomNumberId] INT NOT NULL,
 	[UserId] INT NOT NULL,
