@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Rooms]
+(
+	[RoomId] INT NOT NULL PRIMARY KEY,
+	[Price] DECIMAL NOT NULL,
+	[Name] NVARCHAR(MAX) NOT NULL,
+	[HotelId] INT NOT NULL, 
+	[RoomNumberId] INT NOT NULL,
+	CONSTRAINT FK_RoomHotel FOREIGN KEY([HotelId]) REFERENCES Hotels(HotelId),
+)

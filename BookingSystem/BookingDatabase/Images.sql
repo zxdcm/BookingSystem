@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Images]
+(
+	[ImageId] INT NOT NULL PRIMARY KEY,
+	[URL] NVARCHAR(MAX) NOT NULL
+)
