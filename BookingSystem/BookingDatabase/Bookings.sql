@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Bookings]
 (
-	[BookingId] INT NOT NULL PRIMARY KEY,
+	[BookingId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[Created] DATETIME2 NOT NULL,
 	[MoveIn] DATETIME2,
 	[MoveOut] DATETIME2,

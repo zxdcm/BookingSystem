@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[RoomNumbers]
 (
-	[RoomNumberId] INT NOT NULL PRIMARY KEY,
+	[RoomNumberId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[IsAvailable] BIT DEFAULT 1 NOT NULL,
 	[Number] INT NOT NULL,
 	[RoomId] INT NOT NULL,
