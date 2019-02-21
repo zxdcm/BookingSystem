@@ -6,6 +6,6 @@
 	[Address] NVARCHAR(MAX) NOT NULL,
 	[CountryId] INT NOT NULL,
 	[CityId] INT NOT NULL,
-	CONSTRAINT [FK_HotelCountry] FOREIGN KEY ([CountryId]) REFERENCES [Countries] ([CountryId]),
-	CONSTRAINT [FK_HotelCity] FOREIGN KEY ([CityId]) REFERENCES [Cities]([CityId]),
+	CONSTRAINT [FK_Hotel_Country] FOREIGN KEY ([CountryId]) REFERENCES [Countries] ([CountryId]),
+	CONSTRAINT [FK_Hotel_City] FOREIGN KEY ([CityId]) REFERENCES [Cities]([CityId]),
 )

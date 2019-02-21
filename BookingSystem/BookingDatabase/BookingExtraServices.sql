@@ -1,6 +1,8 @@
 ﻿CREATE TABLE [dbo].[BookingExtraServices]
 (
-	[BookingId] INT FOREIGN KEY REFERENCES [Bookings] ([BookingId]) NOT NULL,
-	[ExtraServiceId] INT FOREIGN KEY REFERENCES [ExtraServices] ([ExtraServiceId]) NOT NULL,
-	CONSTRAINT [PK_BookingExtraServices] PRIMARY KEY ([BookingId], [ExtraServiceId]),
+	[BookingId] INT NOT NULL,
+	[ExtraServiceId] INT NOT NULL,
+	CONSTRAINT [FK_BookingExtraService_Booking] FOREIGN KEY([BookingId]) REFERENCES [Bookings] ([BookingId]),
+	CONSTRAINT [FK_BookingExtraService_ExtraService] FOREIGN KEY([ExtraServiceId]) REFERENCES [ExtraServices] ([ExtraServiceId]),
+	CONSTRAINT [PK_BookingExtraService] PRIMARY KEY ([BookingId], [ExtraServiceId]),
 )
