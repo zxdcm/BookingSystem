@@ -75,4 +75,10 @@
     <Build Include="UserRoles.sql" />
     <Build Include="BookingExtraServices.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="BookingDatabase.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
 </Project>

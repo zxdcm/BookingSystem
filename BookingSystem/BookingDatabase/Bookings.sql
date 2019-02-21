@@ -8,6 +8,6 @@
 	[Status] TINYINT NOT NULL,
 	[RoomNumberId] INT NOT NULL,
 	[UserId] INT NOT NULL,
-    CONSTRAINT FK_BookingRoomNumber FOREIGN KEY([RoomNumberId]) REFERENCES RoomNumbers(RoomNumberId),
-	CONSTRAINT FK_BookingUser FOREIGN KEY([UserId]) REFERENCES Users(UserId),
+    CONSTRAINT [FK_BookingRoomNumber] FOREIGN KEY ([RoomNumberId]) REFERENCES [RoomNumbers] ([RoomNumberId]),
+	CONSTRAINT [FK_BookingUser] FOREIGN KEY ([UserId]) REFERENCES [Users] ([UserId]),
 )

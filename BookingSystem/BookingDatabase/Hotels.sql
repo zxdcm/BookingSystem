@@ -4,5 +4,7 @@
 	[Name] NVARCHAR(80) NOT NULL,
 	[IsActive] BIT DEFAULT 1 NOT NULL,
 	[LocationId] INT NOT NULL,
-	CONSTRAINT FK_HotelLocation FOREIGN KEY([LocationId]) REFERENCES Locations(LocationId)
+	[CountryId] INT NOT NULL,
+	CONSTRAINT [FK_HotelLocation] FOREIGN KEY ([LocationId]) REFERENCES [Locations] ([LocationId]),
+	CONSTRAINT [FK_HotelCountry] FOREIGN KEY ([CountryId]) REFERENCES [Countries] ([CountryId]),
 )
