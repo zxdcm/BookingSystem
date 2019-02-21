@@ -4,5 +4,6 @@
 	[Name] NVARCHAR(80) NOT NULL,
 	[Price] DECIMAL(18, 4) NOT NULL,
 	[HotelId] INT NOT NULL,
+	[IsAvailable] BIT DEFAULT 1 NOT NULL,
 	CONSTRAINT [FK_ExtraServiceHotel] FOREIGN KEY([HotelId]) REFERENCES [Hotels] ([HotelId]),
 )

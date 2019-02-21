@@ -3,8 +3,9 @@
 	[HotelId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[Name] NVARCHAR(80) NOT NULL,
 	[IsActive] BIT DEFAULT 1 NOT NULL,
-	[LocationId] INT NOT NULL,
+	[Address] NVARCHAR(MAX) NOT NULL,
 	[CountryId] INT NOT NULL,
-	CONSTRAINT [FK_HotelLocation] FOREIGN KEY ([LocationId]) REFERENCES [Locations] ([LocationId]),
+	[CityId] INT NOT NULL,
 	CONSTRAINT [FK_HotelCountry] FOREIGN KEY ([CountryId]) REFERENCES [Countries] ([CountryId]),
+	CONSTRAINT [FK_HotelCity] FOREIGN KEY ([CityId]) REFERENCES [Cities]([CityId]),
 )

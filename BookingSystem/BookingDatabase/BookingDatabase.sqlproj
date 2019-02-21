@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Hotels.sql" />
-    <Build Include="Locations.sql" />
     <Build Include="Cities.sql" />
     <Build Include="Countries.sql" />
     <Build Include="Images.sql" />
