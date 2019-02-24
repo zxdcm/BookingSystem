@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace DataAccessLayer.Entities
 {
-    public partial class Roles
+    public partial class UserRole
     {
+        public int UserId { get; set; }
         public int RoleId { get; set; }
-        public string Name { get; set; }
     }
 }

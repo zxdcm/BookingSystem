@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace DataAccessLayer.Entities
 {
-    public partial class Cities
+    public partial class City
     {
-        public Cities()
+        public City()
         {
-            Hotels = new HashSet<Hotels>();
+            Hotels = new HashSet<Hotel>();
         }
 
         public int CityId { get; set; }
         public string Name { get; set; }
         public int CountryId { get; set; }
 
-        public virtual Countries Country { get; set; }
-        public virtual ICollection<Hotels> Hotels { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual ICollection<Hotel> Hotels { get; set; }
     }
 }

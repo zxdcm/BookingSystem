@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace DataAccessLayer.Entities
 {
-    public partial class ExtraServices
+    public partial class ExtraService
     {
-        public ExtraServices()
+        public ExtraService()
         {
-            BookingExtraServices = new HashSet<BookingExtraServices>();
+            BookingExtraServices = new HashSet<BookingExtraService>();
         }
 
         public int ExtraServiceId { get; set; }
@@ -16,7 +16,7 @@ namespace DataAccessLayer.Entities
         public bool? IsAvailable { get; set; }
         public int HotelId { get; set; }
 
-        public virtual Hotels Hotel { get; set; }
-        public virtual ICollection<BookingExtraServices> BookingExtraServices { get; set; }
+        public virtual Hotel Hotel { get; set; }
+        public virtual ICollection<BookingExtraService> BookingExtraServices { get; set; }
     }
 }

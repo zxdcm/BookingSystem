@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace DataAccessLayer.Entities
 {
-    public partial class Bookings
+    public partial class Booking
     {
-        public Bookings()
+        public Booking()
         {
-            BookingExtraServices = new HashSet<BookingExtraServices>();
+            BookingExtraServices = new HashSet<BookingExtraService>();
         }
 
         public int BookingId { get; set; }
@@ -19,8 +19,8 @@ namespace DataAccessLayer.Entities
         public int RoomNumberId { get; set; }
         public int UserId { get; set; }
 
-        public virtual RoomNumbers RoomNumber { get; set; }
-        public virtual Users User { get; set; }
-        public virtual ICollection<BookingExtraServices> BookingExtraServices { get; set; }
+        public virtual RoomNumber RoomNumber { get; set; }
+        public virtual User User { get; set; }
+        public virtual ICollection<BookingExtraService> BookingExtraServices { get; set; }
     }
 }
