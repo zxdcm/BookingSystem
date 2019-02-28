@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusinessLayer.Specification
+namespace BookingSystem.Common.Specification
 {
     public static class SpecificationEvaluator
     {

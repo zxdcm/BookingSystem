@@ -1,6 +1,6 @@
-﻿using DataAccessLayer.Entities;
+﻿using BookingSystem.ApplicationCore.Entities.ReadModels;
 
-namespace BusinessLayer.Specification
+namespace BookingSystem.Common.Specification
 {
     public class HotelDetailsSpecification : BaseSpecification<Hotel>
     {

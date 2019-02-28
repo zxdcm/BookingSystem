@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
-namespace BusinessLayer.Specification
+namespace BookingSystem.Common.Specification
 {
     public abstract class BaseSpecification<T> : ISpecification<T>
     {

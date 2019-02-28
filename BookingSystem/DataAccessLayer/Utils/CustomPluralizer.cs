@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore.Design;
+﻿using Microsoft.EntityFrameworkCore.Design;
 
-namespace DataAccessLayer.Utils
+namespace BookingSystem.WritePersistence.Utils
 {
     internal class CustomPluralizer : IPluralizer
     {

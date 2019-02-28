@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace BusinessLayer.Specification
+namespace BookingSystem.Common.Specification
 {
     public interface ISpecification<T>
     {
