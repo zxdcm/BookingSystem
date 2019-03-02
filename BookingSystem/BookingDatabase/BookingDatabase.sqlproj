@@ -64,15 +64,14 @@
     <Build Include="Countries.sql" />
     <Build Include="Images.sql" />
     <Build Include="HotelImages.sql" />
-    <Build Include="RoomsImages.sql" />
     <Build Include="Rooms.sql" />
-    <Build Include="RoomNumbers.sql" />
     <Build Include="ExtraServices.sql" />
     <Build Include="Users.sql" />
     <Build Include="Roles.sql" />
     <Build Include="Bookings.sql" />
     <Build Include="UserRoles.sql" />
     <Build Include="BookingExtraServices.sql" />
+    <Build Include="RoomsImages.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BookingDatabase.publish.xml" />
