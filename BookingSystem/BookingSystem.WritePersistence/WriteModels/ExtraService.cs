@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookingSystem.WritePersistence.WriteModels
 {
@@ -15,7 +16,7 @@ namespace BookingSystem.WritePersistence.WriteModels
         public bool? IsAvailable { get; set; }
         public int HotelId { get; set; }
 
-        public virtual Hotel Hotel { get; set; }
-        public virtual ICollection<BookingExtraService> BookingExtraServices { get; set; }
+        public Hotel Hotel { get; set; }
+        public ICollection<BookingExtraService> BookingExtraServices { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookingSystem.WritePersistence.WriteModels
 {
@@ -16,6 +17,6 @@ namespace BookingSystem.WritePersistence.WriteModels
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
 
-        public virtual ICollection<Booking> Bookings { get; set; }
+        public ICollection<Booking> Bookings { get; set; }
     }
 }

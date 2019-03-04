@@ -1,4 +1,7 @@
-﻿namespace BookingSystem.WritePersistence.WriteModels
+﻿using System;
+using System.Collections.Generic;
+
+namespace BookingSystem.WritePersistence.WriteModels
 {
     public partial class UserRole
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookingSystem.WritePersistence.WriteModels
 {
@@ -13,7 +14,7 @@ namespace BookingSystem.WritePersistence.WriteModels
         public string Name { get; set; }
         public int CountryId { get; set; }
 
-        public virtual Country Country { get; set; }
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public Country Country { get; set; }
+        public ICollection<Hotel> Hotels { get; set; }
     }
 }

@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookingSystem.WritePersistence.WriteModels
 {
     public partial class Room
     {
-        private ICollection<RoomNumber> _roomNumbers;
-        private ICollection<RoomsImage> _roomsImages;
-
         public Room()
         {
-            _roomNumbers = new HashSet<RoomNumber>();
-            _roomsImages = new HashSet<RoomsImage>();
+            Bookings = new HashSet<Booking>();
+            RoomsImages = new HashSet<RoomsImage>();
         }
 
         public int RoomId { get; set; }
@@ -19,21 +16,10 @@ namespace BookingSystem.WritePersistence.WriteModels
         public string Name { get; set; }
         public int Size { get; set; }
         public int HotelId { get; set; }
+        public int Quantity { get; set; }
 
-        public virtual Hotel Hotel { get; set; }
-
-        public virtual IReadOnlyCollection<RoomNumber> RoomNumbers => _roomNumbers.ToList();
-
-        public virtual IReadOnlyCollection<RoomsImage> RoomsImages => _roomsImages.ToList();
-
-
-        public string NumbersRange { get; set; }
-
-        public void AddRoomNumbers()
-        {
-
-        }
-
-
+        public Hotel Hotel { get; set; }
+        public ICollection<Booking> Bookings { get; set; }
+        public ICollection<RoomsImage> RoomsImages { get; set; }
     }
 }

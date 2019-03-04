@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BookingSystem.WritePersistence.Enums;
 
 namespace BookingSystem.WritePersistence.WriteModels
 {
@@ -15,12 +16,25 @@ namespace BookingSystem.WritePersistence.WriteModels
         public DateTime MoveInDate { get; set; }
         public DateTime MoveOutDate { get; set; }
         public decimal? TotalPrice { get; set; }
-        public byte Status { get; set; }
-        public int RoomNumberId { get; set; }
+        public BookingStatus Status { get; set; }
+        public int RoomId { get; set; }
         public int UserId { get; set; }
 
-        public virtual RoomNumber RoomNumber { get; set; }
-        public virtual User User { get; set; }
-        public virtual ICollection<BookingExtraService> BookingExtraServices { get; set; }
+        public Room Room { get; set; }
+        public User User { get; set; }
+        public ICollection<BookingExtraService> BookingExtraServices { get; set; }
+
+        public void CompleteBooking(int lockTimeOut)
+        {
+            if (Status == BookingStatus.Pending && (DateTime.UtcNow - CreatedDate).TotalMinutes < lockTimeOut)
+            {
+                Status = BookingStatus.Completed;
+            }
+            else
+            {
+                Status = BookingStatus.Failed;
+            }
+        }
+
     }
 }
