@@ -1,6 +1,5 @@
 ﻿using BookingSystem.ReadPersistence.ReadModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookingSystem.ReadPersistence
 {
@@ -8,8 +7,8 @@ namespace BookingSystem.ReadPersistence
     {
         public BookingReadContext()
         {
-            
         }
+
         public BookingReadContext(DbContextOptions<BookingReadContext> options)
             : base(options)
         {
@@ -25,7 +24,6 @@ namespace BookingSystem.ReadPersistence
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
-        public virtual DbSet<RoomNumber> RoomNumbers { get; set; }
         public virtual DbSet<RoomsImage> RoomsImages { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
@@ -39,27 +37,26 @@ namespace BookingSystem.ReadPersistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
-
             modelBuilder.Entity<Booking>(entity =>
             {
                 entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 4)");
 
-                RelationalReferenceCollectionBuilderExtensions.HasConstraintName((ReferenceCollectionBuilder) entity.HasOne(d => d.RoomNumber)
+                entity.HasOne(d => d.Room)
                     .WithMany(p => p.Bookings)
-                    .HasForeignKey(d => d.RoomNumberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull), "FK_Booking_RoomNumber");
+                    .HasForeignKey(d => d.RoomId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Booking_Room");
 
-                RelationalReferenceCollectionBuilderExtensions.HasConstraintName((ReferenceCollectionBuilder) entity.HasOne(d => d.User)
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.Bookings)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull), "FK_Booking_User");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Booking_User");
             });
 
             modelBuilder.Entity<BookingExtraService>(entity =>
             {
-                entity.HasKey(e => new { e.BookingId, e.ExtraServiceId })
-                    .HasName("PK_BookingExtraService");
+                entity.HasKey(e => new { e.BookingId, e.ExtraServiceId });
 
                 entity.HasOne(d => d.Booking)
                     .WithMany(p => p.BookingExtraServices)
@@ -74,7 +71,7 @@ namespace BookingSystem.ReadPersistence
                     .HasConstraintName("FK_BookingExtraService_ExtraService");
             });
 
-            modelBuilder.Entity<ReadModels.City>(entity =>
+            modelBuilder.Entity<City>(entity =>
             {
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -87,7 +84,7 @@ namespace BookingSystem.ReadPersistence
                     .HasConstraintName("FK_City_Country");
             });
 
-            modelBuilder.Entity<ReadModels.Country>(entity =>
+            modelBuilder.Entity<Country>(entity =>
             {
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -113,7 +110,7 @@ namespace BookingSystem.ReadPersistence
                     .HasConstraintName("FK_ExtraService_Hotel");
             });
 
-            modelBuilder.Entity<ReadModels.Hotel>(entity =>
+            modelBuilder.Entity<Hotel>(entity =>
             {
                 entity.Property(e => e.Address).IsRequired();
 
@@ -140,8 +137,7 @@ namespace BookingSystem.ReadPersistence
 
             modelBuilder.Entity<HotelImage>(entity =>
             {
-                entity.HasKey(e => new { e.HotelId, e.ImageId })
-                    .HasName("PK_HotelImage");
+                entity.HasKey(e => new { e.HotelId, e.ImageId });
 
                 entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.HotelImages)
@@ -170,7 +166,7 @@ namespace BookingSystem.ReadPersistence
                     .HasMaxLength(80);
             });
 
-            modelBuilder.Entity<ReadModels.Room>(entity =>
+            modelBuilder.Entity<Room>(entity =>
             {
                 entity.Property(e => e.Name).IsRequired();
 
@@ -183,23 +179,9 @@ namespace BookingSystem.ReadPersistence
                     .HasConstraintName("FK_Room_Hotel");
             });
 
-            modelBuilder.Entity<RoomNumber>(entity =>
-            {
-                entity.Property(e => e.IsAvailable)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.Room)
-                    .WithMany(p => p.RoomNumbers)
-                    .HasForeignKey(d => d.RoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RoomNumber_Number");
-            });
-
             modelBuilder.Entity<RoomsImage>(entity =>
             {
-                entity.HasKey(e => new { e.RoomId, e.ImageId })
-                    .HasName("PK_RoomImage");
+                entity.HasKey(e => new { e.RoomId, e.ImageId });
 
                 entity.HasOne(d => d.Image)
                     .WithMany(p => p.RoomsImages)
@@ -235,8 +217,7 @@ namespace BookingSystem.ReadPersistence
 
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK_UserRole");
+                entity.HasKey(e => new { e.UserId, e.RoleId });
             });
         }
     }

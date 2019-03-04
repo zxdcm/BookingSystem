@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 namespace BookingSystem.ReadPersistence.ReadModels
 {
     public partial class BookingExtraService
@@ -6,7 +8,7 @@ namespace BookingSystem.ReadPersistence.ReadModels
         public int BookingId { get; set; }
         public int ExtraServiceId { get; set; }
 
-        public virtual Booking Booking { get; set; }
-        public virtual ExtraService ExtraService { get; set; }
+        public Booking Booking { get; set; }
+        public ExtraService ExtraService { get; set; }
     }
 }

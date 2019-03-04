@@ -16,10 +16,11 @@ namespace BookingSystem.ReadPersistence.ReadModels
         public DateTime MoveOutDate { get; set; }
         public decimal? TotalPrice { get; set; }
         public byte Status { get; set; }
-        public int RoomNumberId { get; set; }
+        public int RoomId { get; set; }
         public int UserId { get; set; }
-        public virtual RoomNumber RoomNumber { get; set; }
-        public virtual User User { get; set; }
-        public virtual ICollection<BookingExtraService> BookingExtraServices { get; set; }
+
+        public Room Room { get; set; }
+        public User User { get; set; }
+        public ICollection<BookingExtraService> BookingExtraServices { get; set; }
     }
 }

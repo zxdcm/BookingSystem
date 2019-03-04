@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookingSystem.ReadPersistence.ReadModels
 {
@@ -13,7 +14,7 @@ namespace BookingSystem.ReadPersistence.ReadModels
         public int CountryId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<City> Cities { get; set; }
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public ICollection<City> Cities { get; set; }
+        public ICollection<Hotel> Hotels { get; set; }
     }
 }
