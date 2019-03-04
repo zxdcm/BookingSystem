@@ -1,8 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
+using AutoMapper;
+using BookingSystem.Commands.Commands.HotelCommands.MappingProfiles;
+using BookingSystem.Commands.Infrastructure;
+using BookingSystem.Common.Interfaces;
+using BookingSystem.Common.Utils;
+using BookingSystem.Queries.Infrastructure;
+using BookingSystem.ReadPersistence;
+using BookingSystem.WritePersistence;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace BookingSystem.WebApi
 {
@@ -19,6 +33,33 @@ namespace BookingSystem.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddTransient<ICommandDispatcher, CommandDispatcher>();
+            services.AddTransient<IQueryDispatcher, QueryDispatcher>();
+            services.AddHandlers();
+            //services.AddTransient<ICommandHandler <BookRoomNumberCommand, Task<Result>>, BookRoomNumberCommandHandler>();
+            services.AddDbContext<BookingWriteContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("BookingDatabase")));
+            services.AddDbContext<BookingReadContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("BookingDatabase")));
+            
+            services.AddTransient(typeof(IQueryHandler<,>), typeof(PagedQueryHandler<,>));
+
+
+            services.AddAutoMapper(typeof(HotelMappingProfiles));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                    { Title = "BookingSystem API", Version = "v1",
+                      License = new License()
+                      {
+                          Name = "WTFPL",
+                          Url = @"http://www.wtfpl.net/",
+                      }
+                    });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +73,16 @@ namespace BookingSystem.WebApi
             {
                 app.UseHsts();
             }
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
