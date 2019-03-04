@@ -37,25 +37,12 @@ PRINT CAST(@FirstHotelId AS NVARCHAR);
 
 IF (NOT EXISTS(SELECT * FROM [dbo].[Rooms]))
 BEGIN
-	INSERT INTO [dbo].Rooms([HotelId], [Name], [Price], [Size])
+	INSERT INTO [dbo].Rooms([HotelId], [Name], [Price], [Size], [Quantity])
 	VALUES
-		(@FirstHotelId,'room for 1 person', 10.0, 1),
-		(@SecondHotelId, 'room for 3 persons', 20.0, 2);
+		(@FirstHotelId,'room for 1 person', 10.0, 1, 10),
+		(@SecondHotelId, 'room for 3 persons', 20.0, 2, 20);
 END
 
-
-IF (NOT EXISTS(SELECT * FROM [dbo].[RoomNumbers]))
-BEGIN
-	DECLARE @FirstRoomId INT, @SecondRoomID INT;
-	SET @FirstRoomId = (SELECT [RoomId] FROM [dbo].[Rooms] WHERE [HotelId] = @FirstHotelId);
-	SET @SecondRoomID = (SELECT [RoomId] FROM [dbo].[Rooms] WHERE [HotelId] = @SecondHotelId);
-
-	INSERT INTO [dbo].[RoomNumbers]([Number], [IsAvailable], [RoomId])
-	VALUES
-		(1, 1, @FirstRoomId),
-		(2, 1, @FirstRoomId),
-		(3, 1, @FirstRoomId);
-END
 
 IF (NOT EXISTS(SELECT * FROM [dbo].[ExtraServices]))
 BEGIN
@@ -71,15 +58,15 @@ BEGIN
 	DECLARE @UserId INT;
 	SET @UserId = (SELECT [UserId] FROM  [dbo].[Users] WHERE [FirstName]='user');
 	
-	DECLARE @FirstRoomNumberId INT;
-	DECLARE @SecondRoomNumberId INT;
-	SET @FirstRoomNumberId = (SELECT [RoomNumberId] FROM [dbo].[RoomNumbers] WHERE [Number] = 1);
-	SET @SecondRoomNumberId = (SELECT [RoomNumberId] FROM [dbo].[RoomNumbers] WHERE [Number] = 2);
+	DECLARE @FirstRoomId INT;
+	DECLARE @SecondRoomId INT;
+	SET @FirstRoomId = (SELECT [RoomId] FROM [dbo].[Rooms] WHERE [Name] = 'room for 1 person');
+	SET @SecondRoomId = (SELECT [RoomId] FROM [dbo].[Rooms] WHERE [Name] = 'room for 3 persons');
 
-	INSERT INTO [dbo].[Bookings]([RoomNumberId], [UserId], [CreatedDate], [MoveInDate], [MoveOutDate], [Status])
+	INSERT INTO [dbo].[Bookings]([RoomId], [UserId], [CreatedDate], [MoveInDate], [MoveOutDate], [Status])
 	VALUES
-	(@FirstRoomNumberId, @UserId, SYSDATETIME(), SYSDATETIME(), SYSDATETIME(), 1),
-	(@SecondRoomNumberId, @UserId, SYSDATETIME(), SYSDATETIME(), SYSDATETIME(), 1);
+	(@FirstRoomId, @UserId, SYSDATETIME(), SYSDATETIME(), SYSDATETIME(), 1),
+	(@SecondRoomId , @UserId, SYSDATETIME(), SYSDATETIME(), SYSDATETIME(), 1);
 END
 
 

@@ -5,6 +5,7 @@
 	[Name] NVARCHAR(MAX) NOT NULL,
 	[Size] INT NOT NULL,
 	[HotelId] INT NOT NULL, 
+	[Quantity] INT NOT NULL,
 	CONSTRAINT [FK_Room_Hotel] FOREIGN KEY([HotelId]) REFERENCES [Hotels] ([HotelId]),
 	CONSTRAINT [PK_Room] PRIMARY KEY ([RoomId]),
 )
