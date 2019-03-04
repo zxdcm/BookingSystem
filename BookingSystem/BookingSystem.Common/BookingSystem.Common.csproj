@@ -13,16 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="1.2.8" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\BookingSystem.WritePersistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.EntityFrameworkCore">
-      <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.entityframeworkcore\2.2.2\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
   </ItemGroup>
 
 </Project>
