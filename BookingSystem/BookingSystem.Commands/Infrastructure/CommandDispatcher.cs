@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 
 namespace BookingSystem.Commands.Infrastructure
@@ -19,9 +20,10 @@ namespace BookingSystem.Commands.Infrastructure
             Type handlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(handlerType);
-            T result = handler.Handle((dynamic)command);
+            T result = handler.Execute((dynamic)command);
 
             return result;
         }
+
     }
 }
