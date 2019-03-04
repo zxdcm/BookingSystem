@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using BookingSystem.ApplicationCore.Views;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Queries.Views;
 using BookingSystem.ReadPersistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,29 +15,53 @@ namespace BookingSystem.Queries.HotelQueries
         {
             HotelId = hotelId;
         }
+    }
 
-        internal sealed class HotelDetailsQueryHandler : IQueryHandler<HotelDetailsQuery, Task<HotelView>>
+    public class HotelDetailsQueryHandler : IQueryHandler<HotelDetailsQuery, Task<HotelView>>
+    {
+        private readonly BookingReadContext _dataContext;
+
+        public HotelDetailsQueryHandler(BookingReadContext dataContext)
         {
-            private readonly BookingReadContext _dataContext;
+            _dataContext = dataContext;
+        }
 
-            public HotelDetailsQueryHandler(BookingReadContext dataContext)
-            {
-                _dataContext = dataContext;
-            }
+        public Task<HotelView> Execute(HotelDetailsQuery query)
+        {
+//            return _dataContext.Hotels
+//                .Select(HotelView.FullProjection)
+//                .FirstOrDefaultAsync(hotel => hotel.HotelId == query.HotelId);
 
-            public Task<HotelView> Execute(HotelDetailsQuery query)
-            {
-                return _dataContext.Hotels
-                    .Select(hotel => new HotelView
-                    {
-                        HotelId = hotel.HotelId,
-                        Address = hotel.Address,
-                        IsActive = hotel.IsActive.Value, //TODO: ask
+            return _dataContext.Hotels
+                .Select(hotel => new HotelView
+                {
+                    HotelId = hotel.HotelId,
+                    Name = hotel.Name,
+                    Address = hotel.Address,
                     CountryName = hotel.Country.Name,
-                        CityName = hotel.Country.Name,
-                    })
-                    .FirstOrDefaultAsync(hotel => hotel.HotelId == query.HotelId);
-            }
+                    CityName = hotel.City.Name,
+                    IsActive = hotel.IsActive,
+                    HotelImagesIds = _dataContext.HotelImages.Select(image => image.ImageId),
+                    ExtraServices = _dataContext.ExtraServices.Select(service => new ExtraServiceView()
+                    {
+                        ExtraServiceId = service.ExtraServiceId,
+                        HotelId = service.HotelId,
+                        IsAvailable = service.IsAvailable,
+                        Name = service.Name,
+                        Price = service.Price
+                    }),
+                    Rooms = _dataContext.Rooms.Select(room => new RoomView()
+                    {
+                        RoomId = room.RoomId,
+                        Price = room.Price,
+                        Name = room.Name,
+                        HotelId = room.HotelId,
+                        Quantity = room.Quantity,
+                        Size = room.Size,
+                        RoomImagesIds = _dataContext.RoomsImages.Select(image => image.ImageId),
+                    }), 
+                })
+                .FirstOrDefaultAsync(hotel => hotel.HotelId == query.HotelId);
         }
     }
 }

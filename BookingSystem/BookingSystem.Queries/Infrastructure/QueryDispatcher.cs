@@ -1,7 +1,7 @@
 ﻿using System;
 using BookingSystem.Common.Interfaces;
 
-namespace BookingSystem.Queries.Infrastracture
+namespace BookingSystem.Queries.Infrastructure
 {
     public class QueryDispatcher : IQueryDispatcher
     {
@@ -19,7 +19,7 @@ namespace BookingSystem.Queries.Infrastracture
             Type handlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(handlerType);
-            T result = handler.Handle((dynamic)query);
+            T result = handler.Execute((dynamic)query);
             return result;
         }
     }

@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLayer\BookingSystem.Common.csproj" />
-    <ProjectReference Include="..\ReadModel\BookingSystem.ReadPersistence.csproj" />
+    <ProjectReference Include="..\BookingSystem.Common\BookingSystem.Common.csproj" />
+    <ProjectReference Include="..\BookingSystem.ReadPersistence\BookingSystem.ReadPersistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\MappingProfiles\" />
   </ItemGroup>
 
 </Project>
