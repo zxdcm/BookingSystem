@@ -1,42 +1,41 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Commands.Properties;
-using BookingSystem.Common;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WritePersistence;
-using BookingSystem.WritePersistence.Enums;
 using BookingSystem.WritePersistence.Services;
 using BookingSystem.WritePersistence.WriteModels;
-using Microsoft.Extensions.Configuration;
 
 namespace BookingSystem.Commands.Commands.BookingCommands.Commands
 {
-    public class CompleteBookingCommand : ICommand<Result>
+    public class BookExtraServicesCommand : ICommand<Result>
     {
-        public CompleteBookingDto Booking { get; }
+        public BookExtraServicesDto Booking { get; }
 
-        public CompleteBookingCommand(CompleteBookingDto booking)
+        public BookExtraServicesCommand(BookExtraServicesDto booking)
         {
             Booking = booking;
         }
     }
-    public class CompleteBookingCommandHandler : ICommandHandler<CompleteBookingCommand, Result>
+
+    public class BookExtraServicesCommandHandler : ICommandHandler<BookExtraServicesCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
-        private readonly int _lockTimeOut;
+        private readonly IMapper _mapper;
         private readonly BookingService _bookingService;
 
-        public CompleteBookingCommandHandler(BookingWriteContext dataContext,
-            IBookingConfiguration config, 
+        public BookExtraServicesCommandHandler(BookingWriteContext dataContext, 
+            IMapper mapper,
             BookingService bookingService)
         {
             _dataContext = dataContext;
+            _mapper = mapper;
             _bookingService = bookingService;
-            _lockTimeOut = config.LockTimeOutMinutes;
         }
 
-        public async Task<Result> ExecuteAsync(CompleteBookingCommand command)
+        public async Task<Result> ExecuteAsync(BookExtraServicesCommand command)
         {
             var bookingDto = command.Booking;
 
@@ -44,12 +43,12 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
             if (booking == null)
                 return Result.NullEntityError(nameof(Booking), bookingDto.BookingId);
 
-            await _bookingService.CompleteBookingAsync(booking, _lockTimeOut);
+            var result = await _bookingService.CanBookExtraServicesAsync(booking, bookingDto.ExtraServicesIds);
+            if (!result)
+                return Result.Error(ErrorsResources.InvalidExtraServices);
+
+            _mapper.Map(bookingDto, booking);
             await _dataContext.SaveChangesAsync();
-
-            if (booking.Status == BookingStatus.Failed)
-                return Result.Error(string.Format(ErrorsResources.LockTimeOut, _lockTimeOut));
-
             return Result.Ok(booking.BookingId);
         }
     }

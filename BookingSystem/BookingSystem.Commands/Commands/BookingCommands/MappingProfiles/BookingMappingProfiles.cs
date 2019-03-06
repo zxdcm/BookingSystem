@@ -10,7 +10,7 @@ namespace BookingSystem.Commands.Commands.BookingCommands.MappingProfiles
         public BookingMappingProfiles()
         {
             CreateMap<NewBookingDto, Booking>();
-            CreateMap<CompleteBookingDto, Booking>()
+            CreateMap<BookExtraServicesDto, Booking>()
                     .ForMember(b => b.BookingExtraServices, 
                                conf => conf.MapFrom(dto => dto.ExtraServicesIds
                                .Select(id => new BookingExtraService()
@@ -18,6 +18,7 @@ namespace BookingSystem.Commands.Commands.BookingCommands.MappingProfiles
                                    ExtraServiceId = id,
                                    BookingId = dto.BookingId
                                })));
+            CreateMap<CompleteBookingDto, Booking>();
         }
     }
 }
