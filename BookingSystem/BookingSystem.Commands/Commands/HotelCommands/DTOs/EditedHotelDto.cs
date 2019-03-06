@@ -11,6 +11,5 @@ namespace BookingSystem.Commands.Commands.HotelCommands.DTOs
         public int CountryId { get; set; }
         public int CityId { get; set; }
         public bool? IsActive { get; set; }
-        public List<EditedExtraServiceDto> ExtraServices { get; set; }
     }
 }

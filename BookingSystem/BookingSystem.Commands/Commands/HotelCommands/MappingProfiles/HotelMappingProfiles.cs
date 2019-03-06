@@ -10,12 +10,13 @@ namespace BookingSystem.Commands.Commands.HotelCommands.MappingProfiles
         public HotelMappingProfiles()
         {
             CreateMap<NewHotelDto, Hotel>();
-            CreateMap<EditedHotelDto, Hotel>()
+            CreateMap<EditedHotelDto, Hotel>();
+            CreateMap<EditedHotelExtraServicesDto, Hotel>()
                 .ForMember(h => h.ExtraServices, ext => ext.MapFrom(
-                    dto => dto.ExtraServices.Select(service => new ExtraService()
+                    dto => dto.NewExtraServices.Select(serviceId => new ExtraService()
                     {
                         HotelId = dto.HotelId,
-                        ExtraServiceId = service.ExtraServiceId
+                        ExtraServiceId = serviceId
                     })));
         }
     }

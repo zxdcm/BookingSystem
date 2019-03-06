@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.DTOs;
 using BookingSystem.Commands.Infrastructure;
@@ -8,21 +11,21 @@ using BookingSystem.WritePersistence.WriteModels;
 
 namespace BookingSystem.Commands.Commands.HotelCommands.Commands
 {
-    public class EditHotelCommand : ICommand<Result>
+    public class EditHotelExtraServicesCommand : ICommand<Result>
     {
         public EditedHotelDto Hotel { get; }
 
-        public EditHotelCommand(EditedHotelDto hotel)
+        public EditHotelExtraServicesCommand(EditedHotelDto hotel)
         {
             Hotel = hotel;
         }
     }
-    public class EditHotelCommandHandler : ICommandHandler<EditHotelCommand, Result>
+    public class EditHotelExtraServicesCommandHandler : ICommandHandler<EditHotelCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
 
-        public EditHotelCommandHandler(BookingWriteContext dataContext, IMapper mapper)
+        public EditHotelExtraServicesCommandHandler(BookingWriteContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext;
             _mapper = mapper;
@@ -39,7 +42,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             _mapper.Map(hotelDto, hotel);
 
             await _dataContext.SaveChangesAsync();
-            return Result.Ok(hotel.HotelId);
+            return Result.Ok();
         }
     }
 }
