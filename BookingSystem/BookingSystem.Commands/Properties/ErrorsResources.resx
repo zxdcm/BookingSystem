@@ -121,12 +121,15 @@
     <value>Some of the extra services doesn't exist or unavailable</value>
   </data>
   <data name="LockTimeOut" xml:space="preserve">
-    <value>Booking failed due to lock {0} timeout</value>
+    <value>Booking confirmation failed due to lock ({0} minutes) timeout</value>
   </data>
   <data name="NoAvailableRooms" xml:space="preserve">
     <value>No available rooms found</value>
   </data>
   <data name="NullEntityResult" xml:space="preserve">
     <value>No {0} found with id {1}</value>
+  </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>Validation errors occured</value>
   </data>
 </root>

@@ -22,14 +22,14 @@ namespace BookingSystem.Commands.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Errors {
+    internal class ErrorsResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Errors() {
+        internal ErrorsResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace BookingSystem.Commands.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BookingSystem.Commands.Properties.Errors", typeof(Errors).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BookingSystem.Commands.Properties.ErrorsResources", typeof(ErrorsResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,7 +70,7 @@ namespace BookingSystem.Commands.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Booking confirmation failed due to lock {0} timeout.
+        ///   Looks up a localized string similar to Booking confirmation failed due to lock ({0} minutes) timeout.
         /// </summary>
         internal static string LockTimeOut {
             get {
@@ -93,6 +93,15 @@ namespace BookingSystem.Commands.Properties {
         internal static string NullEntityResult {
             get {
                 return ResourceManager.GetString("NullEntityResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation errors occured.
+        /// </summary>
+        internal static string ValidationError {
+            get {
+                return ResourceManager.GetString("ValidationError", resourceCulture);
             }
         }
     }
