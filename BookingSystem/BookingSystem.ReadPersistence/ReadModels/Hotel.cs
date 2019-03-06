@@ -7,9 +7,7 @@ namespace BookingSystem.ReadPersistence.ReadModels
     {
         public Hotel()
         {
-            ExtraServices = new HashSet<ExtraService>();
-            HotelImages = new HashSet<HotelImage>();
-            Rooms = new HashSet<Room>();
+
         }
 
         public int HotelId { get; set; }
@@ -19,10 +17,5 @@ namespace BookingSystem.ReadPersistence.ReadModels
         public int CountryId { get; set; }
         public int CityId { get; set; }
 
-        public City City { get; set; }
-        public Country Country { get; set; }
-        public ICollection<ExtraService> ExtraServices { get; set; }
-        public ICollection<HotelImage> HotelImages { get; set; }
-        public ICollection<Room> Rooms { get; set; }
     }
 }

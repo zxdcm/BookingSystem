@@ -5,10 +5,7 @@ namespace BookingSystem.ReadPersistence.ReadModels
 {
     public partial class User
     {
-        public User()
-        {
-            Bookings = new HashSet<Booking>();
-        }
+        public User() { }
 
         public int UserId { get; set; }
         public string FirstName { get; set; }
@@ -16,7 +13,5 @@ namespace BookingSystem.ReadPersistence.ReadModels
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
-
-        public ICollection<Booking> Bookings { get; set; }
     }
 }

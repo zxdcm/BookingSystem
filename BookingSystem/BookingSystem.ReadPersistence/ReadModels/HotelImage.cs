@@ -7,8 +7,5 @@ namespace BookingSystem.ReadPersistence.ReadModels
     {
         public int HotelId { get; set; }
         public int ImageId { get; set; }
-
-        public Hotel Hotel { get; set; }
-        public Image Image { get; set; }
     }
 }

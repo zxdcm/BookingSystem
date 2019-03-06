@@ -7,7 +7,7 @@ namespace BookingSystem.ReadPersistence.ReadModels
     {
         public ExtraService()
         {
-            BookingExtraServices = new HashSet<BookingExtraService>();
+
         }
 
         public int ExtraServiceId { get; set; }
@@ -15,8 +15,5 @@ namespace BookingSystem.ReadPersistence.ReadModels
         public decimal Price { get; set; }
         public bool? IsAvailable { get; set; }
         public int HotelId { get; set; }
-
-        public Hotel Hotel { get; set; }
-        public ICollection<BookingExtraService> BookingExtraServices { get; set; }
     }
 }
