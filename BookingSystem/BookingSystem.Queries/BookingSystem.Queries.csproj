@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookingSystem.Common\BookingSystem.Common.csproj" />
+    <ProjectReference Include="..\BookingSystem.ReadPersistence\BookingSystem.ReadPersistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\MappingProfiles\" />
+  </ItemGroup>
+
+</Project>
