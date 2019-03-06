@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.MappingProfiles;
 using BookingSystem.Commands.Infrastructure;
+using BookingSystem.Common;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Infrastructure;
 using BookingSystem.ReadPersistence;
+using BookingSystem.WebApi.Utils;
 using BookingSystem.WritePersistence;
+using BookingSystem.WritePersistence.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,12 +39,15 @@ namespace BookingSystem.WebApi
             services.AddTransient<ICommandDispatcher, CommandDispatcher>();
             services.AddTransient<IQueryDispatcher, QueryDispatcher>();
             services.AddHandlers();
-            //services.AddTransient<ICommandHandler <BookRoomNumberCommand, Task<Result>>, BookRoomNumberCommandHandler>();
+
             services.AddDbContext<BookingWriteContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("BookingDatabase")));
             services.AddDbContext<BookingReadContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("BookingDatabase")));
-            
+
+            services.AddTransient<IBookingConfiguration, BookingConfiguration>();
+            services.AddTransient<HotelService>();
+            services.AddTransient<BookingService>();
             services.AddTransient(typeof(IQueryHandler<,>), typeof(PagedQueryHandler<,>));
 
 
@@ -80,7 +86,7 @@ namespace BookingSystem.WebApi
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookingSystem API V1");
                 c.RoutePrefix = string.Empty;
             });
 
