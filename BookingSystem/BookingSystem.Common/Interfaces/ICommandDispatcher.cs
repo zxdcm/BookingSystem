@@ -1,7 +1,9 @@
-﻿namespace BookingSystem.Common.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace BookingSystem.Common.Interfaces
 {
     public interface ICommandDispatcher
     {
-        T Dispatch<T>(ICommand<T> command);
+        Task<T> DispatchAsync<T>(ICommand<T> command);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace BookingSystem.Common.Interfaces
 {
-    public interface ICommandHandler<in TCommand, out TResult>
+    public interface ICommandHandler<in TCommand, TResult>
         where TCommand : ICommand<TResult>
     {
-        TResult Execute(TCommand command);
+        Task<TResult> ExecuteAsync(TCommand command);
     }
     public interface IAsyncCommandHandler<in TCommand, TResult>
         where TCommand : ICommand<TResult>
