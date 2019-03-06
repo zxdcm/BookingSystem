@@ -13,14 +13,14 @@ namespace BookingSystem.Commands.Infrastructure
             _provider = provider;
         }
 
-        public T Dispatch<T>(ICommand<T> command)
+        public async Task<T> DispatchAsync<T>(ICommand<T> command)
         {
             Type type = typeof(ICommandHandler<,>);
             Type[] typeArgs = { command.GetType(), typeof(T) };
             Type handlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(handlerType);
-            T result = handler.Execute((dynamic)command);
+            T result = await handler.ExecuteAsync((dynamic)command);
 
             return result;
         }
