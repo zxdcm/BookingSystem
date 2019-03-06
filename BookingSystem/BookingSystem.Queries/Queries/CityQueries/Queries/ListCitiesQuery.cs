@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Infrastructure;
-using BookingSystem.Queries.Views;
+using BookingSystem.Queries.Queries.CityQueries.Views;
 using BookingSystem.ReadPersistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookingSystem.Queries.CityQueries
+namespace BookingSystem.Queries.Queries.CityQueries.Queries
 {
     public class ListCitiesQuery : IQuery<Task<IEnumerable<CityView>>>
     {
@@ -42,7 +42,7 @@ namespace BookingSystem.Queries.CityQueries
                     CityId = city.CityId,
                     CityName = city.Name,
                     CountryId = city.CountryId,
-                    CountryName = city.Country.Name,
+                    //CountryName = city.Country.Name,
                 })
                 .WhereIf(!string.IsNullOrWhiteSpace(query.CityNameLike), 
                     city => city.CityName.StartsWith(query.CityNameLike))

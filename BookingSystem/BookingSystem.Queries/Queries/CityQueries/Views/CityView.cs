@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BookingSystem.Queries.Views
+namespace BookingSystem.Queries.Queries.CityQueries.Views
 {
     public class CityView
     {

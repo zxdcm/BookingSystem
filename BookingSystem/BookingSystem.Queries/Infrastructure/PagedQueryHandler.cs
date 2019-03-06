@@ -40,7 +40,7 @@ namespace BookingSystem.Queries.Infrastructure
         public async Task<Paged<TItem>> Execute(PagedQuery<TQuery, TItem> query)
         {
             var paging = query.PageInfo ?? new PageInfo();
-            IQueryable<TItem> queryItems= _handler.Execute(query.Query);
+            IQueryable<TItem> queryItems = _handler.Execute(query.Query);
             var items = await queryItems.Skip(paging.PageIndex * paging.PageSize)
                 .Take(paging.PageSize).ToArrayAsync();
             return new Paged<TItem>

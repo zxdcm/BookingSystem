@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookingSystem.Queries.Views
+﻿namespace BookingSystem.Queries.Queries.CountryQueries.Views
 {
     public class CountryView
     {
