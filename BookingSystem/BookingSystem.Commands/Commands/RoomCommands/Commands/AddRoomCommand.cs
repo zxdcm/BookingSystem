@@ -8,7 +8,7 @@ using BookingSystem.WritePersistence.WriteModels;
 
 namespace BookingSystem.Commands.Commands.RoomCommands.Commands
 {
-    public class AddRoomCommand : ICommand<Task<Result>>
+    public class AddRoomCommand : ICommand<Result>
     {
         public NewRoomDto Room { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Commands.Commands.RoomCommands.Commands
             Room = room;
         }
     }
-    public class AddRoomCommandHandler : ICommandHandler<AddRoomCommand, Task<Result>>
+    public class AddRoomCommandHandler : ICommandHandler<AddRoomCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
@@ -28,15 +28,17 @@ namespace BookingSystem.Commands.Commands.RoomCommands.Commands
             _mapper = mapper;
         }
 
-        public async Task<Result> Execute(AddRoomCommand command)
+        public async Task<Result> ExecuteAsync(AddRoomCommand command)
         {
-            var dto = command.Room;
-            var hotel = await _dataContext.Hotels.FindAsync(dto.HotelId);
-            if (hotel == null)
-                return Result.NullEntityError(nameof(Hotel), dto.HotelId);
+            var roomDto = command.Room;
 
-            var room = _mapper.Map<Room>(dto);
-            await _dataContext.Rooms.AddAsync(room);
+            var hotel = await _dataContext.Hotels.FindAsync(roomDto.HotelId);
+            if (hotel == null)
+                return Result.NullEntityError(nameof(Hotel), roomDto.HotelId);
+
+            var room = _mapper.Map<Room>(roomDto);
+
+            _dataContext.Rooms.Add(room);
             await _dataContext.SaveChangesAsync();
             return Result.Ok();
         }
