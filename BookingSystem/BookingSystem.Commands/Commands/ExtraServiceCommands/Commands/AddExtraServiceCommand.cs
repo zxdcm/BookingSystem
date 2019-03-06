@@ -8,7 +8,7 @@ using BookingSystem.WritePersistence.WriteModels;
 
 namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
 {
-    public class AddExtraServiceCommand : ICommand<Task<Result>>
+    public class AddExtraServiceCommand : ICommand<Result>
     {
         public NewExtraServiceDto ExtraService { get; }
 
@@ -18,7 +18,7 @@ namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
         }
     }
 
-    public class AddExtraServiceCommandHandler : ICommandHandler<AddExtraServiceCommand, Task<Result>>
+    public class AddExtraServiceCommandHandler : ICommandHandler<AddExtraServiceCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
@@ -29,16 +29,19 @@ namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
             _mapper = mapper;
         }
 
-        public async Task<Result> Execute(AddExtraServiceCommand command)
+        public async Task<Result> ExecuteAsync(AddExtraServiceCommand command)
         {
-            var dto = command.ExtraService;
-            var hotel = await _dataContext.Hotels.FindAsync(dto.HotelId);
-            if (hotel == null)
-                return Result.NullEntityError(nameof(Hotel), dto.HotelId);
+            var extraServiceDto = command.ExtraService;
 
-            var extraService = _mapper.Map<ExtraService>(dto);
-            await _dataContext.ExtraServices.AddAsync(extraService);
-            return Result.Ok();
+            var hotel = await _dataContext.Hotels.FindAsync(extraServiceDto.HotelId);
+            if (hotel == null)
+                return Result.NullEntityError(nameof(Hotel), extraServiceDto.HotelId);
+
+            var extraService = _mapper.Map<ExtraService>(extraServiceDto);
+            _dataContext.ExtraServices.Add(extraService);
+            await _dataContext.SaveChangesAsync();
+
+            return Result.Ok(extraService.ExtraServiceId);
         }
     }
 }

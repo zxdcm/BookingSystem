@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
 {
-    public class DeleteExtraService : ICommand<Task<Result>>
+    public class DeleteExtraService : ICommand<Result>
     {
         public int ExtraServiceId { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
         }
     }
 
-    public class DeleteExtraServiceHandler : ICommandHandler<DeleteExtraService, Task<Result>>
+    public class DeleteExtraServiceHandler : ICommandHandler<DeleteExtraService, Result>
     {
         private readonly BookingWriteContext _dataContext;
 
@@ -26,14 +26,16 @@ namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
             _dataContext = dataContext;
         }
 
-        public async Task<Result> Execute(DeleteExtraService command)
+        public async Task<Result> ExecuteAsync(DeleteExtraService command)
         {
             var extraService = await _dataContext.ExtraServices.FindAsync(command.ExtraServiceId);
             if (extraService == null)
                 return Result.NullEntityError(nameof(Hotel), command.ExtraServiceId);
+
             extraService.IsAvailable = false;
             await _dataContext.SaveChangesAsync();
-            return Result.Ok();
+
+            return Result.Ok(extraService.ExtraServiceId);
         }
     }
 }
