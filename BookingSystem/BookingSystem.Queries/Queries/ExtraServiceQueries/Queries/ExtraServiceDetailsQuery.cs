@@ -34,7 +34,7 @@ namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
                 {
                     ExtraServiceId = service.ExtraServiceId,
                     HotelId = service.HotelId,
-                    IsAvailable = service.IsAvailable,
+                    IsActive = service.IsActive,
                     Name = service.Name,
                     Price = service.Price,
                 };

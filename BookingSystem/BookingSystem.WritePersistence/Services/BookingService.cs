@@ -62,7 +62,7 @@ namespace BookingSystem.WritePersistence.Services
             var availableServicesAmount = await _dataContext.ExtraServices
                 .Where(se => se.HotelId == hotelId &&
                              extraServicesIds.Contains(se.ExtraServiceId) && 
-                             se.IsAvailable == true)
+                             se.IsActive == true)
                 .CountAsync();
 
             return availableServicesAmount == extraServicesIds.Count();

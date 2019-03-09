@@ -32,7 +32,7 @@ namespace BookingSystem.Commands.Commands.ExtraServiceCommands.Commands
             if (extraService == null)
                 return Result.NullEntityError(nameof(Hotel), command.ExtraServiceId);
 
-            extraService.IsAvailable = false;
+            extraService.IsActive = false;
             await _dataContext.SaveChangesAsync();
 
             return Result.Ok(extraService.ExtraServiceId);

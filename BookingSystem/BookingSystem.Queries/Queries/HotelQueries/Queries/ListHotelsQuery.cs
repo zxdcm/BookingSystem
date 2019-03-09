@@ -13,7 +13,7 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 {
     public class ListHotelsQuery : IQuery<IQueryable<HotelPreView>>
     {
-        public bool? IsAvailable { get; set; }
+        public bool? IsActive { get; set; }
         public string Name { get; set; }
         public int? CountryId { get; set; }
         public int? CityId { get; set; }
@@ -57,7 +57,7 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
 
             var filteredHotels = _dataContext.Hotels
-                .WhereIf(query.IsAvailable.HasValue, h => h.IsActive == query.IsAvailable)
+                .WhereIf(query.IsActive.HasValue, h => h.IsActive == query.IsActive)
                 .WhereIf(query.CityId.HasValue, h => h.CityId == query.CityId)
                 .WhereIf(query.CountryId.HasValue, h => h.CountryId == query.CountryId);
 
