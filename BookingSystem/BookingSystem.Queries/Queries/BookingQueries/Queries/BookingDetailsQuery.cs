@@ -34,7 +34,7 @@ namespace BookingSystem.Queries.Queries.BookingQueries.Queries
                 {
                     BookingId = b.BookingId,
                     RoomId = b.RoomId,
-                    Status = b.Status.ToString(),
+                    Status = b.Status,
                     CreatedDate = b.CreatedDate,
                     MoveInDate = b.MoveInDate,
                     MoveOutDate = b.MoveOutDate,
