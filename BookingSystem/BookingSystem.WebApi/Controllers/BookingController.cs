@@ -50,7 +50,7 @@ namespace BookingSystem.WebApi.Controllers
         {
             var result = await _commandDispatcher.DispatchAsync(new BookRoomCommand(booking));
             if (result.IsSuccessful == false)
-                return BadRequest(result);
+                return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetBooking), new { id = result.Value }, null);
 
         }
@@ -61,14 +61,8 @@ namespace BookingSystem.WebApi.Controllers
         {
             var result = await _commandDispatcher.DispatchAsync(new CompleteBookingCommand(booking));
             if (result.IsSuccessful == false)
-                return BadRequest(result);
+                return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetBooking), new { id = result.Value }, null);
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

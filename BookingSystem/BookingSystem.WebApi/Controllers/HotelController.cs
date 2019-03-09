@@ -65,16 +65,16 @@ namespace BookingSystem.WebApi.Controllers
         /// </summary>
         /// <param name="hotel"></param>
         /// <returns></returns>
-        /// <response code="404">If city not found</response>
+        /// <response code="422">If city not found</response>
         /// <responce code="201">New hotel created</responce>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> AddHotelAsync([FromBody] NewHotelDto hotel)
         {
             var result = await _commandDispatcher.DispatchAsync(new AddHotelCommand(hotel));
             if (result.IsSuccessful == false)
-                return BadRequest(result);
+                return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetHotelAsync), new {id = result.Value}, null);
 //            return FromResult(result);
         }
@@ -94,7 +94,7 @@ namespace BookingSystem.WebApi.Controllers
                 return BadRequest();
             var result = await _commandDispatcher.DispatchAsync(new EditHotelCommand(hotel));
             if (result.IsSuccessful == false)
-                return BadRequest(result);
+                return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetHotelAsync), new { id = result.Value }, null);
         }
 
