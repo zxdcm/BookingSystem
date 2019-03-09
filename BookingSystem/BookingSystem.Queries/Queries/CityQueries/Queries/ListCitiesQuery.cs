@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Infrastructure;
@@ -42,7 +40,6 @@ namespace BookingSystem.Queries.Queries.CityQueries.Queries
                     CityId = city.CityId,
                     CityName = city.Name,
                     CountryId = city.CountryId,
-                    //CountryName = city.Country.Name,
                 })
                 .WhereIf(!string.IsNullOrWhiteSpace(query.CityNameLike), 
                     city => city.CityName.StartsWith(query.CityNameLike))

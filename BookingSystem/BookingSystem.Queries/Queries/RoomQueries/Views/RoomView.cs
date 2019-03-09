@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookingSystem.Queries.Queries.RoomQueries.Views
+﻿namespace BookingSystem.Queries.Queries.RoomQueries.Views
 {
     public class RoomView
     {

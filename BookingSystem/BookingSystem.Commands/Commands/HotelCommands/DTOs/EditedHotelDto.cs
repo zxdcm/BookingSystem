@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using BookingSystem.Commands.Commands.ExtraServiceCommands.DTOs;
-
-namespace BookingSystem.Commands.Commands.HotelCommands.DTOs
+﻿namespace BookingSystem.Commands.Commands.HotelCommands.DTOs
 {
     public class EditedHotelDto
     {

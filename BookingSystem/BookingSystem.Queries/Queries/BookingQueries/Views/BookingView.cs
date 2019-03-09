@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
-using BookingSystem.ReadPersistence.ReadModels;
 
 namespace BookingSystem.Queries.Queries.BookingQueries.Views
 {

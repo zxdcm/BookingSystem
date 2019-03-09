@@ -3,7 +3,6 @@ using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.WriteModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Commands.Commands.HotelCommands.Commands
 {

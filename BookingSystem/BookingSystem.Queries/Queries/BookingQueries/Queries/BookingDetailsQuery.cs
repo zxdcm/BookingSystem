@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Queries.BookingQueries.Views;
 using BookingSystem.ReadPersistence;
-using BookingSystem.ReadPersistence.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.BookingQueries.Queries

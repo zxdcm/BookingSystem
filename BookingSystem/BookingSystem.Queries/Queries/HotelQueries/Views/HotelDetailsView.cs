@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using BookingSystem.Queries.Queries.ExtraServiceQueries.Views;
 
 namespace BookingSystem.Queries.Queries.HotelQueries.Views

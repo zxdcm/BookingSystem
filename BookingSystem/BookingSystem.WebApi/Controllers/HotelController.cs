@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.Commands;
 using BookingSystem.Commands.Commands.HotelCommands.DTOs;
-using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Queries.HotelQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace BookingSystem.WebApi.Controllers
 {

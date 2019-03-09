@@ -2,13 +2,11 @@
 using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Commands.Properties;
-using BookingSystem.Common;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.Enums;
 using BookingSystem.WritePersistence.Services;
 using BookingSystem.WritePersistence.WriteModels;
-using Microsoft.Extensions.Configuration;
 
 namespace BookingSystem.Commands.Commands.BookingCommands.Commands
 {

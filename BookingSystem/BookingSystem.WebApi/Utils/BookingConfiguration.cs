@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BookingSystem.Common;
-using BookingSystem.Common.Interfaces;
+﻿using BookingSystem.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace BookingSystem.WebApi.Utils

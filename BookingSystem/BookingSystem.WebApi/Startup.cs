@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.MappingProfiles;
 using BookingSystem.Commands.Infrastructure;
-using BookingSystem.Common;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Infrastructure;

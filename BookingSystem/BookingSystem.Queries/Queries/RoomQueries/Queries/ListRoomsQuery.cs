@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Queries.RoomQueries.Views;
 using BookingSystem.ReadPersistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.RoomQueries.Queries
 {

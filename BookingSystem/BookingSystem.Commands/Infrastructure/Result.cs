@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using BookingSystem.Commands.Properties;
-using BookingSystem.WritePersistence.WriteModels;
 
 namespace BookingSystem.Commands.Infrastructure
 {
@@ -13,7 +12,10 @@ namespace BookingSystem.Commands.Infrastructure
         public string ErrorMessage { get; }
         public IEnumerable<string> Errors { get; }
 
-        public Result(T value, bool isSuccessful, string errorMessage, IEnumerable<string> errors)
+        public Result(T value,
+            bool isSuccessful, 
+            string errorMessage, 
+            IEnumerable<string> errors)
         {
             Value = value;
             IsSuccessful = isSuccessful;
@@ -21,7 +23,8 @@ namespace BookingSystem.Commands.Infrastructure
             Errors = errors;
         }
 
-        public static Result<T> Ok(T value) => new Result<T>(value, true, null, null);
+        public static Result<T> Ok(T value) => 
+            new Result<T>(value, true, null, null);
     }
 
 
