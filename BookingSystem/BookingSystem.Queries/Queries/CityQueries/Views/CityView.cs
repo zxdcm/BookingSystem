@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookingSystem.Queries.Queries.CityQueries.Views
+﻿namespace BookingSystem.Queries.Queries.CityQueries.Views
 {
     public class CityView
     {

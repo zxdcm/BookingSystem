@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using BookingSystem.ReadPersistence.ReadModels;
-
-namespace BookingSystem.Queries.Queries.RoomQueries.Views
+﻿namespace BookingSystem.Queries.Queries.RoomQueries.Views
 {
     public class RoomPreView
     {
