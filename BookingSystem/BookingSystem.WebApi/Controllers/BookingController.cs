@@ -38,7 +38,7 @@ namespace BookingSystem.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBooking(int id)
         {
-            var result = await _queryDispatcher.Dispatch(new BookingDetailsQuery(id));
+            var result = await _queryDispatcher.DispatchAsync(new BookingDetailsQuery(id));
             if (result==null)
                 return NotFound(id);
             return Ok(result);

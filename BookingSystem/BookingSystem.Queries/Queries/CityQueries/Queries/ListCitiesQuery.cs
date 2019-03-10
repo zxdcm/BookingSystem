@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.CityQueries.Queries
 {
-    public class ListCitiesQuery : IQuery<Task<IEnumerable<CityView>>>
+    public class ListCitiesQuery : IQuery<IEnumerable<CityView>>
     {
         public string CityNameLike { get; }
         public string CountryNameLike { get; }
@@ -23,7 +23,7 @@ namespace BookingSystem.Queries.Queries.CityQueries.Queries
         }
     }
 
-    public class ListCitiesQueryHandler : IQueryHandler<ListCitiesQuery, Task<IEnumerable<CityView>>>
+    public class ListCitiesQueryHandler : IQueryHandler<ListCitiesQuery, IEnumerable<CityView>>
     {
         private readonly BookingReadContext _dataContext;
 
@@ -32,7 +32,7 @@ namespace BookingSystem.Queries.Queries.CityQueries.Queries
             _dataContext = dataContext;
         }
 
-        public async Task<IEnumerable<CityView>> Execute(ListCitiesQuery query)
+        public async Task<IEnumerable<CityView>> ExecuteAsync(ListCitiesQuery query)
         {
             return await _dataContext.Cities
                 .Select(city => new CityView()

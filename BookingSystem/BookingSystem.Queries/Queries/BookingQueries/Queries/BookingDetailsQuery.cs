@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.BookingQueries.Queries
 {
-    public class BookingDetailsQuery : IQuery<Task<BookingView>>
+    public class BookingDetailsQuery : IQuery<BookingView>
     {
         public int BookingId { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Queries.Queries.BookingQueries.Queries
         }
     }
 
-    public class BookingDetailsQueryHandler : IQueryHandler<BookingDetailsQuery, Task<BookingView>>
+    public class BookingDetailsQueryHandler : IQueryHandler<BookingDetailsQuery, BookingView>
     {
         private readonly BookingReadContext _dataContext;
 
@@ -27,9 +27,9 @@ namespace BookingSystem.Queries.Queries.BookingQueries.Queries
         }
 
 
-        public Task<BookingView> Execute(BookingDetailsQuery query)
+        public Task<BookingView> ExecuteAsync(BookingDetailsQuery query)
         {
-            return _dataContext.Bookings
+            return  _dataContext.Bookings
                 .Select(b => new BookingView()
                 {
                     BookingId = b.BookingId,

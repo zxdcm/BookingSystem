@@ -7,9 +7,4 @@ namespace BookingSystem.Common.Interfaces
     {
         Task<TResult> ExecuteAsync(TCommand command);
     }
-    public interface IAsyncCommandHandler<in TCommand, TResult>
-        where TCommand : ICommand<TResult>
-    {
-        Task<TResult> ExecuteAsync(TCommand command);
-    }
 }

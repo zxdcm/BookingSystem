@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
 {
-    public class ExtraServiceDetailsQuery : IQuery<Task<ExtraServiceView>>
+    public class ExtraServiceDetailsQuery : IQuery<ExtraServiceView>
     {
         public int ExtraServiceId { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
         }
     }
 
-    public class ExtraServiceDetailsQueryHandler : IQueryHandler<ExtraServiceDetailsQuery, Task<ExtraServiceView>>
+    public class ExtraServiceDetailsQueryHandler : IQueryHandler<ExtraServiceDetailsQuery, ExtraServiceView>
     {
 
         private readonly BookingReadContext _dataContext;
@@ -27,7 +27,7 @@ namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
             _dataContext = dataContext;
         }
 
-        public async Task<ExtraServiceView> Execute(ExtraServiceDetailsQuery query)
+        public async Task<ExtraServiceView> ExecuteAsync(ExtraServiceDetailsQuery query)
         {
             var services = from service in _dataContext.ExtraServices
                 select new ExtraServiceView()

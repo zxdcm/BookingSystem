@@ -1,13 +1,20 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Queries.ExtraServiceQueries.Views;
 using BookingSystem.ReadPersistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
 {
     public class ListExtraServicesQuery : IQuery<IQueryable<ExtraServiceView>>
     {
-        
+        public int HotelId { get; }
+
+        public ListExtraServicesQuery(int hotelId)
+        {
+            HotelId = hotelId;
+        }
     }
 
     public class ListExtraServicesQueryHandler : IQueryHandler<ListExtraServicesQuery, IQueryable<ExtraServiceView>>
@@ -19,9 +26,10 @@ namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
             _dataContext = dataContext;
         }
 
-        public IQueryable<ExtraServiceView> Execute(ListExtraServicesQuery query)
+        public Task<IQueryable<ExtraServiceView>> ExecuteAsync(ListExtraServicesQuery query)
         {
             var services = from service in _dataContext.ExtraServices
+                           where service.HotelId == query.HotelId
                 select new ExtraServiceView()
                 {
                     ExtraServiceId = service.ExtraServiceId,
@@ -30,7 +38,7 @@ namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
                     IsActive = service.IsActive,
                     Price = service.Price,
                 };
-            return services;
+            return Task.FromResult(services);
         }
     }
 }

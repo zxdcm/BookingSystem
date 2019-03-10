@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.CountryQueries.Queries
 {
-    public class CountryDetailsQuery : IQuery<Task<CountryView>>
+    public class CountryDetailsQuery : IQuery<CountryView>
     {
         public int CountryId { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Queries.Queries.CountryQueries.Queries
         }
     }
 
-    public class CountryDetailsQueryHandler : IQueryHandler<CountryDetailsQuery, Task<CountryView>>
+    public class CountryDetailsQueryHandler : IQueryHandler<CountryDetailsQuery, CountryView>
     {
         private readonly BookingReadContext _dataContext;
 
@@ -26,7 +26,7 @@ namespace BookingSystem.Queries.Queries.CountryQueries.Queries
             _dataContext = dataContext;
         }
 
-        public async Task<CountryView> Execute(CountryDetailsQuery query)
+        public async Task<CountryView> ExecuteAsync(CountryDetailsQuery query)
         {
             var countries = from country in _dataContext.Countries
                 select new CountryView()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Infrastructure;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
@@ -46,7 +47,7 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
             return rooms;
         }
 
-        public IQueryable<HotelPreView> Execute(ListHotelsQuery query)
+        public Task<IQueryable<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
 
             var rooms = GetAvailableRooms(query);
@@ -71,7 +72,7 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                     CityName = hotel.Name,
                     IsActive = hotel.IsActive,
                 };
-            return hotels;
+            return Task.FromResult(hotels);
         }
     }
 }

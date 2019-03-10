@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Queries.RoomQueries.Views;
 using BookingSystem.ReadPersistence;
@@ -22,7 +23,7 @@ namespace BookingSystem.Queries.Queries.RoomQueries.Queries
             _dataContext = dataContext;
         }
 
-        public IQueryable<RoomView> Execute(ListRoomsQuery query)
+        public Task<IQueryable<RoomView>> ExecuteAsync(ListRoomsQuery query)
         {
             var rooms = from room in _dataContext.Rooms
                         select new RoomView()
@@ -34,7 +35,7 @@ namespace BookingSystem.Queries.Queries.RoomQueries.Queries
                             Quantity = room.Quantity,
                             Size = room.Size,
                         };
-            return rooms;
+            return Task.FromResult(rooms);
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Queries.Queries.RoomQueries.Queries
 {
-    public class RoomDetailsQuery : IQuery<Task<RoomPreView>>
+    public class RoomDetailsQuery : IQuery<RoomView>
     {
         public int RoomId { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Queries.Queries.RoomQueries.Queries
         }
     }
 
-    public class RoomDetailsQueryHandler : IQueryHandler<RoomDetailsQuery, Task<RoomView>>
+    public class RoomDetailsQueryHandler : IQueryHandler<RoomDetailsQuery, RoomView>
     {
         private readonly BookingReadContext _dataContext;
 
@@ -26,7 +26,7 @@ namespace BookingSystem.Queries.Queries.RoomQueries.Queries
             _dataContext = dataContext;
         }
 
-        public async Task<RoomView> Execute(RoomDetailsQuery query)
+        public async Task<RoomView> ExecuteAsync(RoomDetailsQuery query)
         {
             var rooms = from room in _dataContext.Rooms
                         select new RoomView()

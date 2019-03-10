@@ -24,7 +24,7 @@ namespace BookingSystem.Queries.Infrastructure
         public PageInfo PageInfo { get; set; }
     }
 
-    public class PagedQueryHandler<TQuery, TItem> : IQueryHandler<PagedQuery<TQuery, TItem>, Task<Paged<TItem>>>
+/*    public class PagedQueryHandler<TQuery, TItem> : IQueryHandler<PagedQuery<TQuery, TItem>, Task<Paged<TItem>>>
         where TQuery : IQuery<IQueryable<TItem>>
     {
         private readonly IQueryHandler<TQuery, IQueryable<TItem>> _handler;
@@ -37,7 +37,7 @@ namespace BookingSystem.Queries.Infrastructure
         public async Task<Paged<TItem>> Execute(PagedQuery<TQuery, TItem> query)
         {
             var paging = query.PageInfo ?? new PageInfo();
-            IQueryable<TItem> queryItems = _handler.Execute(query.Query);
+            IQueryable<TItem> queryItems = _handler.ExecuteAsync(query.Query);
             var items = await queryItems.Skip(paging.PageIndex * paging.PageSize)
                 .Take(paging.PageSize).ToArrayAsync();
             return new Paged<TItem>
@@ -46,5 +46,5 @@ namespace BookingSystem.Queries.Infrastructure
                 Paging = paging,
             };
         }
-    }
+    }*/
 }

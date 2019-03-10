@@ -41,7 +41,8 @@ namespace BookingSystem.WebApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<HotelPreView>> GetHotelsListAsync([FromQuery] ListHotelsQuery query)
         {
-            return await _queryDispatcher.Dispatch(query).ToArrayAsync();
+            var queryResult =  await _queryDispatcher.DispatchAsync(query);
+            return await queryResult.ToArrayAsync();
         }
 
         // GET: api/Hotels/5
@@ -53,7 +54,7 @@ namespace BookingSystem.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHotelAsync(int id)
         {
-            var result = await _queryDispatcher.Dispatch(new HotelDetailsQuery(id));
+            var result = await _queryDispatcher.DispatchAsync(new HotelDetailsQuery(id));
             if (result == null)
                 return NotFound(id);
             return Ok(result);
