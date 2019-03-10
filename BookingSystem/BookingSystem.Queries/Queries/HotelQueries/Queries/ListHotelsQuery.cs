@@ -49,17 +49,19 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 
         public Task<IQueryable<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
-
+            
             var rooms = GetAvailableRooms(query);
 
             var filteredRooms = rooms
                 .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
 
             var filteredHotels = _dataContext.Hotels
+                .WhereIf(!string.IsNullOrWhiteSpace(query.Name), h => h.Name.StartsWith(query.Name))
                 .WhereIf(query.IsActive.HasValue, h => h.IsActive == query.IsActive)
                 .WhereIf(query.CityId.HasValue, h => h.CityId == query.CityId)
                 .WhereIf(query.CountryId.HasValue, h => h.CountryId == query.CountryId);
 
+            // TODO: ask. EF cant execute join.. 
             var hotels = from hotel in filteredHotels
                 join room in filteredRooms
                     on hotel.HotelId equals room.HotelId
