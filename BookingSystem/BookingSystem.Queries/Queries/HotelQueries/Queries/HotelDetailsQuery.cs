@@ -90,8 +90,8 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                                 HotelId = gr.Key.HotelId,
                                 Name = gr.Key.Name,
                                 Address = gr.Key.Address,
-                                CountryName = gr.Key.Name,
-                                CityName = gr.Key.Name,
+                                CountryName = gr.Key.CountryName,
+                                CityName = gr.Key.CityName,
                                 IsActive = gr.Key.IsActive,
                                 ExtraServices = gr.Select(s => new ExtraServiceView()
                                 {
@@ -132,8 +132,8 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 HotelId = hotelGr.Key.HotelId,
                 Name = hotelGr.Key.Name,
                 Address = hotelGr.Key.Address,
-                CountryName = hotelGr.Key.Name,
-                CityName = hotelGr.Key.Name,
+                CountryName = hotelGr.Key.CountryName,
+                CityName = hotelGr.Key.CityName,
                 IsActive = hotelGr.Key.IsActive,
                 ExtraServices = hotelGr.Select(s => new ExtraServiceView()
                 {
