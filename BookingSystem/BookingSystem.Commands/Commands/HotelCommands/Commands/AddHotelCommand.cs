@@ -33,8 +33,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
         {
             var hotelDto = command.Hotel;
 
-            var city = await _dataContext.Cities
-                .FirstOrDefaultAsync(c => c.CityId == hotelDto.CityId); 
+            var city = await _dataContext.Cities.FindAsync(hotelDto.CityId); 
             if (city == null)
                 return Result.NullEntityError(nameof(City), hotelDto.CityId);
 

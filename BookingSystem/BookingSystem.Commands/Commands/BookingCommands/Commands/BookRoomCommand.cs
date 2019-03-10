@@ -37,18 +37,18 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
         }
 
 
-        public async Task<Result> ValidateRules(NewBookingDto dto)
+        public async Task<Result> ValidateRules(NewBookingDto bookingDto)
         {
-            var user = await _dataContext.Users.FindAsync(dto.UserId);
+            var user = await _dataContext.Users.FindAsync(bookingDto.UserId);
             if (user == null)
-                return Result.NullEntityError(nameof(User), dto.UserId);
+                return Result.NullEntityError(nameof(User), bookingDto.UserId);
 
-            var room = await _dataContext.Rooms.FindAsync(dto.RoomId);
+            var room = await _dataContext.Rooms.FindAsync(bookingDto.RoomId);
             if (room == null)
-                return Result.NullEntityError(nameof(Room), dto.RoomId);
+                return Result.NullEntityError(nameof(Room), bookingDto.RoomId);
 
 
-            var result = await _hotelService.HasAvailableRoomAsync(room, dto.MoveInDate, dto.MoveOutDate); 
+            var result = await _hotelService.HasAvailableRoomAsync(room, bookingDto.MoveInDate, bookingDto.MoveOutDate); 
             if (!result)
                 return Result.Error(ErrorsResources.NoAvailableRooms);
 
