@@ -4,11 +4,11 @@
     {
         public User() { }
 
-        public int UserId { get; set; }
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
+        public int UserId { get; private set; }
+        public string FirstName { get; private set; }
+        public string SecondName { get; private set; }
+        public string Email { get; private set; }
+        public string PasswordHash { get; private set; }
+        public string PasswordSalt { get; private set; }
     }
 }

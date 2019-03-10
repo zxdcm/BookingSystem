@@ -7,13 +7,13 @@ namespace BookingSystem.ReadPersistence.ReadModels
     {
         public Booking() { }
 
-        public int BookingId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime MoveInDate { get; set; }
-        public DateTime MoveOutDate { get; set; }
-        public decimal? TotalPrice { get; set; }
-        public BookingStatus Status { get; set; }
-        public int RoomId { get; set; }
-        public int UserId { get; set; }
+        public int BookingId { get; private set; }
+        public DateTime CreatedDate { get; private set; }
+        public DateTime MoveInDate { get; private set; }
+        public DateTime MoveOutDate { get; private set; }
+        public decimal? TotalPrice { get; private set; }
+        public BookingStatus Status { get; private set; }
+        public int RoomId { get; private set; }
+        public int UserId { get; private set; }
     }
 }

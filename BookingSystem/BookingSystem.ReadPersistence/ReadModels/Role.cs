@@ -2,7 +2,7 @@
 {
     public partial class Role
     {
-        public int RoleId { get; set; }
-        public string Name { get; set; }
+        public int RoleId { get; private set; }
+        public string Name { get; private set; }
     }
 }

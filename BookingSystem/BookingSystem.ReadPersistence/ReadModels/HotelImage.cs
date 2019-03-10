@@ -2,7 +2,7 @@
 {
     public partial class HotelImage
     {
-        public int HotelId { get; set; }
-        public int ImageId { get; set; }
+        public int HotelId { get; private set; }
+        public int ImageId { get; private set; }
     }
 }

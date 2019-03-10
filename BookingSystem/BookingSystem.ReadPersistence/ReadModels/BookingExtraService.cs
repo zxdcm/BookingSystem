@@ -2,7 +2,7 @@
 {
     public class BookingExtraService
     {
-        public int BookingId { get; set; }
-        public int ExtraServiceId { get; set; }
+        public int BookingId { get; private set; }
+        public int ExtraServiceId { get; private set; }
     }
 }
