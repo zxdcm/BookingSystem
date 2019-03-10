@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BookingSystem.WebApi.Controllers
 {
+    [Produces("application/json")]
     [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -38,7 +39,7 @@ namespace BookingSystem.WebApi.Controllers
 
         // POST: api/Account/signin
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] SignInDto user)
+        public async Task<IActionResult> SignInAsync([FromBody] SignInDto user)
         {
             var result = await _commandDispatcher.DispatchAsync(new SignInCommand(user));
             if (result.IsSuccessful == false)
@@ -49,7 +50,7 @@ namespace BookingSystem.WebApi.Controllers
 
         // POST: api/Account/signup
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpDto user)
+        public async Task<IActionResult> SignUpAsync([FromBody] SignUpDto user)
         {
             var result = await _commandDispatcher.DispatchAsync(new SignUpCommand(user));
             if (result.IsSuccessful == false)

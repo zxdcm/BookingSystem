@@ -88,9 +88,8 @@ namespace BookingSystem.WebApi.Controllers
         /// <param name="hotel"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditHotel(int id, [FromBody] EditedHotelDto hotel)
+        public async Task<IActionResult> EditHotelAsync(int id, [FromBody] EditedHotelDto hotel)
         {
-            //Todo: ask
             if (id != hotel.HotelId)
                 return BadRequest();
             var result = await _commandDispatcher.DispatchAsync(new EditHotelCommand(hotel));
@@ -106,7 +105,7 @@ namespace BookingSystem.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHotel(int id)
+        public async Task<IActionResult> DeleteHotelAsync(int id)
         {
             var result = await _commandDispatcher.DispatchAsync(new DeleteHotelCommand(id));
             return FromResult(result);
