@@ -120,6 +120,9 @@
   <data name="InvalidExtraServices" xml:space="preserve">
     <value>Some of the extra services doesn't exist or unavailable</value>
   </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Passwords do not match</value>
+  </data>
   <data name="LockTimeOut" xml:space="preserve">
     <value>Booking confirmation failed due to lock ({0} minutes) timeout</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="NullEntityResult" xml:space="preserve">
     <value>No {0} found with id {1}</value>
+  </data>
+  <data name="UserAlreadyExist" xml:space="preserve">
+    <value>User with {0} email already exist</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User with {0} email not found</value>
   </data>
   <data name="ValidationError" xml:space="preserve">
     <value>Validation errors occured</value>

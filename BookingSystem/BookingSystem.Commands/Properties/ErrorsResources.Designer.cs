@@ -70,6 +70,15 @@ namespace BookingSystem.Commands.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passwords do not match.
+        /// </summary>
+        internal static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Booking confirmation failed due to lock ({0} minutes) timeout.
         /// </summary>
         internal static string LockTimeOut {
@@ -93,6 +102,24 @@ namespace BookingSystem.Commands.Properties {
         internal static string NullEntityResult {
             get {
                 return ResourceManager.GetString("NullEntityResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with {0} email already exist.
+        /// </summary>
+        internal static string UserAlreadyExist {
+            get {
+                return ResourceManager.GetString("UserAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with {0} email not found.
+        /// </summary>
+        internal static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
         
