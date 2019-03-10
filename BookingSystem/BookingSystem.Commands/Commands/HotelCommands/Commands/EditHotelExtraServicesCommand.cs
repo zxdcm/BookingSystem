@@ -17,7 +17,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             Hotel = hotel;
         }
     }
-    public class EditHotelExtraServicesCommandHandler : ICommandHandler<EditHotelCommand, Result>
+    public class EditHotelExtraServicesCommandHandler : ICommandHandler<EditHotelExtraServicesCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             _mapper = mapper;
         }
 
-        public async Task<Result> ExecuteAsync(EditHotelCommand command)
+        public async Task<Result> ExecuteAsync(EditHotelExtraServicesCommand command)
         {
             var hotelDto = command.Hotel;
 

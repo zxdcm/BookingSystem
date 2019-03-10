@@ -36,6 +36,10 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             if (hotel == null)
                 return Result.NullEntityError(nameof(Hotel), hotelDto.HotelId);
 
+            var city = await _dataContext.Cities.FindAsync(hotelDto.CityId);
+            if (city == null)
+                return Result.NullEntityError(nameof(City), hotelDto.CityId);
+
             _mapper.Map(hotelDto, hotel);
 
             await _dataContext.SaveChangesAsync();
