@@ -41,12 +41,12 @@ namespace BookingSystem.Commands.Commands.AccountCommands.Commands
             if (user == null)
                 return Result.Error(string.Format(ErrorsResources.UserNotFound, userDto.Email));
 
-            if (_hasher.VerifyPassword(user.PasswordHash, userDto.Password))
+            if (_hasher.VerifyPassword(user.PasswordHash, userDto.Password) == false)
             {
-                return Result.Ok(user.UserId);
+                return Result.Error(ErrorsResources.InvalidPassword);
             }
 
-            return Result.Error(ErrorsResources.InvalidPassword);
+            return Result.Ok(user.UserId);
         }
     }
 }
