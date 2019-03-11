@@ -6,12 +6,9 @@ using BookingSystem.Common.Interfaces;
 namespace BookingSystem.Commands.Infrastructure.Decorators
 {
     public sealed class ValidationDecorator<TCommand, TResult> : 
-        ICommandHandler<TCommand, TResult>, 
-        IAsyncCommandHandler<TCommand, TResult>
-        where TCommand : ICommand<TResult>
+        ICommandHandler<TCommand, TResult> where TCommand : ICommand<TResult>
     {
         private readonly ICommandHandler<TCommand, TResult> _handler;
-        private readonly IAsyncCommandHandler<TCommand, TResult> _asyncHandler;
         private readonly IValidator<TCommand> _validator;
 
         public ValidationDecorator(ICommandHandler<TCommand, TResult> handler, IValidator<TCommand> validator)
@@ -20,9 +17,8 @@ namespace BookingSystem.Commands.Infrastructure.Decorators
             _validator = validator;
         }
 
-        public ValidationDecorator(IAsyncCommandHandler<TCommand, TResult> handler, IValidator<TCommand> validator)
+        public ValidationDecorator(IValidator<TCommand> validator)
         {
-            _asyncHandler = handler;
             _validator = validator;
         }
 

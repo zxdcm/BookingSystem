@@ -34,7 +34,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             hotel.IsActive = false;
 
             await _dataContext.SaveChangesAsync();
-            return Result.Ok();
+            return Result.Ok(hotel.HotelId);
         }
     }
 }
