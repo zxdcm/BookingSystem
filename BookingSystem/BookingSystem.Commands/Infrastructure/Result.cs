@@ -4,7 +4,6 @@ using BookingSystem.Commands.Properties;
 namespace BookingSystem.Commands.Infrastructure
 {
 
-
     public class Result<T>
     {
         public T Value { get; }
@@ -23,8 +22,8 @@ namespace BookingSystem.Commands.Infrastructure
             Errors = errors;
         }
 
-        public static Result<T> Ok(T value) => 
-            new Result<T>(value, true, null, null);
+        public static Result<T> Ok(T value) 
+            => new Result<T>(value, true, null, null);
     }
 
 
@@ -48,7 +47,8 @@ namespace BookingSystem.Commands.Infrastructure
         public static Result Ok()
             => new Result(null, true, null);
 
-        public static Result Ok(int id) => new Result(id, true, null);
+        public static Result Ok(int id) 
+            => new Result(id, true, null);
 
         public static Result Error(string errorMessage)
             => new Result(errorMessage);
