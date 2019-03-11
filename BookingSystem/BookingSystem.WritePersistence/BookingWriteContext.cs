@@ -208,8 +208,6 @@ namespace BookingSystem.WritePersistence
 
                 entity.Property(e => e.PasswordHash).IsRequired();
 
-                entity.Property(e => e.PasswordSalt).IsRequired();
-
                 entity.Property(e => e.SecondName)
                     .IsRequired()
                     .HasMaxLength(80);

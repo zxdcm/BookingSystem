@@ -49,7 +49,6 @@ namespace BookingSystem.Commands.Commands.AccountCommands.Commands
 
             var user = _mapper.Map<User>(userDto);
             user.PasswordHash = _hasher.HashPassword(userDto.Password);
-            user.PasswordSalt = "0"; //Todo: fix
             _dataContext.Users.Add(user);
 
             await _dataContext.SaveChangesAsync();
