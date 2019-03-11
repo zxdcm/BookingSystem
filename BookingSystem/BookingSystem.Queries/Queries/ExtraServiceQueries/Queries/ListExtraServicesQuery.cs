@@ -9,7 +9,12 @@ namespace BookingSystem.Queries.Queries.ExtraServiceQueries.Queries
 {
     public class ListExtraServicesQuery : IQuery<IQueryable<ExtraServiceView>>
     {
-        public int HotelId { get; set; }
+        public int HotelId { get; }
+
+        public ListExtraServicesQuery(int hotelId)
+        {
+            HotelId = hotelId;
+        }
     }
 
     public class ListExtraServicesQueryHandler : IQueryHandler<ListExtraServicesQuery, IQueryable<ExtraServiceView>>

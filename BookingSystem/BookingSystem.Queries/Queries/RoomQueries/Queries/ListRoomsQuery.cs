@@ -8,9 +8,11 @@ namespace BookingSystem.Queries.Queries.RoomQueries.Queries
 {
     public class ListRoomsQuery : IQuery<IQueryable<RoomView>>
     {
-        public ListRoomsQuery()
-        {
+        public int HotelId { get; }
 
+        public ListRoomsQuery(int hotelId)
+        {
+            HotelId = hotelId;
         }
     }
 
@@ -26,6 +28,7 @@ namespace BookingSystem.Queries.Queries.RoomQueries.Queries
         public Task<IQueryable<RoomView>> ExecuteAsync(ListRoomsQuery query)
         {
             var rooms = from room in _dataContext.Rooms
+                        where room.HotelId == query.HotelId
                         select new RoomView()
                         {
                             RoomId = room.RoomId,
