@@ -43,8 +43,8 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
             if (booking == null)
                 return Result.NullEntityError(nameof(Booking), bookingDto.BookingId);
 
-            var result = await _bookingService.CanBookExtraServicesAsync(booking, bookingDto.ExtraServicesIds);
-            if (!result)
+            var canBook = await _bookingService.CanBookExtraServicesAsync(booking, bookingDto.ExtraServicesIds);
+            if (!canBook)
                 return Result.Error(ErrorsResources.InvalidExtraServices);
 
             _mapper.Map(bookingDto, booking);
