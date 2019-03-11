@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Commands.Infrastructure;
@@ -9,12 +6,12 @@ using BookingSystem.Commands.Properties;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.Enums;
+using BookingSystem.WritePersistence.Services;
 using BookingSystem.WritePersistence.WriteModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Commands.Commands.BookingCommands.Commands
 {
-    public class BookRoomCommand : ICommand<Task<Result>>
+    public class BookRoomCommand : ICommand<Result>
     {
         public NewBookingDto Booking { get; }
 
@@ -24,44 +21,55 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
         }
     }
 
-    public class BookRoomCommandHandler : ICommandHandler<BookRoomCommand, Task<Result>>
+    public class BookRoomCommandHandler : ICommandHandler<BookRoomCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
+        private readonly HotelService _hotelService;
 
-        public BookRoomCommandHandler(BookingWriteContext dataContext, IMapper mapper)
+        public BookRoomCommandHandler(BookingWriteContext dataContext,
+            IMapper mapper, 
+            HotelService hotelService)
         {
             _dataContext = dataContext;
             _mapper = mapper;
+            _hotelService = hotelService;
         }
 
-        public async Task<Result> Execute(BookRoomCommand command)
+
+        public async Task<Result> ValidateRules(NewBookingDto bookingDto)
         {
-            var dto = command.Booking;
-
-            var user = await _dataContext.Users.FindAsync(dto.UserId);
+            var user = await _dataContext.Users.FindAsync(bookingDto.UserId);
             if (user == null)
-                return Result.NullEntityError(nameof(User), dto.UserId);
+                return Result.NullEntityError(nameof(User), bookingDto.UserId);
 
-            var room = await _dataContext.Rooms.FindAsync(dto.RoomId);
+            var room = await _dataContext.Rooms.FindAsync(bookingDto.RoomId);
             if (room == null)
-                return Result.NullEntityError(nameof(Room), dto.RoomId);
+                return Result.NullEntityError(nameof(Room), bookingDto.RoomId);
 
-            Expression<Func<Booking, bool>> condition = //TODO: fix 
-                b => (b.RoomId == dto.RoomId && 
-                     ((b.MoveInDate < dto.MoveInDate && b.MoveOutDate > dto.MoveOutDate) || //inside 
-                     (b.MoveInDate < dto.MoveInDate && b.MoveOutDate > dto.MoveInDate) || //left border
-                     (b.MoveInDate > dto.MoveInDate && b.MoveInDate < dto.MoveOutDate))); // right border
 
-            var count = await _dataContext.Bookings.Where(condition).CountAsync();
+            var result = await _hotelService.HasAvailableRoomAsync(room, bookingDto.MoveInDate, bookingDto.MoveOutDate); 
+            if (!result)
+                return Result.Error(ErrorsResources.NoAvailableRooms);
 
-            if (room.Quantity < count)
-                return Result.Error(Errors.NoAvailableRooms);
-
-            var booking = _mapper.Map<Booking>(dto);
-            booking.Status = BookingStatus.Pending;
-            await _dataContext.Bookings.AddAsync(booking);
             return Result.Ok();
+        }
+
+
+        public async Task<Result> ExecuteAsync(BookRoomCommand command)
+        {
+            var bookingDto = command.Booking; 
+
+            var result = await ValidateRules(bookingDto);
+            if (!result.IsSuccessful)
+                return result;
+
+            var booking = _mapper.Map<Booking>(bookingDto); 
+            booking.Status = BookingStatus.Pending;
+
+            _dataContext.Bookings.Add(booking);
+            await _dataContext.SaveChangesAsync();
+            return Result.Ok(booking.BookingId);
         }
     }
 }

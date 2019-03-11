@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 
 namespace BookingSystem.Queries.Infrastructure
@@ -12,14 +13,14 @@ namespace BookingSystem.Queries.Infrastructure
             _provider = provider;
         }
 
-        public T Dispatch<T>(IQuery<T> query)
+        public async Task<T> DispatchAsync<T>(IQuery<T> query)
         {
             Type type = typeof(IQueryHandler<,>);
             Type[] typeArgs = { query.GetType(), typeof(T) };
             Type handlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(handlerType);
-            T result = handler.Execute((dynamic)query);
+            T result = await handler.ExecuteAsync((dynamic)query);
             return result;
         }
     }

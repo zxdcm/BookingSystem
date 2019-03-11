@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BookingSystem.WritePersistence.WriteModels
 {
@@ -13,7 +12,7 @@ namespace BookingSystem.WritePersistence.WriteModels
         public int ExtraServiceId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public bool? IsAvailable { get; set; }
+        public bool? IsActive { get; set; }
         public int HotelId { get; set; }
 
         public Hotel Hotel { get; set; }

@@ -23,18 +23,5 @@ namespace BookingSystem.WritePersistence.WriteModels
         public Room Room { get; set; }
         public User User { get; set; }
         public ICollection<BookingExtraService> BookingExtraServices { get; set; }
-
-        public void CompleteBooking(int lockTimeOut)
-        {
-            if (Status == BookingStatus.Pending && (DateTime.UtcNow - CreatedDate).TotalMinutes < lockTimeOut)
-            {
-                Status = BookingStatus.Completed;
-            }
-            else
-            {
-                Status = BookingStatus.Failed;
-            }
-        }
-
     }
 }

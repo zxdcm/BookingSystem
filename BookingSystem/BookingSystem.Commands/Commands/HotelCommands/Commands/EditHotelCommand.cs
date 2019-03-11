@@ -8,7 +8,7 @@ using BookingSystem.WritePersistence.WriteModels;
 
 namespace BookingSystem.Commands.Commands.HotelCommands.Commands
 {
-    public class EditHotelCommand : ICommand<Task<Result>>
+    public class EditHotelCommand : ICommand<Result>
     {
         public EditedHotelDto Hotel { get; }
 
@@ -17,7 +17,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             Hotel = hotel;
         }
     }
-    public class EditHotelCommandHandler : ICommandHandler<EditHotelCommand, Task<Result>>
+    public class EditHotelCommandHandler : ICommandHandler<EditHotelCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
@@ -28,17 +28,22 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             _mapper = mapper;
         }
 
-        public async Task<Result> Execute(EditHotelCommand command)
+        public async Task<Result> ExecuteAsync(EditHotelCommand command)
         {
-            var dto = command.Hotel;
+            var hotelDto = command.Hotel;
 
-            var hotel = await _dataContext.Hotels.FindAsync(dto.HotelId);
+            var hotel = await _dataContext.Hotels.FindAsync(hotelDto.HotelId);
             if (hotel == null)
-                return Result.NullEntityError(nameof(Hotel), dto.HotelId);
+                return Result.NullEntityError(nameof(Hotel), hotelDto.HotelId);
 
-            _mapper.Map(dto, hotel);
+            var city = await _dataContext.Cities.FindAsync(hotelDto.CityId);
+            if (city == null)
+                return Result.NullEntityError(nameof(City), hotelDto.CityId);
+
+            _mapper.Map(hotelDto, hotel);
+
             await _dataContext.SaveChangesAsync();
-            return Result.Ok();
+            return Result.Ok(hotel.HotelId);
         }
     }
 }

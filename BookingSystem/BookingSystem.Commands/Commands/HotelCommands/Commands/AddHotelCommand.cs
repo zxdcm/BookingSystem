@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Commands.Commands.HotelCommands.Commands 
 {
-    public class AddHotelCommand : ICommand<Task<Result>>
+    public class AddHotelCommand : ICommand<Result>
     {
         public NewHotelDto Hotel { get; }
 
@@ -18,7 +18,7 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             Hotel = hotel;
         }
     }
-    public class AddHotelCommandHandler : ICommandHandler<AddHotelCommand, Task<Result>>
+    public class AddHotelCommandHandler : ICommandHandler<AddHotelCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
@@ -29,20 +29,20 @@ namespace BookingSystem.Commands.Commands.HotelCommands.Commands
             _mapper = mapper;
         }
 
-        public async Task<Result> Execute(AddHotelCommand command)
+        public async Task<Result> ExecuteAsync(AddHotelCommand command)
         {
-            var dto = command.Hotel;
+            var hotelDto = command.Hotel;
 
-            var city = await _dataContext.Cities
-                .FirstOrDefaultAsync(c => c.CityId == dto.CityId && 
-                                          c.CountryId == dto.CountryId);
+            var city = await _dataContext.Cities.FindAsync(hotelDto.CityId); 
             if (city == null)
-                return Result.NullEntityError(nameof(City), dto.CityId);
+                return Result.NullEntityError(nameof(City), hotelDto.CityId);
 
-            var hotel = _mapper.Map<Hotel>(dto);
-            await _dataContext.Hotels.AddAsync(hotel);
+            var hotel = _mapper.Map<Hotel>(hotelDto);
+            hotel.CountryId = city.CountryId; 
+            _dataContext.Hotels.Add(hotel);
+
             await _dataContext.SaveChangesAsync();
-            return Result.Ok();
+            return Result.Ok(hotel.HotelId);
         }
     }
 }

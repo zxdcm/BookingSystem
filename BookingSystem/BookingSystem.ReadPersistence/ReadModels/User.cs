@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookingSystem.ReadPersistence.ReadModels
+﻿namespace BookingSystem.ReadPersistence.ReadModels
 {
     public partial class User
     {
-        public User()
-        {
-            Bookings = new HashSet<Booking>();
-        }
+        public User() { }
 
-        public int UserId { get; set; }
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
-
-        public ICollection<Booking> Bookings { get; set; }
+        public int UserId { get; private set; }
+        public string FirstName { get; private set; }
+        public string SecondName { get; private set; }
+        public string Email { get; private set; }
+        public string PasswordHash { get; private set; }
+        public string PasswordSalt { get; private set; }
     }
 }

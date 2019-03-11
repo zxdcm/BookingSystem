@@ -1,20 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Commands.Properties;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.Enums;
+using BookingSystem.WritePersistence.Services;
 using BookingSystem.WritePersistence.WriteModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BookingSystem.Commands.Commands.BookingCommands.Commands
 {
-    public class CompleteBookingCommand : ICommand<Task<Result>>
+    public class CompleteBookingCommand : ICommand<Result>
     {
         public CompleteBookingDto Booking { get; }
 
@@ -23,50 +19,36 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
             Booking = booking;
         }
     }
-    public class CompleteBookingCommandHandler : ICommandHandler<CompleteBookingCommand, Task<Result>>
+    public class CompleteBookingCommandHandler : ICommandHandler<CompleteBookingCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly int _lockTimeOut;
-        private readonly IMapper _mapper;
+        private readonly BookingService _bookingService;
 
         public CompleteBookingCommandHandler(BookingWriteContext dataContext,
-            IMapper mapper, 
-            IConfiguration config)
+            IBookingConfiguration config, 
+            BookingService bookingService)
         {
             _dataContext = dataContext;
-            _mapper = mapper;
-            _lockTimeOut = config.GetValue("BookingRules:TimeOutMinutes", 30);
+            _bookingService = bookingService;
+            _lockTimeOut = config.LockTimeOutMinutes;
         }
 
-        public async Task<Result> Execute(CompleteBookingCommand command)
+        public async Task<Result> ExecuteAsync(CompleteBookingCommand command)
         {
-            var dto = command.Booking;
+            var bookingDto = command.Booking;
 
-            var booking = await _dataContext.Bookings.FindAsync(dto.BookingId);
-
+            var booking = await _dataContext.Bookings.FindAsync(bookingDto.BookingId);
             if (booking == null)
-                return Result.NullEntityError(nameof(Booking), dto.BookingId);
+                return Result.NullEntityError(nameof(Booking), bookingDto.BookingId);
 
-            var extraServicesQuery = _dataContext.ExtraServices //Todo: check that extraServices belongs to hotel
-                .Where(x => dto.ExtraServicesIds.Any(id => id == x.ExtraServiceId) && x.IsAvailable == true);
-
-            var extraServicesAmount = await extraServicesQuery.CountAsync();
-            if (extraServicesAmount != dto.ExtraServicesIds.Count())
-                return Result.Error(Errors.InvalidExtraServices);
-
-            //Todo: Replace with methods
-            _mapper.Map(dto, booking);
-
-            booking.CompleteBooking(_lockTimeOut);
-            if (booking.Status == BookingStatus.Failed)
-            {
-                await _dataContext.SaveChangesAsync();
-                return Result.Error(string.Format(Errors.LockTimeOut, _lockTimeOut));
-            }
-
-            booking.TotalPrice = await extraServicesQuery.Select(x => x.Price).SumAsync();
+            await _bookingService.CompleteBookingAsync(booking, _lockTimeOut);
             await _dataContext.SaveChangesAsync();
-            return Result.Ok();
+
+            if (booking.Status == BookingStatus.Failed)
+                return Result.Error(string.Format(ErrorsResources.LockTimeOut, _lockTimeOut));
+
+            return Result.Ok(booking.BookingId);
         }
     }
 }

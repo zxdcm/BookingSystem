@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\MappingProfiles\" />
+    <Folder Include="Queries\AccountQueries\Views\" />
+    <Folder Include="Queries\AccountQueries\Queries\" />
   </ItemGroup>
 
 </Project>

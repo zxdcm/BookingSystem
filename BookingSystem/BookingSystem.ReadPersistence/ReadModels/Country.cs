@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookingSystem.ReadPersistence.ReadModels
+﻿namespace BookingSystem.ReadPersistence.ReadModels
 {
     public partial class Country
     {
-        public Country()
-        {
-            Cities = new HashSet<City>();
-            Hotels = new HashSet<Hotel>();
-        }
-
-        public int CountryId { get; set; }
-        public string Name { get; set; }
-
-        public ICollection<City> Cities { get; set; }
-        public ICollection<Hotel> Hotels { get; set; }
+        public Country() { }
+        public int CountryId { get; private set; }
+        public string Name { get; private set; }
     }
 }

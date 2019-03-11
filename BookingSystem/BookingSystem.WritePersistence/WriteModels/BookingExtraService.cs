@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookingSystem.WritePersistence.WriteModels
+﻿namespace BookingSystem.WritePersistence.WriteModels
 {
     public partial class BookingExtraService
     {

@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookingSystem.ReadPersistence.ReadModels
+﻿namespace BookingSystem.ReadPersistence.ReadModels
 {
     public partial class ExtraService
     {
         public ExtraService()
         {
-            BookingExtraServices = new HashSet<BookingExtraService>();
+
         }
 
-        public int ExtraServiceId { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public bool? IsAvailable { get; set; }
-        public int HotelId { get; set; }
-
-        public Hotel Hotel { get; set; }
-        public ICollection<BookingExtraService> BookingExtraServices { get; set; }
+        public int ExtraServiceId { get; private set; }
+        public string Name { get; private set; }
+        public decimal Price { get; private set; }
+        public bool? IsActive { get; private set; }
+        public int HotelId { get; private set; }
     }
 }

@@ -5,11 +5,10 @@ using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.WriteModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Commands.Commands.RoomCommands.Commands
 {
-    public class EditRoomCommand : ICommand<Task<Result>>
+    public class EditRoomCommand : ICommand<Result>
     {
 
         public EditedRoomDto Room { get; }
@@ -20,7 +19,7 @@ namespace BookingSystem.Commands.Commands.RoomCommands.Commands
         }
     }
 
-    public class EditRoomCommandHandler : ICommandHandler<EditRoomCommand, Task<Result>>
+    public class EditRoomCommandHandler : ICommandHandler<EditRoomCommand, Result>
     {
         private readonly BookingWriteContext _dataContext;
         private readonly IMapper _mapper;
@@ -31,16 +30,16 @@ namespace BookingSystem.Commands.Commands.RoomCommands.Commands
             _mapper = mapper;
         }
 
-        public async Task<Result> Execute(EditRoomCommand command)
+        public async Task<Result> ExecuteAsync(EditRoomCommand command)
         {
-            var dto = command.Room;
+            var roomDto = command.Room;
 
-            var room = await _dataContext.Rooms
-                .FirstOrDefaultAsync(r => r.RoomId == dto.RoomId);
+            var room = await _dataContext.Rooms.FindAsync(roomDto.RoomId);
             if (room == null)
-                return Result.NullEntityError(nameof(Room), dto.RoomId);
+                return Result.NullEntityError(nameof(Room), roomDto.RoomId);
 
-            _mapper.Map(dto, room);
+            _mapper.Map(roomDto, room);
+
             await _dataContext.SaveChangesAsync();
             return Result.Ok();
         }

@@ -93,7 +93,7 @@ namespace BookingSystem.WritePersistence
 
             modelBuilder.Entity<ExtraService>(entity =>
             {
-                entity.Property(e => e.IsAvailable)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
 

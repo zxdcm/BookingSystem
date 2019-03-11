@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.BookingCommands.Commands;
 using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Common.Interfaces;
-using BookingSystem.Queries.BookingQueries;
-using Microsoft.AspNetCore.Http;
+using BookingSystem.Queries.Queries.BookingQueries.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace BookingSystem.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Route("api/bookings")]
     [ApiController]
     public class BookingController : BaseController
     {
@@ -30,43 +28,44 @@ namespace BookingSystem.WebApi.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        // GET: api/Booking
+        // GET: api/Bookings
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Booking/5
+        // GET: api/Bookings/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBooking(int id)
+        public async Task<IActionResult> GetBookingAsync(int id)
         {
-            var result = await _queryDispatcher.Dispatch(new BookingDetailsQuery(id));
+            var result = await _queryDispatcher.DispatchAsync(new BookingDetailsQuery(id));
             if (result==null)
                 return NotFound(id);
             return Ok(result);
         }
 
-        // POST: api/Booking
+        // POST: api/Bookings
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] NewBookingDto booking)
+        public async Task<IActionResult> AddBookingAsync([FromBody] NewBookingDto booking)
         {
-            var result = await _commandDispatcher.Dispatch(new BookRoomCommand(booking));
-            return FromResult(result);
+            var result = await _commandDispatcher.DispatchAsync(new BookRoomCommand(booking));
+            if (result.IsSuccessful == false)
+                return UnprocessableEntity(result);
+            return CreatedAtAction(nameof(GetBookingAsync), new { id = result.Value }, null);
+
         }
 
-        // PUT: api/Booking/5
+        // PUT: api/Bookings/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CompleteBookingDto booking)
+        public async Task<IActionResult> CompleteBookingAsync(int id, [FromBody] CompleteBookingDto booking)
         {
-            var result = await _commandDispatcher.Dispatch(new CompleteBookingCommand(booking));
-            return FromResult(result);
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            if (id != booking.BookingId)
+                return BadRequest();
+            var result = await _commandDispatcher.DispatchAsync(new CompleteBookingCommand(booking));
+            if (result.IsSuccessful == false)
+                return UnprocessableEntity(result);
+            return CreatedAtAction(nameof(GetBookingAsync), new { id = result.Value }, null);
         }
     }
 }
