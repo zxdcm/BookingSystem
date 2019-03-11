@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.HotelCommands.Commands;
 using BookingSystem.Commands.Commands.HotelCommands.DTOs;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Queries.Queries.ExtraServiceQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
+using BookingSystem.Queries.Queries.RoomQueries.Queries;
+using BookingSystem.WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BookingSystem.WebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/hotels")]
+    [Route("api/hotel")]
     [ApiController]
     public class HotelController : BaseController
     {
@@ -31,7 +34,7 @@ namespace BookingSystem.WebApi.Controllers
         /// <summary>
         /// Return hotels list by incoming query
         /// </summary>
-        /// <param name="query"></param>
+        /// <param name="hotelRequestModel"></param>
         /// <remarks>
         /// Sample request:
         ///
@@ -39,24 +42,41 @@ namespace BookingSystem.WebApi.Controllers
         /// </remarks>
         /// <returns>List of hotels views</returns>
         [HttpGet]
-        public async Task<IEnumerable<HotelPreView>> GetHotelsListAsync([FromQuery] ListHotelsQuery query)
+        public async Task<IActionResult> GetHotelsListAsync([FromQuery] HotelsRequestModel hotelRequestModel)
         {
+            var query = hotelRequestModel.ToQuery();
             var queryResult =  await _queryDispatcher.DispatchAsync(query);
-            return await queryResult.ToArrayAsync();
+            return Ok(queryResult);
+        }
+
+        [HttpGet("{hotelId}/extraservices")]
+        public async Task<IActionResult> GetHotelExtraServicesAsync(int hotelId)
+        {
+            var query = new ListExtraServicesQuery(hotelId);
+            var queryResult = await _queryDispatcher.DispatchAsync(query);
+            return Ok(queryResult);
+        }
+
+        [HttpGet("{hotelId}/rooms")]
+        public async Task<IActionResult> GetHotelRoomsAsync(int hotelId)
+        {
+            var query = new ListRoomsQuery(hotelId);
+            var queryResult = await _queryDispatcher.DispatchAsync(query);
+            return Ok(queryResult);
         }
 
         // GET: api/Hotels/5
         /// <summary>
         /// Return hotel by specified id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="hotelId"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetHotelAsync(int id)
+        [HttpGet("{hotelId}")]
+        public async Task<IActionResult> GetHotelAsync(int hotelId)
         {
-            var result = await _queryDispatcher.DispatchAsync(new HotelDetailsQuery(id));
+            var result = await _queryDispatcher.DispatchAsync(new HotelDetailsQuery(hotelId));
             if (result == null)
-                return NotFound(id);
+                return NotFound(hotelId);
             return Ok(result);
         }
 
@@ -77,38 +97,39 @@ namespace BookingSystem.WebApi.Controllers
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetHotelAsync), new {id = result.Value}, null);
-//            return FromResult(result);
         }
 
         // PUT: api/Hotels/5
         /// <summary>
         /// Edit a hotel
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="hotelId"></param>
         /// <param name="hotel"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditHotelAsync(int id, [FromBody] EditedHotelDto hotel)
+        [HttpPut("{hotelId}")]
+        public async Task<IActionResult> EditHotelAsync(int hotelId, [FromBody] EditedHotelDto hotel)
         {
-            if (id != hotel.HotelId)
+            if (hotelId != hotel.HotelId)
                 return BadRequest();
             var result = await _commandDispatcher.DispatchAsync(new EditHotelCommand(hotel));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetHotelAsync), new { id = result.Value }, null);
+            return CreatedAtAction(nameof(GetHotelAsync), new { hotelId = result.Value }, null);
         }
 
         // DELETE: api/Hotel/5
         /// <summary>
         /// Deactive a hotel
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="hotelId"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHotelAsync(int id)
+        [HttpDelete("{hotelId}")]
+        public async Task<IActionResult> DeleteHotelAsync(int hotelId)
         {
-            var result = await _commandDispatcher.DispatchAsync(new DeleteHotelCommand(id));
-            return FromResult(result);
+            var result = await _commandDispatcher.DispatchAsync(new DeleteHotelCommand(hotelId));
+            if (result.IsSuccessful == false)
+                return UnprocessableEntity(result);
+            return Ok();
         }
     }
 }

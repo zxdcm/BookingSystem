@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace BookingSystem.WebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/bookings")]
+    [Route("api/booking")]
     [ApiController]
     public class BookingController : BaseController
     {
@@ -28,20 +28,13 @@ namespace BookingSystem.WebApi.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        // GET: api/Bookings
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET: api/Bookings/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBookingAsync(int id)
+        [HttpGet("{bookingId}")]
+        public async Task<IActionResult> GetBookingAsync(int bookingId)
         {
-            var result = await _queryDispatcher.DispatchAsync(new BookingDetailsQuery(id));
+            var result = await _queryDispatcher.DispatchAsync(new BookingDetailsQuery(bookingId));
             if (result==null)
-                return NotFound(id);
+                return NotFound(bookingId);
             return Ok(result);
         }
 
@@ -52,20 +45,20 @@ namespace BookingSystem.WebApi.Controllers
             var result = await _commandDispatcher.DispatchAsync(new BookRoomCommand(booking));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetBookingAsync), new { id = result.Value }, null);
+            return CreatedAtAction(nameof(GetBookingAsync), new { bookingId = result.Value }, null);
 
         }
 
         // PUT: api/Bookings/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> CompleteBookingAsync(int id, [FromBody] CompleteBookingDto booking)
+        [HttpPut("{bookingId}")]
+        public async Task<IActionResult> CompleteBookingAsync(int bookingId, [FromBody] CompleteBookingDto booking)
         {
-            if (id != booking.BookingId)
+            if (bookingId != booking.BookingId)
                 return BadRequest();
             var result = await _commandDispatcher.DispatchAsync(new CompleteBookingCommand(booking));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetBookingAsync), new { id = result.Value }, null);
+            return CreatedAtAction(nameof(GetBookingAsync), new { bookingId = result.Value }, null);
         }
     }
 }

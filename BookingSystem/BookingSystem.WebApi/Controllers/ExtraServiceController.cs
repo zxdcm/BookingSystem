@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 namespace BookingSystem.WebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/extraservices")] //TODO: fix later
+    [Route("api/extraservice")] 
     [ApiController]
     public class ExtraServiceController : ControllerBase
     {
@@ -32,45 +32,37 @@ namespace BookingSystem.WebApi.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        // GET: api/extraservices/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetExtraServiceAsync(int id)
+        // GET: api/extraservice/5
+        [HttpGet("{extraServiceId}")]
+        public async Task<IActionResult> GetExtraServiceAsync(int extraServiceId)
         {
-            var result = await _queryDispatcher.DispatchAsync(new ExtraServiceDetailsQuery(id));
+            var result = await _queryDispatcher.DispatchAsync(new ExtraServiceDetailsQuery(extraServiceId));
             if (result == null)
-                return NotFound(id);
+                return NotFound(extraServiceId);
             return Ok(result);
         }
 
-        // GET: api/extraservices/
-        [HttpGet]
-        public async Task<IActionResult> GetExtraServicesAsync([FromQuery] ListExtraServicesQuery query)
-        {
-            var result = await _queryDispatcher.DispatchAsync(query);
-            return Ok(result);
-        }
-
-        // POST: api/extraservices
+        // POST: api/extraservice
         [HttpPost]
         public async Task<IActionResult> AddExtraServiceAsync([FromBody] NewExtraServiceDto extraService)
         {
             var result = await _commandDispatcher.DispatchAsync(new AddExtraServiceCommand(extraService));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetExtraServiceAsync), new { id = result.Value }, null);
+            return CreatedAtAction(nameof(GetExtraServiceAsync), new { extraServiceId = result.Value }, null);
 
         }
 
-        // PUT: api/extraservices/
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditExtraServiceAsync(int id, [FromBody] EditedExtraServiceDto extraService)
+        // PUT: api/extraservice
+        [HttpPut("{extraServiceId}")]
+        public async Task<IActionResult> EditExtraServiceAsync(int extraServiceId, [FromBody] EditedExtraServiceDto extraService)
         {
-            if (id != extraService.ExtraServiceId)
+            if (extraServiceId != extraService.ExtraServiceId)
                 return BadRequest();
             var result = await _commandDispatcher.DispatchAsync(new EditExtraServiceCommand(extraService));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetExtraServiceAsync), new { id = result.Value }, null);
+            return CreatedAtAction(nameof(GetExtraServiceAsync), new { extraServiceId = result.Value }, null);
         }
     }
 }

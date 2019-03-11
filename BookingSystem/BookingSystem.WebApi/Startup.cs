@@ -46,7 +46,7 @@ namespace BookingSystem.WebApi
             services.AddTransient<IBookingConfiguration, BookingConfiguration>();
             services.AddTransient<HotelService>();
             services.AddTransient<BookingService>();
-            services.AddTransient(typeof(IQueryHandler<,>), typeof(PagedQueryHandler<,>));
+            services.AddTransient<IPasswordHasher, PasswordHasher>();
 
 
             services.AddAutoMapper(typeof(HotelMappingProfiles));

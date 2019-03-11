@@ -22,7 +22,6 @@
     <ProjectReference Include="..\BookingSystem.Queries\BookingSystem.Queries.csproj" />
     <ProjectReference Include="..\BookingSystem.ReadPersistence\BookingSystem.ReadPersistence.csproj" />
     <ProjectReference Include="..\BookingSystem.WritePersistence\BookingSystem.WritePersistence.csproj" />
-    <ProjectReference Include="..\Test\Test.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
