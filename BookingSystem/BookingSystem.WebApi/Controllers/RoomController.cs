@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.RoomCommands.Commands;
 using BookingSystem.Commands.Commands.RoomCommands.DTOs;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Queries.RoomQueries.Queries;
-using Microsoft.AspNetCore.Http;
+using BookingSystem.ReadPersistence.ReadModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingSystem.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/room")]
+    [Authorize(Roles = RoleName.Admin)]
     [ApiController]
     public class RoomController : ControllerBase
     {
@@ -27,6 +27,7 @@ namespace BookingSystem.WebApi.Controllers
         }
 
         [HttpGet("{roomId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetRoomAsync(int roomId)
         {
             var query = new RoomDetailsQuery(roomId);

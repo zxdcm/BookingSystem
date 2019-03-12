@@ -7,7 +7,9 @@ using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Commands.Commands.ExtraServiceCommands.Commands;
 using BookingSystem.Commands.Commands.ExtraServiceCommands.DTOs;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Queries.ExtraServiceQueries.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,7 +17,7 @@ using Microsoft.Extensions.Logging;
 namespace BookingSystem.WebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/extraservice")] 
+    [Route("api/extraservice")]
     [ApiController]
     public class ExtraServiceController : ControllerBase
     {
@@ -34,6 +36,7 @@ namespace BookingSystem.WebApi.Controllers
 
         // GET: api/extraservice/5
         [HttpGet("{extraServiceId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetExtraServiceAsync(int extraServiceId)
         {
             var result = await _queryDispatcher.DispatchAsync(new ExtraServiceDetailsQuery(extraServiceId));
@@ -44,6 +47,7 @@ namespace BookingSystem.WebApi.Controllers
 
         // POST: api/extraservice
         [HttpPost]
+        [Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> AddExtraServiceAsync([FromBody] NewExtraServiceDto extraService)
         {
             var result = await _commandDispatcher.DispatchAsync(new AddExtraServiceCommand(extraService));
@@ -55,6 +59,7 @@ namespace BookingSystem.WebApi.Controllers
 
         // PUT: api/extraservice
         [HttpPut("{extraServiceId}")]
+        [Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> EditExtraServiceAsync(int extraServiceId, [FromBody] EditedExtraServiceDto extraService)
         {
             if (extraServiceId != extraService.ExtraServiceId)

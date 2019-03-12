@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.HotelCommands.Commands;
 using BookingSystem.Commands.Commands.HotelCommands.DTOs;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Queries.ExtraServiceQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
 using BookingSystem.Queries.Queries.RoomQueries.Queries;
 using BookingSystem.WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +93,7 @@ namespace BookingSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> AddHotelAsync([FromBody] NewHotelDto hotel)
         {
             var result = await _commandDispatcher.DispatchAsync(new AddHotelCommand(hotel));
@@ -107,6 +110,7 @@ namespace BookingSystem.WebApi.Controllers
         /// <param name="hotel"></param>
         /// <returns></returns>
         [HttpPut("{hotelId}")]
+        [Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> EditHotelAsync(int hotelId, [FromBody] EditedHotelDto hotel)
         {
             if (hotelId != hotel.HotelId)
@@ -124,6 +128,7 @@ namespace BookingSystem.WebApi.Controllers
         /// <param name="hotelId"></param>
         /// <returns></returns>
         [HttpDelete("{hotelId}")]
+        [Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> DeleteHotelAsync(int hotelId)
         {
             var result = await _commandDispatcher.DispatchAsync(new DeleteHotelCommand(hotelId));
