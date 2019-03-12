@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.AccountCommands.Commands;
 using BookingSystem.Commands.Commands.AccountCommands.DTOs;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Queries.Queries.UserQueries.Queries;
+using BookingSystem.Queries.Queries.UserQueries.Views;
+using BookingSystem.WebApi.JwtProvider;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,21 +23,26 @@ namespace BookingSystem.WebApi.Controllers
         private readonly ILogger<BookingController> _logger;
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
+        private readonly JwtGenerator _jwtGenerator;
 
         public AccountController(ILogger<BookingController> logger, 
             ICommandDispatcher commandDispatcher, 
-            IQueryDispatcher queryDispatcher)
+            IQueryDispatcher queryDispatcher, JwtGenerator jwtGenerator)
         {
             _logger = logger;
             _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;
+            _jwtGenerator = jwtGenerator;
         }
 
         // GET: api/Account/5
         [HttpGet("{id}")]
-        public string GetProfileInfo(int id)
+        public async Task<IActionResult> GetProfileInfo(int id)
         {
-            return null;
+            var result = await _queryDispatcher.DispatchAsync(new UserDetailsQuery(id));
+            if (result == null)
+                return NotFound(id);
+            return Ok(result);
         }
 
         // POST: api/Account/signin
@@ -44,7 +52,10 @@ namespace BookingSystem.WebApi.Controllers
             var result = await _commandDispatcher.DispatchAsync(new SignInCommand(user));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetProfileInfo), new { id = result.Value }, null);
+            var userId = result.Value.Value;
+            var userView = await _queryDispatcher.DispatchAsync(new UserDetailsQuery(userId));
+            var token = _jwtGenerator.GenerateAccessToken(userView);
+            return CreatedAtAction(nameof(GetProfileInfo), new { id = result.Value }, token);
 
         }
 
