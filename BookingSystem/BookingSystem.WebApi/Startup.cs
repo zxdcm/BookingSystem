@@ -82,7 +82,9 @@ namespace BookingSystem.WebApi
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
             };
 
-            services.AddScoped(provider => new JwtGenerator(new JwtOptions(tokenValidationParameters)));
+            var expirationTime = Configuration.GetValue("BookingRules:TimeOutMinutes", TimeSpan.FromMinutes(30));
+
+            services.AddScoped(provider => new JwtGenerator(new JwtOptions(tokenValidationParameters, expirationTime)));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => { options.TokenValidationParameters = tokenValidationParameters; });

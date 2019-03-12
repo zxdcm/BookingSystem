@@ -15,15 +15,15 @@ namespace BookingSystem.WebApi.JwtProvider
         public SecurityKey Key { get; }
         public TimeSpan Expiration { get; }
 
-        public JwtOptions(TokenValidationParameters parameters, 
-                          string algorithm = SecurityAlgorithms.HmacSha256Signature,
-                          TimeSpan? expiration = null)
+        public JwtOptions(TokenValidationParameters parameters,
+                          TimeSpan expiration,
+                          string algorithm = SecurityAlgorithms.HmacSha256Signature)
         {
             Algorithm = algorithm;
             Audience = parameters.ValidAudience;
             Issuer = parameters.ValidIssuer;
             Key = parameters.IssuerSigningKey;
-            Expiration = expiration ?? TimeSpan.FromMinutes(30);
+            Expiration = expiration;
         }
     }
 }
