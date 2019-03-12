@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.MappingProfiles;
 using BookingSystem.Commands.Infrastructure;
@@ -8,15 +10,18 @@ using BookingSystem.Common.Interfaces;
 using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Infrastructure;
 using BookingSystem.ReadPersistence;
+using BookingSystem.WebApi.JwtProvider;
 using BookingSystem.WebApi.Utils;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace BookingSystem.WebApi
@@ -46,7 +51,7 @@ namespace BookingSystem.WebApi
             services.AddTransient<IBookingConfiguration, BookingConfiguration>();
             services.AddTransient<HotelService>();
             services.AddTransient<BookingService>();
-            services.AddTransient(typeof(IQueryHandler<,>), typeof(PagedQueryHandler<,>));
+            services.AddTransient<IPasswordHasher, PasswordHasher>();
 
 
             services.AddAutoMapper(typeof(HotelMappingProfiles));
@@ -64,6 +69,25 @@ namespace BookingSystem.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            var tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = Configuration["Jwt:Issuer"],
+                ValidAudience = Configuration["Jwt:Issuer"],
+                ClockSkew = TimeSpan.Zero,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+            };
+
+            var expirationTime = Configuration.GetValue("BookingRules:TimeOutMinutes", TimeSpan.FromMinutes(30));
+
+            services.AddScoped(provider => new JwtGenerator(new JwtOptions(tokenValidationParameters, expirationTime)));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => { options.TokenValidationParameters = tokenValidationParameters; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,7 +95,9 @@ namespace BookingSystem.WebApi
         {
             if (env.IsDevelopment())
             {
+                app.UseHsts();
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {
@@ -89,6 +115,7 @@ namespace BookingSystem.WebApi
             });
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

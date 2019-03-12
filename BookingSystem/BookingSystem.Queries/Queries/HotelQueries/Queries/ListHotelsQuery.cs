@@ -12,13 +12,26 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 {
     public class ListHotelsQuery : IQuery<IQueryable<HotelPreView>>
     {
-        public bool? IsActive { get; set; }
-        public string Name { get; set; }
-        public int? CountryId { get; set; }
-        public int? CityId { get; set; }
-        public int? RoomSize { get; set; }
-        public DateTime MoveIntDate { get; set; }
-        public DateTime MoveOutDate { get; set; }
+        public string Name { get; }
+        public DateTime MoveInDate { get; }
+        public DateTime MoveOutDate { get; }
+        public bool? IsActive { get; }
+        public int? CountryId { get; }
+        public int? CityId { get; }
+        public int? RoomSize { get; }
+
+        public ListHotelsQuery(string name, DateTime moveIntDate, DateTime moveOutDate,
+            bool? isActive, int? countryId, int? cityId, int? roomSize)
+        {
+            Name = name;
+            MoveInDate = moveIntDate;
+            MoveOutDate = moveOutDate;
+            IsActive = isActive;
+            CountryId = countryId;
+            CityId = cityId;
+            RoomSize = roomSize;
+        }
+
     }
 
     public class ListHotelsQueryHandler : IQueryHandler<ListHotelsQuery, IQueryable<HotelPreView>>
@@ -39,7 +52,7 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 join booking in _dataContext.Bookings
                     on room.RoomId equals booking.RoomId into bookings
                 from b in bookings.DefaultIfEmpty()
-                where ((query.MoveIntDate > b.MoveOutDate || query.MoveOutDate < b.MoveInDate) ||
+                where ((query.MoveInDate > b.MoveOutDate || query.MoveOutDate < b.MoveInDate) ||
                        (b.Status == BookingStatus.Failed) ||
                        (b.Status == BookingStatus.Pending && (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
                 where (room.Quantity > bookings.Count())

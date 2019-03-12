@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using AutoMapper;
 using BookingSystem.Commands.Commands.AccountCommands.DTOs;
 using BookingSystem.Commands.Infrastructure;
 using BookingSystem.Commands.Properties;
 using BookingSystem.Common.Interfaces;
+using BookingSystem.Common.Utils;
 using BookingSystem.WritePersistence;
 using BookingSystem.WritePersistence.WriteModels;
 using Microsoft.EntityFrameworkCore;
@@ -49,10 +52,17 @@ namespace BookingSystem.Commands.Commands.AccountCommands.Commands
 
             var user = _mapper.Map<User>(userDto);
             user.PasswordHash = _hasher.HashPassword(userDto.Password);
-            user.PasswordSalt = "0"; //Todo: fix
-            _dataContext.Users.Add(user);
 
+            //Cant wrap in transcation scope coz EF core doesn't support distributed transactions :)))0
+            _dataContext.Users.Add(user);
             await _dataContext.SaveChangesAsync();
+            var userRoleId = await _dataContext.Roles
+                .Where(r => r.Name == RoleName.User)
+                .Select(x => x.RoleId)
+                .FirstOrDefaultAsync();
+            _dataContext.UserRoles.Add(new UserRole() { RoleId = userRoleId, UserId = user.UserId });
+            await _dataContext.SaveChangesAsync();
+
             return Result.Ok(user.UserId);
         }
     }

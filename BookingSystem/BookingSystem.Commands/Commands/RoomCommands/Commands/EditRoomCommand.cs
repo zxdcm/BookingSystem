@@ -41,7 +41,7 @@ namespace BookingSystem.Commands.Commands.RoomCommands.Commands
             _mapper.Map(roomDto, room);
 
             await _dataContext.SaveChangesAsync();
-            return Result.Ok();
+            return Result.Ok(room.RoomId);
         }
     }
 }

@@ -127,6 +127,8 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 into gr
                 select gr;
             var hotelGr = await hotelViews.FirstOrDefaultAsync();
+            if (hotelGr == null)
+                return null;
             return new HotelDetailsView
             {
                 HotelId = hotelGr.Key.HotelId,

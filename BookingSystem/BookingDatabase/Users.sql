@@ -5,6 +5,5 @@
 	[SecondName] NVARCHAR(80) NOT NULL,
 	[Email] NVARCHAR(80) NOT NULL,
 	[PasswordHash] NVARCHAR(MAX) NOT NULL,
-	[PasswordSalt] NVARCHAR(MAX) NOT NULL,
 	CONSTRAINT [PK_User] PRIMARY KEY ([UserId]),
 )

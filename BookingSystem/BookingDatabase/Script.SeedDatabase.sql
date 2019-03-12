@@ -1,10 +1,10 @@
 ﻿IF (NOT EXISTS(SELECT * FROM [dbo].[Users]))
 BEGIN
     INSERT INTO [Users]
-			([FirstName], [SecondName], [Email], [PasswordHash], [PasswordSalt])
+			([FirstName], [SecondName], [Email], [PasswordHash])
 	VALUES
-		('admin', 'admin', 'admin@admin.com', '1', '1'),
-		('user', 'user', 'user@user.com', '2', '1');
+		('admin', 'admin', 'admin@admin.com', '1'),
+		('user', 'user', 'user@user.com', '2');
 END
 
 IF (NOT EXISTS(SELECT * FROM [dbo].[Hotels]))
