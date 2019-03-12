@@ -14,7 +14,6 @@ namespace BookingSystem.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/booking")]
-    [Authorize]
     [ApiController]
     public class BookingController : BaseController
     {
@@ -57,7 +56,6 @@ namespace BookingSystem.WebApi.Controllers
 
         // PUT: api/Bookings/5
         [HttpPut("{bookingId}")]
-        [Authorize]
         [BookingAuthorize]
         public async Task<IActionResult> CompleteBookingAsync(int bookingId, [FromBody] CompleteBookingDto booking)
         {

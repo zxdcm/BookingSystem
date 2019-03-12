@@ -17,15 +17,21 @@ namespace BookingSystem.WebApi.Utils
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            
             if (context.HttpContext.User.Claims
                 .Any(c => c.Type == ClaimTypes.Role && c.Value == RoleName.Admin))
             {
                 return;
             }
-            var queryDispatcher = context.HttpContext.RequestServices.GetRequiredService<IQueryDispatcher>();
             var bookingId = int.Parse(context.RouteData.Values.GetValueOrDefault("bookingId", 0).ToString());
-            var userId = int.Parse(context.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(context.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
+            if (userId == 0)
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
 
+            var queryDispatcher = context.HttpContext.RequestServices.GetRequiredService<IQueryDispatcher>();
             var canAccess = await queryDispatcher.DispatchAsync(new UserCanAccessBookingQuery(bookingId, userId));
             if (canAccess == false)
             {
