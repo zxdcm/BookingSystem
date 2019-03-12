@@ -86,13 +86,6 @@ namespace BookingSystem.WebApi
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => { options.TokenValidationParameters = tokenValidationParameters; });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(RoleName.Admin, policy =>
-                    policy.RequireClaim(ClaimTypes.Role, RoleName.Admin));
-            });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,7 +93,9 @@ namespace BookingSystem.WebApi
         {
             if (env.IsDevelopment())
             {
+                app.UseHsts();
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {

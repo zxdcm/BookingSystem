@@ -26,6 +26,7 @@ namespace BookingSystem.WebApi.JwtProvider
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
             };
             var roleClaims = user.Roles.Select(role => new Claim(ClaimTypes.Role, role));
             return claims.Concat(roleClaims);
@@ -33,7 +34,7 @@ namespace BookingSystem.WebApi.JwtProvider
 
         public string GenerateAccessToken(UserView user)
         {
-            var credentials = new SigningCredentials(_options.Key, _options.Algorithm);
+            var credentials = new SigningCredentials(_options.Key, _options.Algorithm); 
             var currentTime = DateTime.UtcNow;
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -48,7 +49,6 @@ namespace BookingSystem.WebApi.JwtProvider
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            ClaimsIdentity identity = new ClaimsIdentity();
             return tokenHandler.WriteToken(token);
         }
     }
