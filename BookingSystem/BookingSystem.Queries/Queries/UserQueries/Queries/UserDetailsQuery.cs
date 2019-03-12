@@ -20,11 +20,11 @@ namespace BookingSystem.Queries.Queries.UserQueries.Queries
         }
     }
 
-    public class RoomDetailsQueryHandler : IQueryHandler<UserDetailsQuery, UserView>
+    public class UserDetailsQueryHandler : IQueryHandler<UserDetailsQuery, UserView>
     {
         private readonly BookingReadContext _dataContext;
 
-        public RoomDetailsQueryHandler(BookingReadContext dataContext)
+        public UserDetailsQueryHandler(BookingReadContext dataContext)
         {
             _dataContext = dataContext;
         }
