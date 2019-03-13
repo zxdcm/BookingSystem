@@ -47,7 +47,8 @@ namespace BookingSystem.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> AddBookingAsync([FromBody] NewBookingDto booking)
         {
-            var result = await _commandDispatcher.DispatchAsync(new BookRoomCommand(booking));
+            var userId = User.GetUserId();
+            var result = await _commandDispatcher.DispatchAsync(new BookRoomCommand(booking, userId));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetBookingAsync), new { bookingId = result.Value }, null);
@@ -56,7 +57,8 @@ namespace BookingSystem.WebApi.Controllers
 
         // PUT: api/Bookings/5
         [HttpPut("{bookingId}")]
-        [BookingAuthorize]
+        [Authorize]
+        [BookingPermissions]
         public async Task<IActionResult> CompleteBookingAsync(int bookingId, [FromBody] CompleteBookingDto booking)
         {
             if (bookingId != booking.BookingId)
@@ -64,7 +66,7 @@ namespace BookingSystem.WebApi.Controllers
             var result = await _commandDispatcher.DispatchAsync(new CompleteBookingCommand(booking));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetBookingAsync), new { bookingId = result.Value }, null);
+            return Ok(bookingId);
         }
     }
 }

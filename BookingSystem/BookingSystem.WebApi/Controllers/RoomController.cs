@@ -54,7 +54,7 @@ namespace BookingSystem.WebApi.Controllers
             var result = await _commandDispatcher.DispatchAsync(new EditRoomCommand(room));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetRoomAsync), new { roomId = result.Value }, null);
+            return Ok(result.Value);
         }
 
     }

@@ -118,7 +118,7 @@ namespace BookingSystem.WebApi.Controllers
             var result = await _commandDispatcher.DispatchAsync(new EditHotelCommand(hotel));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetHotelAsync), new { hotelId = result.Value }, null);
+            return Ok(result.Value);
         }
 
         // DELETE: api/Hotel/5
