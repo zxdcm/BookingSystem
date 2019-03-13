@@ -14,10 +14,12 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
     public class BookRoomCommand : ICommand<Result>
     {
         public NewBookingDto Booking { get; }
+        public int UserId { get; }
 
-        public BookRoomCommand (NewBookingDto booking)
+        public BookRoomCommand (NewBookingDto booking, int userId)
         {
             Booking = booking;
+            UserId = userId;
         }
     }
 
@@ -37,11 +39,14 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
         }
 
 
-        public async Task<Result> ValidateRules(NewBookingDto bookingDto)
+        public async Task<Result> ValidateRules(BookRoomCommand command)
         {
-            var user = await _dataContext.Users.FindAsync(bookingDto.UserId);
+            var userId = command.UserId;
+            var user = await _dataContext.Users.FindAsync(userId);
             if (user == null)
-                return Result.NullEntityError(nameof(User), bookingDto.UserId);
+                return Result.NullEntityError(nameof(User), userId);
+
+            var bookingDto = command.Booking;
 
             var room = await _dataContext.Rooms.FindAsync(bookingDto.RoomId);
             if (room == null)
@@ -58,13 +63,15 @@ namespace BookingSystem.Commands.Commands.BookingCommands.Commands
 
         public async Task<Result> ExecuteAsync(BookRoomCommand command)
         {
-            var bookingDto = command.Booking; 
 
-            var result = await ValidateRules(bookingDto);
+            var result = await ValidateRules(command);
             if (!result.IsSuccessful)
                 return result;
 
-            var booking = _mapper.Map<Booking>(bookingDto); 
+            var bookingDto = command.Booking;
+
+            var booking = _mapper.Map<Booking>(bookingDto);
+            booking.UserId = command.UserId;
             booking.Status = BookingStatus.Pending;
 
             _dataContext.Bookings.Add(booking);
