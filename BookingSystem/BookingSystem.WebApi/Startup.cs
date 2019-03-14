@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Security.Claims;
@@ -76,7 +77,10 @@ namespace BookingSystem.WebApi
                     In = "header",
                     Type = "apiKey"
                 });
-
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer",new string[]{}}
+                });
             });
 
             var tokenValidationParameters = new TokenValidationParameters()
