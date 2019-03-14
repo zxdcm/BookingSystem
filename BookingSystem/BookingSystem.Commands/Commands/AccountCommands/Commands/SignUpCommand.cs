@@ -58,10 +58,10 @@ namespace BookingSystem.Commands.Commands.AccountCommands.Commands
                 .Select(x => x.RoleId)
                 .FirstOrDefaultAsync();
 
-            user.UserRoles = new List<UserRole>()
+            user.UserRoles.Add(new UserRole()
             {
-                new UserRole(){ RoleId = userRoleId }
-            };
+                RoleId =  userRoleId
+            });
 
             _dataContext.Users.Add(user);
             await _dataContext.SaveChangesAsync();
