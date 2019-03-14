@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Security.Claims;
@@ -68,6 +69,18 @@ namespace BookingSystem.WebApi
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer",new string[]{}}
+                });
             });
 
             var tokenValidationParameters = new TokenValidationParameters()
@@ -87,7 +100,12 @@ namespace BookingSystem.WebApi
             services.AddScoped(provider => new JwtGenerator(new JwtOptions(tokenValidationParameters, expirationTime)));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => { options.TokenValidationParameters = tokenValidationParameters; });
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = tokenValidationParameters;
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

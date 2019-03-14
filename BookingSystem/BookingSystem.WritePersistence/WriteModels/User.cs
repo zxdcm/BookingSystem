@@ -7,6 +7,7 @@ namespace BookingSystem.WritePersistence.WriteModels
         public User()
         {
             Bookings = new HashSet<Booking>();
+            UserRoles = new HashSet<UserRole>();
         }
 
         public int UserId { get; set; }
@@ -16,5 +17,6 @@ namespace BookingSystem.WritePersistence.WriteModels
         public string PasswordHash { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }

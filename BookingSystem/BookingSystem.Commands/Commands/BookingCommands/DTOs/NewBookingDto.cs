@@ -7,6 +7,5 @@ namespace BookingSystem.Commands.Commands.BookingCommands.DTOs
         public DateTime MoveInDate { get; set; }
         public DateTime MoveOutDate { get; set; }
         public int RoomId { get; set; }
-        public int UserId { get; set; }
     }
 }

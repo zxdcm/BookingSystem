@@ -8,6 +8,8 @@ using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Queries.UserQueries.Queries;
 using BookingSystem.Queries.Queries.UserQueries.Views;
 using BookingSystem.WebApi.JwtProvider;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -55,8 +57,7 @@ namespace BookingSystem.WebApi.Controllers
             var userId = result.Value.Value;
             var userView = await _queryDispatcher.DispatchAsync(new UserDetailsQuery(userId));
             var token = _jwtGenerator.GenerateAccessToken(userView);
-            return CreatedAtAction(nameof(GetProfileInfo), new { id = result.Value }, token);
-
+            return Ok(token);
         }
 
         // POST: api/Account/signup
@@ -67,13 +68,14 @@ namespace BookingSystem.WebApi.Controllers
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
             return CreatedAtAction(nameof(GetProfileInfo), new { id = result.Value }, null);
-
         }
 
         // POST: api/Account/signout
-        [HttpDelete("signout")]
-        public void SignOut(int id)
+        [HttpPost("signout")]
+        public async Task<IActionResult> SignOut(int id)
         {
+            await HttpContext.SignOutAsync(JwtBearerDefaults.AuthenticationScheme);
+            return Ok();
         }
     }
 }

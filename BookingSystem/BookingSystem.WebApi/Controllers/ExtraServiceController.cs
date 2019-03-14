@@ -67,7 +67,7 @@ namespace BookingSystem.WebApi.Controllers
             var result = await _commandDispatcher.DispatchAsync(new EditExtraServiceCommand(extraService));
             if (result.IsSuccessful == false)
                 return UnprocessableEntity(result);
-            return CreatedAtAction(nameof(GetExtraServiceAsync), new { extraServiceId = result.Value }, null);
+            return Ok(result.Value);
         }
     }
 }

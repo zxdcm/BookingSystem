@@ -53,16 +53,18 @@ namespace BookingSystem.Commands.Commands.AccountCommands.Commands
             var user = _mapper.Map<User>(userDto);
             user.PasswordHash = _hasher.HashPassword(userDto.Password);
 
-            //Cant wrap in transcation scope coz EF core doesn't support distributed transactions :)))0
-            _dataContext.Users.Add(user);
-            await _dataContext.SaveChangesAsync();
             var userRoleId = await _dataContext.Roles
                 .Where(r => r.Name == RoleName.User)
                 .Select(x => x.RoleId)
                 .FirstOrDefaultAsync();
-            _dataContext.UserRoles.Add(new UserRole() { RoleId = userRoleId, UserId = user.UserId });
-            await _dataContext.SaveChangesAsync();
 
+            user.UserRoles.Add(new UserRole()
+            {
+                RoleId =  userRoleId
+            });
+
+            _dataContext.Users.Add(user);
+            await _dataContext.SaveChangesAsync();
             return Result.Ok(user.UserId);
         }
     }
