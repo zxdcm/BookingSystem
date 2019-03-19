@@ -5,8 +5,7 @@ import { HotelSearchActionType as actionType } from "../actions/hotelSearchActio
 const initialState = {
   hotels: [],
   error: null,
-  isFetching: false,
-  cities: []
+  isFetching: false
 };
 
 const fetchHotelsReducer = handleActions(
@@ -21,26 +20,6 @@ const fetchHotelsReducer = handleActions(
       hotels: action.payload.hotels
     }),
     [actionType.FETCH_HOTELS_FAILURE]: (state, action) => ({
-      ...state,
-      isFetching: false,
-      error: action.payload.error
-    })
-  },
-  initialState
-);
-
-const fetchCitiesReducer = handleActions(
-  {
-    [actionType.FETCH_CITIES_REQUEST]: state => ({
-      ...state,
-      isFetching: true
-    }),
-    [actionType.FETCH_CITIES_SUCCESS]: (state, action) => ({
-      ...state,
-      isFetching: false,
-      hotels: action.payload.hotels
-    }),
-    [actionType.FETCH_CITIES_FAILURE]: (state, action) => ({
       ...state,
       isFetching: false,
       error: action.payload.error

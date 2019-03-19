@@ -1,4 +1,4 @@
 import HotelSearch from "./containers/HotelSearch";
-import { hotelSearchReducer } from "./reducers";
+import { hotelSearch } from "./reducers";
 
-export { HotelSearch, hotelSearchReducer };
+export { HotelSearch, hotelSearch };

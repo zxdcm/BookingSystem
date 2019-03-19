@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { hotelSearchReducer } from "./hotelSearch";
+import { hotelSearch } from "./hotelSearch";
 
-const rootReducer = combineReducers({ hotelSearchReducer });
+const rootReducer = combineReducers({ hotelSearch });
 export { rootReducer };

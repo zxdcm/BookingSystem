@@ -1,4 +1,4 @@
-import { basePath } from "../settings/config";
+import { config } from "../settings/config";
 
 const RequestMethod = {
   GET: "GET",
@@ -40,7 +40,7 @@ class OptionsBuilder {
     return this;
   }
 
-  Build() {
+  build() {
     return this.options;
   }
 }
@@ -49,7 +49,7 @@ class RequestOptions {
     return new OptionsBuilder()
       .addMethod(RequestMethod.GET)
       .addAuth(token)
-      .Build();
+      .build();
   }
 
   static createPostOptions(body, token = null) {
@@ -57,7 +57,7 @@ class RequestOptions {
       .addMethod(RequestMethod.POST)
       .addBody(body)
       .addAuth(token)
-      .Build();
+      .build();
   }
 
   static createPutOptions(body, token = null) {
@@ -65,7 +65,7 @@ class RequestOptions {
       .addMethod(RequestMethod.PUT)
       .addBody(body)
       .addAuth(token)
-      .Build();
+      .build();
   }
 
   static createDeleteOptions(body, token = null) {
@@ -73,13 +73,13 @@ class RequestOptions {
       .addMethod(RequestMethod.DELETE)
       .addBody(body)
       .addAuth(token)
-      .Build();
+      .build();
   }
 }
 
 class RequestService {
   static request(url, options) {
-    return fetch(basePath + url, options);
+    return fetch(config.basePath + url, options);
   }
 
   static get(url, token = null) {
@@ -101,8 +101,6 @@ class RequestService {
     const options = RequestOptions.createDeleteOptions(body, token);
     return RequestService.request(url, options);
   }
-
-  static buildQueryString(url, queryObj) {}
 }
 
 export { RequestService };

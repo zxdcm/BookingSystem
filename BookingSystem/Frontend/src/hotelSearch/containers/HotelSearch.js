@@ -1,42 +1,22 @@
 import React, { Component } from "react";
-import HotelList from "../components/HotelList";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { HotelSearchActions } from "../actions";
-import PropTypes from "prop-types";
-
-class HotelSearch extends Component {
-  componentDidMount() {}
-
-  render() {
-    const { hotels, getHotels } = this.props;
-    return (
-      <div>
-        <HotelList hotels={hotels} />
-        <button onClick={() => getHotels("query")}>Get hotels</button>
-      </div>
-    );
-  }
-}
-
-HotelSearch.propTypes = {
-  hotels: PropTypes.object,
-  getHotels: PropTypes.func
-};
+import HotelSearch from "../components/HotelSearch";
 
 const mapStateToProps = state => {
-  const hotelsReducer = state.hotelSearchReducer;
+  const hotelSearch = state.hotelSearch;
   return {
-    hotels: hotelsReducer.hotels,
-    isFetching: hotelsReducer.isFetching,
-    error: hotelsReducer.error
+    hotels: hotelSearch.hotels,
+    isFetching: hotelSearch.isFetching,
+    error: hotelSearch.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   const bindedCreators = bindActionCreators(
     {
-      getHotels: HotelSearchActions.FetchHotels
+      getHotels: HotelSearchActions.fetchHotels
     },
     dispatch
   );
