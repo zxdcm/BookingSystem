@@ -1,6 +1,10 @@
 const links = {
-  HOTEL_SEARCH: "/hotel/",
-  HOTEL_PAGE: id => `hotel/${id}/rooms`
+  getHotel: () => "/hotel/",
+  getCity: () => "/city/",
+  getCountry: () => "/country/",
+  getRoom: () => "/room/",
+  getExtraService: () => "/extraservice/",
+  getHotelRooms: id => `hotel/${id}/rooms`
 };
 
 export { links };
