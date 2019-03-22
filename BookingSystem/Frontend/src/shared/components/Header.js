@@ -1,12 +1,14 @@
 import { React, Component } from "react";
 import PropTypes from "prop-types";
 
-export default class Header extends Component {
-  static propTypes = {
-    prop: PropTypes
-  };
-
+class Header extends Component {
   render() {
     return <div>Header</div>;
   }
 }
+
+Header.propTypes = {
+  prop: PropTypes
+};
+
+export default Header;
