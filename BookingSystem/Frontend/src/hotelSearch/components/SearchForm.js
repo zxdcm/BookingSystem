@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import { Dropdown } from "semantic-ui-react";
 
 const SearchForm = props => {
   const {
@@ -11,12 +10,14 @@ const SearchForm = props => {
     roomSize,
     country,
     city,
+    countryOptions,
     cityOptions,
     handleSubmit,
     handleReset,
     handleInputChange,
     handleStartDateChange,
     handleEndDateChange,
+    handleCountryOptionsChange,
     handleCityOptionsChange,
     handleCountryChange,
     handleCityChange
@@ -33,28 +34,23 @@ const SearchForm = props => {
           value={roomSize}
           onChange={handleInputChange}
         />
-        <label>Cities</label>
+        <label>Country</label>
+        <Select
+          options={countryOptions}
+          onInputChange={handleCountryOptionsChange}
+          onChange={handleCountryChange}
+        />
+        <label>City</label>
         <Select
           options={cityOptions}
           onInputChange={handleCityOptionsChange}
           onChange={handleCityChange}
         />
-        <Dropdown
-          options={cityOptions}
-          search
-          selection
-          value={city}
-          onChange={handleCityChange}
-          onSearchChange={(event, data) => {
-            handleCityOptionsChange(data.searchQuery);
-          }}
-        />
-        <input name="city" onChange={handleCityChange} value={city} />
-        <label>Countries</label>
-        <input name="country" onChange={handleCountryChange} value={country} />
         <div>
           <button type="submit">Find</button>
-          <button onClick={handleReset}>Reset</button>
+          <button type="button" onClick={handleReset}>
+            Reset
+          </button>
         </div>
       </form>
     </div>

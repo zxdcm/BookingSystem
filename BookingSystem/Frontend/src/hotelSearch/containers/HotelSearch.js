@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { HotelSearchActions, hotelSearchActionType } from "../actions";
 import HotelSearch from "../components/HotelSearch";
-import SearchForm from "../components/SearchForm";
 
 const mapStateToProps = state => {
   const hotels = state.hotelSearch.hotels;
@@ -14,7 +13,9 @@ const mapStateToProps = state => {
     error: hotels.error,
     currentCity: form.currentCity,
     currentCountry: form.currentCountry,
-    cityOptions: form.cityOptions
+    countryOptions: form.countryOptions,
+    cityOptions: form.cityOptions,
+    search: state.router.location.pathname
   };
 };
 
@@ -22,15 +23,25 @@ class HotelSearchContainer extends Component {
   state = {
     startDate: new Date(),
     endDate: new Date(),
-    roomSize: 0,
-    cityId: null,
-    countryId: null
+    roomSize: 0
   };
+
+  componentDidMount() {
+    this.props.getHotels({});
+  }
 
   handleSubmit = event => {
     event.preventDefault();
-    const data = { ...this.state };
-    this.props.onSubmit(data);
+    const data = {
+      ...this.state,
+      cityId: this.props.currentCity.cityId,
+      countryId: this.props.currentCountry.countryId
+    };
+    this.props.getHotels(data);
+  };
+
+  handleReset = event => {
+    this.props.getHotels({});
   };
 
   handleInputChange = event => {
@@ -52,13 +63,22 @@ class HotelSearchContainer extends Component {
     });
   };
 
-  handleCityOptionsChange = search => {
-    if (search == "") return;
-    this.props.loadCityOptions(search);
+  handleCountryOptionsChange = search => {
+    if (search === "") return;
+    this.props.loadCountryOptions({ countryName: search });
   };
 
-  handleCountryChange = event => {
-    this.props.setCountry(event.target.value);
+  handleCityOptionsChange = search => {
+    if (search === "") return;
+    const countryName = this.props.currentCountry.name;
+    this.props.loadCityOptions({
+      cityName: search,
+      countryName: countryName
+    });
+  };
+
+  handleCountryChange = data => {
+    this.props.setCountry({ countryId: data.value, name: data.label });
   };
 
   handleCityChange = data => {
@@ -73,11 +93,14 @@ class HotelSearchContainer extends Component {
         roomSize={this.state.roomSize}
         city={this.props.currentCity}
         country={this.props.currentCountry}
+        countryOptions={this.props.countryOptions}
         cityOptions={this.props.cityOptions}
         handleSubmit={this.handleSubmit}
+        handleReset={this.handleReset}
         handleInputChange={this.handleInputChange}
         handleStartDateChange={this.handleStartDateChange}
         handleEndDateChange={this.handleEndDateChange}
+        handleCountryOptionsChange={this.handleCountryOptionsChange}
         handleCityOptionsChange={this.handleCityOptionsChange}
         handleCountryChange={this.handleCountryChange}
         handleCityChange={this.handleCityChange}
@@ -90,9 +113,10 @@ class HotelSearchContainer extends Component {
 const mapDispatchToProps = dispatch => {
   const bindedCreators = bindActionCreators(
     {
-      onSubmit: HotelSearchActions.fetchHotels,
+      getHotels: HotelSearchActions.fetchHotels,
       setCity: HotelSearchActions.setCity,
       setCountry: HotelSearchActions.setCountry,
+      loadCountryOptions: HotelSearchActions.loadCountryOptions,
       loadCityOptions: HotelSearchActions.loadCityOptions
     },
     dispatch

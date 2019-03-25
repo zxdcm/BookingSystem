@@ -43,45 +43,6 @@ const searchFormInitialState = {
   isFetching: false
 };
 
-const searchFormCitiesMap = {
-  [actionType.FETCH_CITIES_REQUEST]: state => ({
-    ...state,
-    isFetching: true
-  }),
-  [actionType.FETCH_CITIES_SUCCESS]: (state, action) => ({
-    ...state,
-    isFetching: false,
-    cities: action.payload.cities
-  }),
-  [actionType.FETCH_CITIES_WITH_MERGE_SUCCESS]: (state, action) => ({
-    ...state,
-    isFetching: false,
-    cities: { ...state.cities, ...action.payload.cities }
-  }),
-  [actionType.FETCH_CITIES_FAILURE]: (state, action) => ({
-    ...state,
-    isFetching: false,
-    error: action.payload.error
-  })
-};
-
-const searchFormCountriesMap = {
-  [actionType.FETCH_COUNTRIES_REQUEST]: state => ({
-    ...state,
-    isFetching: true
-  }),
-  [actionType.FETCH_COUNTRIES_SUCCESS]: (state, action) => ({
-    ...state,
-    isFetching: false,
-    countries: action.payload.countries
-  }),
-  [actionType.FETCH_COUNTIRES_FAILURE]: (state, action) => ({
-    ...state,
-    isFetching: false,
-    error: action.payload.error
-  })
-};
-
 const searchFormMap = {
   [actionType.SET_COUNTRY]: (state, action) => ({
     ...state,
@@ -94,19 +55,45 @@ const searchFormMap = {
   })
 };
 
-const searchFormOptionsMap = {
-  [actionType.SET_CITY_OPTIONS]: (state, action) => ({
+const searchFormCountryOptionsMap = {
+  [actionType.LOAD_COUNTRY_OPTIONS_REQUEST]: state => ({
     ...state,
+    isFetching: true
+  }),
+  [actionType.LOAD_COUNTRY_OPTIONS_SUCCESS]: (state, action) => ({
+    ...state,
+    isFetching: false,
+    countryOptions: action.payload.countryOptions
+  }),
+  [actionType.LOAD_COUNTRY_OPTIONS_FAILURE]: (state, action) => ({
+    ...state,
+    isFetching: false,
+    error: action.payload.error
+  })
+};
+
+const searchFormCityOptionsMap = {
+  [actionType.LOAD_CITY_OPTIONS_REQUEST]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [actionType.LOAD_CITY_OPTIONS_SUCCESS]: (state, action) => ({
+    ...state,
+    isFetching: false,
     cityOptions: action.payload.cityOptions
+  }),
+  [actionType.LOAD_CITY_OPTIONS_FAILURE]: (state, action) => ({
+    ...state,
+    isFetching: false,
+    error: action.payload.error
   })
 };
 
 const searchFormReducer = handleActions(
   {
-    ...searchFormCitiesMap,
-    ...searchFormCountriesMap,
     ...searchFormMap,
-    ...searchFormOptionsMap
+    ...searchFormCityOptionsMap,
+    ...searchFormCountryOptionsMap
   },
   searchFormInitialState
 );

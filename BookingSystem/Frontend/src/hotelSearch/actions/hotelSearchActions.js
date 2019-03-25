@@ -14,28 +14,27 @@ const fetchHotelsFailure = createAction(
   error => ({ error: error })
 );
 
-const fetchCitiesRequest = createAction(actionType.FETCH_CITIES_REQUEST);
-const fetchCitiesSuccess = createAction(
-  actionType.FETCH_CITIES_SUCCESS,
-  data => ({ cities: data })
+const loadCityOptionsRequest = createAction(
+  actionType.LOAD_CITY_OPTIONS_REQUEST
 );
-const fetchCitiesFailure = createAction(
-  actionType.FETCH_CITIES_FAILURE,
+const loadCityOptionsSuccess = createAction(
+  actionType.LOAD_CITY_OPTIONS_SUCCESS,
+  options => ({ cityOptions: options })
+);
+const loadCityOptionsFailure = createAction(
+  actionType.LOAD_CITY_OPTIONS_FAILURE,
   error => ({ error: error })
 );
 
-const fetchCitiesWithMergeSuccess = createAction(
-  actionType.FETCH_CITIES_WITH_MERGE_SUCCESS,
-  data => ({ cities: data })
+const loadCountryOptionsRequest = createAction(
+  actionType.LOAD_COUNTRY_OPTIONS_REQUEST
 );
-
-const fetchCountriesRequest = createAction(actionType.FETCH_CITIES_REQUEST);
-const fetchCountriesSuccess = createAction(
-  actionType.FETCH_CITIES_SUCCESS,
-  data => ({ countries: data })
+const loadCountryOptionsSuccess = createAction(
+  actionType.LOAD_COUNTRY_OPTIONS_SUCCESS,
+  options => ({ countryOptions: options })
 );
-const fetchCountriesFailure = createAction(
-  actionType.FETCH_CITIES_FAILURE,
+const loadCountryOptionsFailure = createAction(
+  actionType.LOAD_COUNTRY_OPTIONS_FAILURE,
   error => ({ error: error })
 );
 
@@ -52,43 +51,7 @@ class HotelSearchActions {
       .catch(error => dispatch(fetchHotelsFailure(error)));
   };
 
-  static fetchCities = (data, merge) => dispatch => {
-    dispatch(fetchCitiesRequest());
-    return HotelSearchService.fetchCities(data)
-      .then(handleError)
-      .then(result => result.json())
-      .then(jsonResult => {
-        if (merge) {
-          dispatch(fetchCitiesSuccess(jsonResult));
-        } else {
-          dispatch(fetchCitiesWithMergeSuccess(jsonResult));
-        }
-        return jsonResult;
-      })
-      .catch(error => {
-        const mockJsonResult = [
-          { name: "Minsk", cityId: 1 },
-          { name: "Moscow", cityId: 2 }
-        ];
-        dispatch(fetchCitiesSuccess(mockJsonResult));
-        dispatch(fetchCitiesFailure(error));
-        return mockJsonResult;
-      });
-  };
-
-  static fetchCountires = data => dispatch => {
-    dispatch(fetchCountriesRequest());
-    HotelSearchService.fetchCountires(data)
-      .then(handleError)
-      .then(result => result.json())
-      .then(jsonResult => {
-        dispatch(fetchCountriesSuccess(jsonResult));
-        return jsonResult;
-      })
-      .catch(error => dispatch(fetchCountriesFailure(error)));
-  };
-
-  static fsetCity = createAction(actionType.SET_CITY, city => ({
+  static setCity = createAction(actionType.SET_CITY, city => ({
     city: city
   }));
   static setCountry = createAction(actionType.SET_COUNTRY, country => ({
@@ -99,13 +62,76 @@ class HotelSearchActions {
     cityOptions: data
   }));
 
+  static setCountryOptions = createAction(
+    actionType.SET_COUNTRY_OPTIONS,
+    data => ({
+      countryOptions: data
+    })
+  );
+
   static loadCityOptions = search => dispatch => {
-    console.log(search);
-    const promise = HotelSearchActions.fetchCities({ name: search })(dispatch);
-    promise.then(cities => {
-      const options = OptionsService.getOptions(cities, "name", "cityId");
-      dispatch(HotelSearchActions.setCityOptions(options));
-    });
+    dispatch(loadCityOptionsRequest);
+    return HotelSearchService.fetchCities({
+      cityName: search.cityName,
+      countryName: search.countryName
+    })
+      .then(handleError)
+      .then(result => result.json())
+      .then(cities => {
+        const citiesOptions = OptionsService.getOptions(
+          cities,
+          "cityName",
+          "cityId"
+        );
+        dispatch(loadCityOptionsSuccess(citiesOptions));
+      })
+      .catch(error => {
+        dispatch(loadCityOptionsFailure(error));
+        dispatch(
+          loadCityOptionsSuccess(
+            OptionsService.getOptions(
+              [
+                { cityName: "Minsk", cityId: 1 },
+                { cityName: "Moscow", cityId: 2 }
+              ],
+              "cityName",
+              "cityId"
+            )
+          )
+        );
+      });
+  };
+
+  static loadCountryOptions = search => dispatch => {
+    dispatch(loadCountryOptionsRequest);
+    return HotelSearchService.fetchCountries({
+      countryName: search.countryName
+    })
+      .then(handleError)
+      .then(result => result.json())
+      .then(countries => {
+        const countriesOptions = OptionsService.getOptions(
+          countries,
+          "countryName",
+          "countryId"
+        );
+        dispatch(loadCountryOptionsSuccess(countriesOptions));
+      })
+      .catch(error => {
+        dispatch(loadCountryOptionsFailure(error));
+        dispatch(
+          loadCountryOptionsSuccess(
+            OptionsService.getOptions(
+              [
+                { countryName: "Belarus", countryId: 1 },
+                { cityName: "Russian", countryId: 2 }
+              ],
+              "countryName",
+              "countryId"
+            )
+          )
+        );
+      });
   };
 }
 

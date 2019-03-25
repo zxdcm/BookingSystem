@@ -10,12 +10,14 @@ const HotelSearch = props => {
     roomSize,
     country,
     city,
+    countryOptions,
     cityOptions,
     handleSubmit,
     handleReset,
     handleInputChange,
     handleStartDateChange,
     handleEndDateChange,
+    handleCountryOptionsChange,
     handleCityOptionsChange,
     handleCountryChange,
     handleCityChange,
@@ -29,12 +31,14 @@ const HotelSearch = props => {
         roomSize={roomSize}
         country={country}
         city={city}
+        countryOptions={countryOptions}
         cityOptions={cityOptions}
         handleSubmit={handleSubmit}
         handleReset={handleReset}
         handleInputChange={handleInputChange}
         handleStartDateChange={handleStartDateChange}
         handleEndDateChange={handleEndDateChange}
+        handleCountryOptionsChange={handleCountryOptionsChange}
         handleCityOptionsChange={handleCityOptionsChange}
         handleCountryChange={handleCountryChange}
         handleCityChange={handleCityChange}

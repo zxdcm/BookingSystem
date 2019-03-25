@@ -4,7 +4,8 @@ const links = {
   getCountry: () => "/country/",
   getRoom: () => "/room/",
   getExtraService: () => "/extraservice/",
-  getHotelRooms: id => `hotel/${id}/rooms`
+  getHotelRooms: id => `hotel/${id}/rooms`,
+  getHotelSearch: () => "/search/"
 };
 
 export { links };
