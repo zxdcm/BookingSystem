@@ -40,10 +40,9 @@ class OptionsService {
   ) {
     if (!options) {
       return [];
-    } else {
-      let filteredList = options.filter(obj => obj[filterProp] === filterValue);
-      return this.getOptions(filteredList, labelProp, labelValue);
     }
+    let filteredList = options.filter(obj => obj[filterProp] === filterValue);
+    return this.getOptions(filteredList, labelProp, labelValue);
   }
 }
 
