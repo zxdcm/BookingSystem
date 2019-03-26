@@ -4,7 +4,7 @@ import moment from "moment";
 
 class QueryService {
   static hotelQueryFromData = data => {
-    if (isEmpty(data)) return;
+    if (isEmpty(data)) return "";
     const formattedData = {};
     formattedData.startDate = moment(data.startDate).format(
       dateFormat.REQUEST_DATE_FORMAT

@@ -27,7 +27,7 @@ class HotelSearchContainer extends Component {
   state = {
     startDate: new Date(),
     endDate: new Date(),
-    roomSize: 0,
+    roomSize: 1,
     city: "",
     country: ""
   };
@@ -49,7 +49,14 @@ class HotelSearchContainer extends Component {
   };
 
   handleReset = event => {
-    this.props.getHotels({});
+    this.setState({
+      startDate: new Date(),
+      endDate: new Date(),
+      roomSize: 1,
+      city: "",
+      country: ""
+    });
+    this.props.getHotels();
   };
 
   handleInputChange = event => {
