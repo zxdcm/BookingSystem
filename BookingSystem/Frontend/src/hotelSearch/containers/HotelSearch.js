@@ -62,7 +62,8 @@ class HotelSearchContainer extends Component {
 
   handleStartDateChange = date => {
     this.setState({
-      startDate: date
+      startDate: date,
+      endDate: date
     });
   };
 

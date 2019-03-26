@@ -55,6 +55,7 @@ const SearchForm = props => {
       <div className="form-group">
         <label>Start date</label>
         <DatePicker
+          minDate={startDate}
           selected={startDate}
           onChange={handleStartDateChange}
           dateFormat={dateFormat.CALENDAR_DISPLAY_FORMAT}
@@ -63,6 +64,7 @@ const SearchForm = props => {
       <div className="form-group">
         <label>End date</label>
         <DatePicker
+          minDate={startDate}
           selected={endDate}
           onChange={handleEndDateChange}
           dateFormat={dateFormat.CALENDAR_DISPLAY_FORMAT}
