@@ -1,3 +1,4 @@
 import { HotelSearchActions } from "./hotelSearchActions";
+import { hotelSearchActionType } from "./hotelSearchActionType";
 
-export { HotelSearchActions };
+export { HotelSearchActions, hotelSearchActionType };

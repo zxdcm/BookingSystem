@@ -1,14 +1,22 @@
 import { links } from "../../shared/settings/links";
-import { RequestService } from "../../shared/utils/requestService";
+import { RequestService, buildQuery } from "../../shared/utils/";
 
 class HotelSearchService {
-  static fetchHotels = query => {
-    const requestUrl = `${links.HOTEL_SEARCH}`;
+  static fetchHotels = data => {
+    const query = buildQuery(data);
+    const requestUrl = `${links.getHotel()}${query}`;
     return RequestService.get(requestUrl);
   };
 
-  static fetchHotelById = id => {
-    const requestUrl = `${links.HOTEL_PAGE(id)}`;
+  static fetchCities = data => {
+    const query = buildQuery(data);
+    const requestUrl = `${links.getCity()}${query}`;
+    return RequestService.get(requestUrl);
+  };
+
+  static fetchCountries = data => {
+    const query = buildQuery(data);
+    const requestUrl = `${links.getCountry()}${query}`;
     return RequestService.get(requestUrl);
   };
 }

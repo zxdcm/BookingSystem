@@ -1,11 +1,27 @@
-const FetchHotelsActionsType = {
+const fetchHotelsActionsType = {
   FETCH_HOTELS_REQUEST: "FETCH_HOTELS_REQUEST",
   FETCH_HOTELS_SUCCESS: "FETCH_HOTELS_SUCCESS",
   FETCH_HOTELS_FAILURE: "FETCH_HOTELS_FAILURE"
 };
 
-const HotelSearchActionType = {
-  ...FetchHotelsActionsType
+const loadCitiesOptionsActionType = {
+  LOAD_CITY_OPTIONS_REQUEST: "LOAD_CITY_OPTIONS_REQUEST",
+  LOAD_CITY_OPTIONS_SUCCESS: "LOAD_CITY_OPTIONS_SUCCESS",
+  LOAD_CITY_OPTIONS_FAILURE: "LOAD_CITY_OPTIONS_FAILURE"
 };
 
-export { HotelSearchActionType };
+const loadCountryOptionsActionType = {
+  LOAD_COUNTRY_OPTIONS_REQUEST: "LOAD_COUNTRY_OPTIONS_REQUEST",
+  LOAD_COUNTRY_OPTIONS_SUCCESS: "LOAD_COUNTRY_OPTIONS_SUCCESS",
+  LOAD_COUNTRY_OPTIONS_FAILURE: "LOAD_COUNTRY_OPTIONS_FAILURE"
+};
+
+const hotelSearchActionType = {
+  ...fetchHotelsActionsType,
+  ...loadCitiesOptionsActionType,
+  ...loadCountryOptionsActionType,
+  SET_CITY_OPTIONS: "SET_CITY_OPTIONS",
+  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS"
+};
+
+export { hotelSearchActionType };
