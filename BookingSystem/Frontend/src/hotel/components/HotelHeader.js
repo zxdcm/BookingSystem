@@ -16,7 +16,7 @@ const HotelHeader = props => {
 };
 
 HotelHeader.propTypes = {
-  hotel: PropTypes.array
+  hotel: PropTypes.object
 };
 
 export default HotelHeader;

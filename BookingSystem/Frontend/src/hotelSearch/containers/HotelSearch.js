@@ -23,7 +23,9 @@ class HotelSearchContainer extends Component {
   state = {
     startDate: new Date(),
     endDate: new Date(),
-    roomSize: 0
+    roomSize: 0,
+    city: "",
+    country: ""
   };
 
   componentDidMount() {
@@ -33,9 +35,11 @@ class HotelSearchContainer extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const data = {
-      ...this.state,
-      cityId: this.props.currentCity.cityId,
-      countryId: this.props.currentCountry.countryId
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      roomSize: this.state.roomSize,
+      cityId: this.state.city.cityId,
+      countryId: this.state.country.countryId
     };
     this.props.getHotels(data);
   };
@@ -70,7 +74,7 @@ class HotelSearchContainer extends Component {
 
   handleCityOptionsChange = search => {
     if (search === "") return;
-    const countryName = this.props.currentCountry.name;
+    const countryName = this.state.country.name;
     this.props.loadCityOptions({
       cityName: search,
       countryName: countryName
@@ -78,11 +82,13 @@ class HotelSearchContainer extends Component {
   };
 
   handleCountryChange = data => {
-    this.props.setCountry({ countryId: data.value, name: data.label });
+    const country = { countryId: data.value, name: data.label };
+    this.setState({ country: country });
   };
 
   handleCityChange = data => {
-    this.props.setCity({ cityId: data.value, name: data.label });
+    const city = { cityId: data.value, name: data.label };
+    this.setState({ city: city });
   };
 
   render() {
@@ -91,8 +97,8 @@ class HotelSearchContainer extends Component {
         startDate={this.state.startDate}
         endDate={this.state.endDate}
         roomSize={this.state.roomSize}
-        city={this.props.currentCity}
-        country={this.props.currentCountry}
+        city={this.state.city}
+        country={this.state.country}
         countryOptions={this.props.countryOptions}
         cityOptions={this.props.cityOptions}
         handleSubmit={this.handleSubmit}
