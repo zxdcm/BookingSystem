@@ -38,21 +38,7 @@ const searchFormInitialState = {
   cityOptions: [],
   countryOptions: [],
   error: null,
-  currentCity: "",
-  currentCountry: "",
   isFetching: false
-};
-
-const searchFormMap = {
-  [actionType.SET_COUNTRY]: (state, action) => ({
-    ...state,
-    currentCity: "",
-    currentCountry: action.payload.country
-  }),
-  [actionType.SET_CITY]: (state, action) => ({
-    ...state,
-    currentCity: action.payload.city
-  })
 };
 
 const searchFormCountryOptionsMap = {
@@ -91,7 +77,6 @@ const searchFormCityOptionsMap = {
 
 const searchFormReducer = handleActions(
   {
-    ...searchFormMap,
     ...searchFormCityOptionsMap,
     ...searchFormCountryOptionsMap
   },

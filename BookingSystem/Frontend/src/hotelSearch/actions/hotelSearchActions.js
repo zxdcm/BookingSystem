@@ -51,13 +51,6 @@ class HotelSearchActions {
       .catch(error => dispatch(fetchHotelsFailure(error)));
   };
 
-  static setCity = createAction(actionType.SET_CITY, city => ({
-    city: city
-  }));
-  static setCountry = createAction(actionType.SET_COUNTRY, country => ({
-    country: country
-  }));
-
   static setCityOptions = createAction(actionType.SET_CITY_OPTIONS, data => ({
     cityOptions: data
   }));
@@ -87,18 +80,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCityOptionsFailure(error));
-        dispatch(
-          loadCityOptionsSuccess(
-            OptionsService.getOptions(
-              [
-                { cityName: "Minsk", cityId: 1 },
-                { cityName: "Moscow", cityId: 2 }
-              ],
-              "cityName",
-              "cityId"
-            )
-          )
-        );
       });
   };
 
@@ -119,18 +100,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCountryOptionsFailure(error));
-        dispatch(
-          loadCountryOptionsSuccess(
-            OptionsService.getOptions(
-              [
-                { countryName: "Belarus", countryId: 1 },
-                { cityName: "Russian", countryId: 2 }
-              ],
-              "countryName",
-              "countryId"
-            )
-          )
-        );
       });
   };
 }
