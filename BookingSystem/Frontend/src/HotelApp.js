@@ -1,13 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { routePath } from "./shared/settings/routePath";
 import Layout from "./shared/components/Layout";
-import { HotelSearch } from "./hotelSearch";
+import { HotelSearch, hotelSearch } from "./hotelSearch";
 
 class HotelApp extends Component {
   render() {
-    return <HotelSearch />;
+    return (
+      <Layout isLoggedIn={true} isAdmin={true}>
+        <Switch>
+          <Route exact path="/" component={HotelSearch} />
+          <Route
+            exact
+            path={routePath.HOTEL_SEARCH_PAGE}
+            component={hotelSearch}
+          />
+        </Switch>
+      </Layout>
+    );
   }
 }
 
