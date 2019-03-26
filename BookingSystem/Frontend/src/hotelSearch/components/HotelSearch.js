@@ -1,16 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import HotelList from "./HotelList";
 import SearchForm from "./SearchForm";
-import { Row, Col, Spinner } from "reactstrap";
 
 const HotelSearch = props => {
   const {
     startDate,
     endDate,
-    roomSize,
     country,
     city,
+    roomSizeOptions,
     countryOptions,
     cityOptions,
     handleSubmit,
@@ -20,6 +19,7 @@ const HotelSearch = props => {
     handleEndDateChange,
     handleCountryOptionsChange,
     handleCityOptionsChange,
+    handleRoomSizeChange,
     handleCountryChange,
     handleCityChange,
     hotels,
@@ -28,14 +28,14 @@ const HotelSearch = props => {
     isLoading
   } = props;
   return (
-    <Row md="8">
-      <Col md="4">
+    <div className="row">
+      <div className="col-4">
         <SearchForm
           startDate={startDate}
           endDate={endDate}
-          roomSize={roomSize}
           country={country}
           city={city}
+          roomSizeOptions={roomSizeOptions}
           countryOptions={countryOptions}
           cityOptions={cityOptions}
           handleSubmit={handleSubmit}
@@ -45,24 +45,30 @@ const HotelSearch = props => {
           handleEndDateChange={handleEndDateChange}
           handleCountryOptionsChange={handleCountryOptionsChange}
           handleCityOptionsChange={handleCityOptionsChange}
+          handleRoomSizeChange={handleRoomSizeChange}
           handleCountryChange={handleCountryChange}
           handleCityChange={handleCityChange}
         />
-      </Col>
-      <Col className="d-flex justify-content-center align-items-center">
+      </div>
+      <div className="col d-flex justify-content-center align-items-center">
         {isLoading ? (
           <div>
-            <Spinner size="lg" color="secondary" />
+            <div
+              className="spinner-border"
+              style={{ size: "lg", color: "secondary" }}
+            />
           </div>
         ) : (
-          <HotelList
-            hotels={hotels}
-            getHotelDetailsLink={getHotelDetailsLink}
-            getHotelImageLink={getHotelImageLink}
-          />
+          <Fragment>
+            <HotelList
+              hotels={hotels}
+              getHotelDetailsLink={getHotelDetailsLink}
+              getHotelImageLink={getHotelImageLink}
+            />
+          </Fragment>
         )}
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 HotelSearch.propTypes = {

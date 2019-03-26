@@ -11,16 +11,18 @@ import {
 import { Link } from "react-router-dom";
 
 const HotelInfo = ({ hotel, hotelDetailsLink, hotelImageLink }) => (
-  <Card>
-    {hotelImageLink && <CardImg src={hotelImageLink} />}
-    <CardBody body outline color="primary">
-      {hotel.name && <CardTitle>{hotel.name}</CardTitle>}
-      {hotel.address && <CardText>{hotel.address}</CardText>}
-      {hotel.countryName && <CardText>{hotel.countryName}</CardText>}
-      {hotel.cityName && <CardText>{hotel.cityName}</CardText>}
+  <div className="card">
+    {hotelImageLink && <img className="card-img" src={hotelImageLink} />}
+    <div className="card-body body outline">
+      {hotel.name && <div className="card-title">{hotel.name}</div>}
+      {hotel.address && <div className="card-text">{hotel.address}</div>}
+      {hotel.countryName && (
+        <div className="card-text">{hotel.countryName}</div>
+      )}
+      {hotel.cityName && <div className="card-text">{hotel.cityName}</div>}
       <Link to={hotelDetailsLink}>Details</Link>
-    </CardBody>
-  </Card>
+    </div>
+  </div>
 );
 
 HotelInfo.propTypes = {

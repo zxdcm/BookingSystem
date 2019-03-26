@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { HotelSearchActions } from "../actions";
 import HotelSearch from "../components/HotelSearch";
 import { links } from "../../shared/settings/links";
-import { QueryService, ImageService } from "../../shared/utils";
+import { QueryService, ImageService, OptionsService } from "../../shared/utils";
 import { format } from "moment";
 
 const mapStateToProps = state => {
@@ -16,6 +16,7 @@ const mapStateToProps = state => {
     error: hotels.error,
     currentCity: form.currentCity,
     currentCountry: form.currentCountry,
+    roomSizeOptions: OptionsService.getNumericOptions(),
     countryOptions: form.countryOptions,
     cityOptions: form.cityOptions,
     search: state.router.location.pathname,
@@ -59,13 +60,6 @@ class HotelSearchContainer extends Component {
     this.props.getHotels();
   };
 
-  handleInputChange = event => {
-    const target = event.target;
-    this.setState({
-      [target.name]: target.value
-    });
-  };
-
   handleStartDateChange = date => {
     this.setState({
       startDate: date
@@ -92,6 +86,10 @@ class HotelSearchContainer extends Component {
     });
   };
 
+  handleRoomSizeChange = data => {
+    this.setState({ roomSize: data.value });
+  };
+
   handleCountryChange = data => {
     const country = { countryId: data.value, name: data.label };
     this.setState({ country: country });
@@ -116,18 +114,18 @@ class HotelSearchContainer extends Component {
       <HotelSearch
         startDate={this.state.startDate}
         endDate={this.state.endDate}
-        roomSize={this.state.roomSize}
         city={this.state.city}
         country={this.state.country}
+        roomSizeOptions={this.props.roomSizeOptions}
         countryOptions={this.props.countryOptions}
         cityOptions={this.props.cityOptions}
         handleSubmit={this.handleSubmit}
         handleReset={this.handleReset}
-        handleInputChange={this.handleInputChange}
         handleStartDateChange={this.handleStartDateChange}
         handleEndDateChange={this.handleEndDateChange}
         handleCountryOptionsChange={this.handleCountryOptionsChange}
         handleCityOptionsChange={this.handleCityOptionsChange}
+        handleRoomSizeChange={this.handleRoomSizeChange}
         handleCountryChange={this.handleCountryChange}
         handleCityChange={this.handleCityChange}
         hotels={this.props.hotels}
