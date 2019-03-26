@@ -26,7 +26,8 @@
     ],
     "rules": {
         "no-trailing-spaces": "error",
-        "no-mixed-spaces-and-tabs": "error"
+        "no-mixed-spaces-and-tabs": "error",
+        "react/prop-types": 0
     }
     
 }
