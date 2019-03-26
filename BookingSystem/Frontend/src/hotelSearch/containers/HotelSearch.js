@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { HotelSearchActions, hotelSearchActionType } from "../actions";
+import { HotelSearchActions } from "../actions";
 import HotelSearch from "../components/HotelSearch";
+import { links } from "../../shared/settings/links";
+import { QueryService, ImageService } from "../../shared/utils";
+import { format } from "moment";
 
 const mapStateToProps = state => {
   const hotels = state.hotelSearch.hotels;
@@ -15,7 +18,8 @@ const mapStateToProps = state => {
     currentCountry: form.currentCountry,
     countryOptions: form.countryOptions,
     cityOptions: form.cityOptions,
-    search: state.router.location.pathname
+    search: state.router.location.pathname,
+    isLoading: hotels.isFetching
   };
 };
 
@@ -91,6 +95,15 @@ class HotelSearchContainer extends Component {
     this.setState({ city: city });
   };
 
+  getHotelDetailsLink = hotelId => {
+    const searchData = { ...this.state };
+    return this.props.getHotelDetailsLink(hotelId, searchData);
+  };
+
+  getHotelImageLink = hotelId => {
+    return this.props.getHotelImageLink(hotelId);
+  };
+
   render() {
     return (
       <HotelSearch
@@ -111,6 +124,9 @@ class HotelSearchContainer extends Component {
         handleCountryChange={this.handleCountryChange}
         handleCityChange={this.handleCityChange}
         hotels={this.props.hotels}
+        getHotelDetailsLink={this.getHotelDetailsLink}
+        getHotelImageLink={this.getHotelImageLink}
+        isLoading={this.props.isLoading}
       />
     );
   }
@@ -128,7 +144,14 @@ const mapDispatchToProps = dispatch => {
     dispatch
   );
   return {
-    ...bindedCreators
+    ...bindedCreators,
+    getHotelDetailsLink: (hotelId, data) => ({
+      pathname: links.getHotel(hotelId),
+      search: QueryService.hotelQueryFromData(data)
+    }),
+    getHotelImageLink: hotelId => {
+      ImageService.getHotelImageLink(hotelId);
+    }
   };
 };
 

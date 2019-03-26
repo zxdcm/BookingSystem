@@ -41,6 +41,7 @@ const searchFormInitialState = {
   isFetching: false
 };
 
+
 const searchFormCountryOptionsMap = {
   [actionType.LOAD_COUNTRY_OPTIONS_REQUEST]: state => ({
     ...state,

@@ -48,7 +48,9 @@ class HotelSearchActions {
         dispatch(fetchHotelsSuccess(jsonResult));
         return jsonResult;
       })
-      .catch(error => dispatch(fetchHotelsFailure(error)));
+      .catch(error => {
+        dispatch(fetchHotelsFailure(error));
+      });
   };
 
   static setCityOptions = createAction(actionType.SET_CITY_OPTIONS, data => ({
