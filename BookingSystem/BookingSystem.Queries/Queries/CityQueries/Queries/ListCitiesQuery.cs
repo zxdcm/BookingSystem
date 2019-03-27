@@ -12,13 +12,13 @@ namespace BookingSystem.Queries.Queries.CityQueries.Queries
     public class ListCitiesQuery : IQuery<IEnumerable<CityView>>
     {
         public string CityNameLike { get; }
-        public string CountryNameLike { get; }
+        public int CountryId { get; }
         public int Amount { get; }
 
-        public ListCitiesQuery(string cityNameLike, string countryNameLike, int amount)
+        public ListCitiesQuery(string cityNameLike, int countryId, int amount)
         {
             CityNameLike = cityNameLike;
-            CountryNameLike = countryNameLike;
+            CountryId = countryId;
             Amount = amount;
         }
     }
@@ -43,8 +43,9 @@ namespace BookingSystem.Queries.Queries.CityQueries.Queries
                 })
                 .WhereIf(!string.IsNullOrWhiteSpace(query.CityNameLike), 
                     city => city.CityName.StartsWith(query.CityNameLike))
-                .WhereIf(!string.IsNullOrWhiteSpace(query.CountryNameLike), 
-                    city => city.CountryName.StartsWith(query.CountryNameLike))
+                .WhereIf(query.CountryId != 0, 
+                    city => city.CountryId == query.CountryId)
+                .Take(query.Amount)
                 .ToListAsync();
         }
     }
