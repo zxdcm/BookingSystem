@@ -10,7 +10,8 @@ const fetchHotelsMap = {
   [actionType.FETCH_HOTELS_SUCCESS]: (state, action) => ({
     ...state,
     isFetching: false,
-    hotels: action.payload.hotels
+    hotels: action.payload.data.hotels,
+    pageInfo: action.payload.data.pageInfo
   }),
   [actionType.FETCH_HOTELS_FAILURE]: (state, action) => ({
     ...state,
@@ -21,6 +22,7 @@ const fetchHotelsMap = {
 
 const hotelsInitialState = {
   hotels: [],
+  pageInfo: {},
   error: null,
   isFetching: false
 };
@@ -40,7 +42,6 @@ const searchFormInitialState = {
   error: null,
   isFetching: false
 };
-
 
 const searchFormCountryOptionsMap = {
   [actionType.LOAD_COUNTRY_OPTIONS_REQUEST]: state => ({

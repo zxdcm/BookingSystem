@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import HotelList from "./HotelList";
 import SearchForm from "./SearchForm";
+import { Pagination } from "../../shared/components/Pagination";
 
 const HotelSearch = props => {
   const {
@@ -22,7 +23,9 @@ const HotelSearch = props => {
     handleRoomSizeChange,
     handleCountryChange,
     handleCityChange,
+    handleSetPage,
     hotels,
+    pageInfo,
     getHotelDetailsLink,
     getHotelImageLink,
     isLoading
@@ -48,6 +51,7 @@ const HotelSearch = props => {
           handleRoomSizeChange={handleRoomSizeChange}
           handleCountryChange={handleCountryChange}
           handleCityChange={handleCityChange}
+          handleSetPage={handleSetPage}
         />
       </div>
       <div className="col d-flex justify-content-center align-items-center">
@@ -65,6 +69,7 @@ const HotelSearch = props => {
               getHotelDetailsLink={getHotelDetailsLink}
               getHotelImageLink={getHotelImageLink}
             />
+            <Pagination pageInfo={pageInfo} setPage={handleSetPage} />
           </Fragment>
         )}
       </div>

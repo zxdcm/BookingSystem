@@ -16,7 +16,7 @@ class QueryService {
       formattedData.roomSize = data.roomSize;
     }
     if (data.page) {
-      formattedData.page = data;
+      formattedData.page = data.page;
     }
     return QueryService.buildQuery(formattedData);
   };

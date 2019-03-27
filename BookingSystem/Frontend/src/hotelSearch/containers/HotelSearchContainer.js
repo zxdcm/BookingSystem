@@ -12,10 +12,9 @@ const mapStateToProps = state => {
   const form = state.hotelSearch.searchForm;
   return {
     hotels: hotels.hotels,
+    pageInfo: hotels.pageInfo,
     isFetching: hotels.isFetching,
     error: hotels.error,
-    currentCity: form.currentCity,
-    currentCountry: form.currentCountry,
     roomSizeOptions: OptionsService.getNumericOptions(),
     countryOptions: form.countryOptions,
     cityOptions: form.cityOptions,
@@ -37,15 +36,18 @@ class HotelSearchContainer extends Component {
     this.props.getHotels({});
   }
 
+  getFormRequestData = () => ({
+    startDate: this.state.startDate,
+    endDate: this.state.endDate,
+    roomSize: this.state.roomSize,
+    cityId: this.state.city.cityId,
+    countryId: this.state.country.countryId
+  });
+
   handleSubmit = event => {
     event.preventDefault();
-    const data = {
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-      roomSize: this.state.roomSize,
-      cityId: this.state.city.cityId,
-      countryId: this.state.country.countryId
-    };
+    const data = this.getFormRequestData();
+    data.page = 1;
     this.props.getHotels(data);
   };
 
@@ -110,6 +112,12 @@ class HotelSearchContainer extends Component {
     return this.props.getHotelImageLink(hotelId);
   };
 
+  handleSetPage = page => {
+    const data = this.getFormRequestData();
+    data.page = page;
+    this.props.getHotels(data);
+  };
+
   render() {
     return (
       <HotelSearch
@@ -129,7 +137,9 @@ class HotelSearchContainer extends Component {
         handleRoomSizeChange={this.handleRoomSizeChange}
         handleCountryChange={this.handleCountryChange}
         handleCityChange={this.handleCityChange}
+        handleSetPage={this.handleSetPage}
         hotels={this.props.hotels}
+        pageInfo={this.props.pageInfo}
         getHotelDetailsLink={this.getHotelDetailsLink}
         getHotelImageLink={this.getHotelImageLink}
         isLoading={this.props.isLoading}

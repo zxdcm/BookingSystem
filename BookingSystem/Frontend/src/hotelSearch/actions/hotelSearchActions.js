@@ -7,7 +7,7 @@ import { OptionsService } from "../../shared/utils/optionsService";
 const fetchHotelsRequest = createAction(actionType.FETCH_HOTELS_REQUEST);
 const fetchHotelsSuccess = createAction(
   actionType.FETCH_HOTELS_SUCCESS,
-  data => ({ hotels: data })
+  data => ({ data: data })
 );
 const fetchHotelsFailure = createAction(
   actionType.FETCH_HOTELS_FAILURE,
@@ -50,6 +50,26 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(fetchHotelsFailure(error));
+        const responce = {
+          hotels: [
+            {
+              hotelId: 1,
+              name: "Test hotel",
+              address: "address",
+              countryName: "country",
+              cityName: "city"
+            },
+            {
+              hotelId: 2,
+              name: "Test hotel 2",
+              address: "address 2",
+              countryName: "country 2",
+              cityName: "city 2"
+            }
+          ],
+          pageInfo: { page: 1, pageSize: 2, totalPages: 10 }
+        };
+        dispatch(fetchHotelsSuccess(responce));
       });
   };
 
@@ -82,6 +102,18 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCityOptionsFailure(error));
+        dispatch(
+          loadCityOptionsSuccess(
+            OptionsService.getOptions(
+              [
+                { cityName: "Minsk", cityId: 1 },
+                { cityName: "Moscow", cityId: 2 }
+              ],
+              "cityName",
+              "cityId"
+            )
+          )
+        );
       });
   };
 
@@ -102,6 +134,18 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCountryOptionsFailure(error));
+        dispatch(
+          loadCountryOptionsSuccess(
+            OptionsService.getOptions(
+              [
+                { countryName: "Belarus", countryId: 1 },
+                { cityName: "Russian", countryId: 2 }
+              ],
+              "countryName",
+              "countryId"
+            )
+          )
+        );
       });
   };
 }
