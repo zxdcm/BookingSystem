@@ -16,12 +16,19 @@ const loadCountryOptionsActionType = {
   LOAD_COUNTRY_OPTIONS_FAILURE: "LOAD_COUNTRY_OPTIONS_FAILURE"
 };
 
+const loadRoomSizeOptionsActionType = {
+  LOAD_ROOM_SIZE_OPTIONS_REQUEST: "LOAD_ROOM_SIZE_OPTIONS_REQUEST",
+  LOAD_ROOM_SIZE_OPTIONS_SUCCESS: "LOAD_ROOM_SIZE_OPTIONS_SUCCESS",
+  LOAD_ROOM_SIZE_OPTIONS_FAILURE: "LOAD_ROOM_SIZE_OPTIONS_FAILURE"
+};
+
 const hotelSearchActionType = {
   ...fetchHotelsActionsType,
   ...loadCitiesOptionsActionType,
   ...loadCountryOptionsActionType,
+  ...loadRoomSizeOptionsActionType,
   SET_CITY_OPTIONS: "SET_CITY_OPTIONS",
-  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS",
+  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS"
 };
 
 export { hotelSearchActionType };

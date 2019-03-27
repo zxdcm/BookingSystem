@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     pageInfo: hotels.pageInfo,
     isFetching: hotels.isFetching,
     error: hotels.error,
-    roomSizeOptions: OptionsService.getNumericOptions(),
+    roomSizeOptions: form.roomSizeOptions,
     countryOptions: form.countryOptions,
     cityOptions: form.cityOptions,
     search: state.router.location.pathname,
@@ -34,6 +34,7 @@ class HotelSearchContainer extends Component {
 
   componentDidMount() {
     this.props.getHotels({});
+    this.props.loadRoomSizeOptions();
   }
 
   getFormRequestData = () => ({
@@ -155,7 +156,8 @@ const mapDispatchToProps = dispatch => {
       setCity: HotelSearchActions.setCity,
       setCountry: HotelSearchActions.setCountry,
       loadCountryOptions: HotelSearchActions.loadCountryOptions,
-      loadCityOptions: HotelSearchActions.loadCityOptions
+      loadCityOptions: HotelSearchActions.loadCityOptions,
+      loadRoomSizeOptions: HotelSearchActions.loadRoomSizeOptions
     },
     dispatch
   );

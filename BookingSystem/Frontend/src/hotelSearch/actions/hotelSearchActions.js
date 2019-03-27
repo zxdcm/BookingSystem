@@ -38,6 +38,19 @@ const loadCountryOptionsFailure = createAction(
   error => ({ error: error })
 );
 
+const loadRoomSizeOptionsRequest = createAction(
+  actionType.LOAD_ROOM_SIZE_OPTIONS_REQUEST
+);
+
+const loadRoomSizeOptionsSuccess = createAction(
+  actionType.LOAD_ROOM_SIZE_OPTIONS_SUCCESS,
+  options => ({ roomSizeOptions: options })
+);
+const loadRoomSizeOptionsFailure = createAction(
+  actionType.LOAD_ROOM_SIZE_OPTIONS_FAILURE,
+  error => ({ error: error })
+);
+
 class HotelSearchActions {
   static fetchHotels = data => dispatch => {
     dispatch(fetchHotelsRequest());
@@ -102,6 +115,7 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCityOptionsFailure(error));
+        console.log("Test");
         dispatch(
           loadCityOptionsSuccess(
             OptionsService.getOptions(
@@ -144,6 +158,27 @@ class HotelSearchActions {
               "countryName",
               "countryId"
             )
+          )
+        );
+      });
+  };
+
+  static loadRoomSizeOptions = () => dispatch => {
+    dispatch(loadRoomSizeOptionsRequest);
+    return HotelSearchService.fetchRoomSizes()
+      .then(handleError)
+      .then(result => result.json())
+      .then(roomSizes => {
+        const roomSizeOptions = OptionsService.getNumericOptionsFromArray(
+          roomSizes
+        );
+        dispatch(loadRoomSizeOptionsSuccess(roomSizeOptions));
+      })
+      .catch(error => {
+        dispatch(loadRoomSizeOptionsFailure(error));
+        dispatch(
+          loadRoomSizeOptionsSuccess(
+            OptionsService.getNumericOptionsFromArray([1, 2, 3, 4])
           )
         );
       });

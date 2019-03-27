@@ -39,6 +39,7 @@ const searchFormInitialState = {
   countries: [],
   cityOptions: [],
   countryOptions: [],
+  roomSizeOptions: [],
   error: null,
   isFetching: false
 };
@@ -77,10 +78,28 @@ const searchFormCityOptionsMap = {
   })
 };
 
+const searchFormRoomSizeOptionsMap = {
+  [actionType.LOAD_ROOM_SIZE_OPTIONS_REQUEST]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [actionType.LOAD_ROOM_SIZE_OPTIONS_SUCCESS]: (state, action) => ({
+    ...state,
+    isFetching: false,
+    roomSizeOptions: action.payload.roomSizeOptions
+  }),
+  [actionType.LOAD_ROOM_SIZE_OPTIONS_FAILURE]: (state, action) => ({
+    ...state,
+    isFetching: false,
+    error: action.payload.error
+  })
+};
+
 const searchFormReducer = handleActions(
   {
     ...searchFormCityOptionsMap,
-    ...searchFormCountryOptionsMap
+    ...searchFormCountryOptionsMap,
+    ...searchFormRoomSizeOptionsMap
   },
   searchFormInitialState
 );

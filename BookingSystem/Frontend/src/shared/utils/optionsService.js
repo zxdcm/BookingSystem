@@ -15,6 +15,10 @@ class OptionsService {
     }));
   }
 
+  static getNumericOptionsFromArray(nums) {
+    return nums.map(item => ({ label: item, value: item }));
+  }
+
   static getOptions(options, labelProperty, valueProperty = null) {
     if (!valueProperty) {
       valueProperty = labelProperty;
