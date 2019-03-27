@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { HotelSearchActions, hotelSearchActionType } from "../actions";
+import { HotelSearchActions } from "../actions";
 import HotelSearch from "../components/HotelSearch";
+import { links } from "../../shared/settings/links";
+import { QueryService, ImageService, OptionsService } from "../../shared/utils";
+import { format } from "moment";
 
 const mapStateToProps = state => {
   const hotels = state.hotelSearch.hotels;
@@ -13,9 +16,11 @@ const mapStateToProps = state => {
     error: hotels.error,
     currentCity: form.currentCity,
     currentCountry: form.currentCountry,
+    roomSizeOptions: OptionsService.getNumericOptions(),
     countryOptions: form.countryOptions,
     cityOptions: form.cityOptions,
-    search: state.router.location.pathname
+    search: state.router.location.pathname,
+    isLoading: hotels.isFetching
   };
 };
 
@@ -23,7 +28,7 @@ class HotelSearchContainer extends Component {
   state = {
     startDate: new Date(),
     endDate: new Date(),
-    roomSize: 0,
+    roomSize: 1,
     city: "",
     country: ""
   };
@@ -45,19 +50,20 @@ class HotelSearchContainer extends Component {
   };
 
   handleReset = event => {
-    this.props.getHotels({});
-  };
-
-  handleInputChange = event => {
-    const target = event.target;
     this.setState({
-      [target.name]: target.value
+      startDate: new Date(),
+      endDate: new Date(),
+      roomSize: 1,
+      city: "",
+      country: ""
     });
+    this.props.getHotels();
   };
 
   handleStartDateChange = date => {
     this.setState({
-      startDate: date
+      startDate: date,
+      endDate: date
     });
   };
 
@@ -81,6 +87,10 @@ class HotelSearchContainer extends Component {
     });
   };
 
+  handleRoomSizeChange = data => {
+    this.setState({ roomSize: data.value });
+  };
+
   handleCountryChange = data => {
     const country = { countryId: data.value, name: data.label };
     this.setState({ country: country });
@@ -91,26 +101,38 @@ class HotelSearchContainer extends Component {
     this.setState({ city: city });
   };
 
+  getHotelDetailsLink = hotelId => {
+    const searchData = { ...this.state };
+    return this.props.getHotelDetailsLink(hotelId, searchData);
+  };
+
+  getHotelImageLink = hotelId => {
+    return this.props.getHotelImageLink(hotelId);
+  };
+
   render() {
     return (
       <HotelSearch
         startDate={this.state.startDate}
         endDate={this.state.endDate}
-        roomSize={this.state.roomSize}
         city={this.state.city}
         country={this.state.country}
+        roomSizeOptions={this.props.roomSizeOptions}
         countryOptions={this.props.countryOptions}
         cityOptions={this.props.cityOptions}
         handleSubmit={this.handleSubmit}
         handleReset={this.handleReset}
-        handleInputChange={this.handleInputChange}
         handleStartDateChange={this.handleStartDateChange}
         handleEndDateChange={this.handleEndDateChange}
         handleCountryOptionsChange={this.handleCountryOptionsChange}
         handleCityOptionsChange={this.handleCityOptionsChange}
+        handleRoomSizeChange={this.handleRoomSizeChange}
         handleCountryChange={this.handleCountryChange}
         handleCityChange={this.handleCityChange}
         hotels={this.props.hotels}
+        getHotelDetailsLink={this.getHotelDetailsLink}
+        getHotelImageLink={this.getHotelImageLink}
+        isLoading={this.props.isLoading}
       />
     );
   }
@@ -128,7 +150,14 @@ const mapDispatchToProps = dispatch => {
     dispatch
   );
   return {
-    ...bindedCreators
+    ...bindedCreators,
+    getHotelDetailsLink: (hotelId, data) => ({
+      pathname: links.getHotel(hotelId),
+      search: QueryService.hotelQueryFromData(data)
+    }),
+    getHotelImageLink: hotelId => {
+      ImageService.getHotelImageLink(hotelId);
+    }
   };
 };
 

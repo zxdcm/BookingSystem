@@ -1,6 +1,12 @@
 import { RequestService } from "./requestService";
 import { handleError } from "./handleError";
-import { buildQuery } from "./buildQuery";
 import { OptionsService } from "./optionsService";
-
-export { handleError, RequestService, OptionsService, buildQuery };
+import { QueryService } from "./queryService";
+import { ImageService } from "./imageService";
+export {
+  handleError,
+  RequestService,
+  OptionsService,
+  QueryService,
+  ImageService
+};

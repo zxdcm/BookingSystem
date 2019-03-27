@@ -8,6 +8,13 @@ class OptionsService {
     ];
   }
 
+  static getNumericOptions(max = 20) {
+    return Array.from(new Array(max), (val, index) => ({
+      label: index + 1,
+      value: index + 1
+    }));
+  }
+
   static getOptions(options, labelProperty, valueProperty = null) {
     if (!valueProperty) {
       valueProperty = labelProperty;
@@ -40,10 +47,9 @@ class OptionsService {
   ) {
     if (!options) {
       return [];
-    } else {
-      let filteredList = options.filter(obj => obj[filterProp] === filterValue);
-      return this.getOptions(filteredList, labelProp, labelValue);
     }
+    let filteredList = options.filter(obj => obj[filterProp] === filterValue);
+    return this.getOptions(filteredList, labelProp, labelValue);
   }
 }
 

@@ -5,7 +5,8 @@ const links = {
   getRoom: () => "/room/",
   getExtraService: () => "/extraservice/",
   getHotelRooms: id => `hotel/${id}/rooms`,
-  getHotelSearch: () => "/search/"
+  getHotelSearch: () => "/search/",
+  getHotelImage: id => `/hotel/${id}/image`
 };
 
 export { links };

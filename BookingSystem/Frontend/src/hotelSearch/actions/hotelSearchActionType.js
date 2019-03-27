@@ -21,7 +21,7 @@ const hotelSearchActionType = {
   ...loadCitiesOptionsActionType,
   ...loadCountryOptionsActionType,
   SET_CITY_OPTIONS: "SET_CITY_OPTIONS",
-  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS"
+  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS",
 };
 
 export { hotelSearchActionType };

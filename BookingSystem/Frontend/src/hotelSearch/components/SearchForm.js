@@ -2,57 +2,87 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
+import { dateFormat } from "../../shared/settings/dateFormat";
+import "react-datepicker/dist/react-datepicker.css";
 
 const SearchForm = props => {
   const {
     startDate,
     endDate,
-    roomSize,
     country,
     city,
+    roomSizeOptions,
     countryOptions,
     cityOptions,
     handleSubmit,
     handleReset,
-    handleInputChange,
     handleStartDateChange,
     handleEndDateChange,
+    handleRoomSizeChange,
     handleCountryOptionsChange,
     handleCityOptionsChange,
     handleCountryChange,
     handleCityChange
   } = props;
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <DatePicker selected={startDate} onChange={handleStartDateChange} />
-        <DatePicker selected={endDate} onChange={handleEndDateChange} />
-        <label>Room size</label>
-        <input
-          name="roomSize"
-          type="number"
-          value={roomSize}
-          onChange={handleInputChange}
-        />
+    <div className="form" onSubmit={handleSubmit}>
+      <div className="form-group">
         <label>Country</label>
         <Select
           options={countryOptions}
           onInputChange={handleCountryOptionsChange}
           onChange={handleCountryChange}
+          placeholder="Select country"
         />
+      </div>
+      <div className="form-group">
         <label>City</label>
         <Select
           options={cityOptions}
           onInputChange={handleCityOptionsChange}
           onChange={handleCityChange}
+          placeholder="Select city"
         />
-        <div>
-          <button type="submit">Find</button>
-          <button type="button" onClick={handleReset}>
-            Reset
-          </button>
-        </div>
-      </form>
+      </div>
+      <div className="form-group">
+        <label>Room size</label>
+        <Select
+          options={roomSizeOptions}
+          onChange={handleRoomSizeChange}
+          placeholder="Select room size"
+        />
+      </div>
+      <div className="form-group">
+        <label>Start date</label>
+        <DatePicker
+          minDate={startDate}
+          selected={startDate}
+          onChange={handleStartDateChange}
+          dateFormat={dateFormat.CALENDAR_DISPLAY_FORMAT}
+        />
+      </div>
+      <div className="form-group">
+        <label>End date</label>
+        <DatePicker
+          minDate={startDate}
+          selected={endDate}
+          onChange={handleEndDateChange}
+          dateFormat={dateFormat.CALENDAR_DISPLAY_FORMAT}
+        />
+      </div>
+
+      <div className="btn-group">
+        <button className="btn btn-primary" type="submit">
+          Find
+        </button>
+        <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={handleReset}
+        >
+          Reset
+        </button>
+      </div>
     </div>
   );
 };

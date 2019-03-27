@@ -1,3 +1,3 @@
-import HotelSearch from "./HotelSearch";
+import HotelSearchContainer from "./HotelSearchContainer";
 
-export { HotelSearch };
+export { HotelSearchContainer };

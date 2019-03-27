@@ -1,12 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  CardImg
+} from "reactstrap";
+import { Link } from "react-router-dom";
 
-const HotelInfo = ({ hotel }) => (
-  <div>
-    {hotel.name && <h2>{hotel.name}</h2>}
-    {hotel.address && <li>{hotel.address}</li>}
-    {hotel.countryName && <li>{hotel.countryName}</li>}
-    {hotel.cityName && <li>{hotel.cityName}</li>}
+const HotelInfo = ({ hotel, hotelDetailsLink, hotelImageLink }) => (
+  <div className="card">
+    {hotelImageLink && <img className="card-img" src={hotelImageLink} />}
+    <div className="card-body body outline">
+      {hotel.name && <div className="card-title">{hotel.name}</div>}
+      {hotel.address && <div className="card-text">{hotel.address}</div>}
+      {hotel.countryName && (
+        <div className="card-text">{hotel.countryName}</div>
+      )}
+      {hotel.cityName && <div className="card-text">{hotel.cityName}</div>}
+      <Link to={hotelDetailsLink}>Details</Link>
+    </div>
   </div>
 );
 
