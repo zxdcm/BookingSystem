@@ -1,19 +1,18 @@
 import React, { Fragment } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Container, Row } from "reactstrap";
 const Layout = props => {
   const { isLoggedIn, isAdmin, children } = props;
   return (
-    <Container>
-      <Row>
+    <div className="container">
+      <div className="row">
         <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
-      </Row>
+      </div>
       {children}
-      <Row>
+      <div className="row">
         <Footer />
-      </Row>
-    </Container>
+      </div>
+    </div>
   );
 };
 

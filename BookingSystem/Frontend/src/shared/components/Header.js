@@ -1,32 +1,27 @@
 import React from "react";
-import { NavLink as RouterNavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { routePath } from "../settings/routePath";
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
 
 const Header = props => {
   const { isLoggedIn, isAdmin } = props;
   return (
     <div>
-      <Navbar>
-        <NavbarBrand tag={RouterNavLink} to="/">
-          Brand
-        </NavbarBrand>
-        <Nav>
-          <NavItem>
-            <NavLink tag={RouterNavLink} to={routePath.HOTEL_SEARCH_PAGE}>
-              Search
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink tag={RouterNavLink} to="/another">
-              Sign up
-            </NavLink>
-          </NavItem>
-          <NavLink tag={RouterNavLink} to="/onemore">
-            One More
-          </NavLink>
-        </Nav>
-      </Navbar>
+      <div className="navbar">
+        <div className="navbar-brand">
+          <NavLink to="/">Brand</NavLink>
+        </div>
+        <div className="nav">
+          <div className="nav-item">
+            <div className="nav-link">
+              <NavLink to={routePath.HOTEL_SEARCH_PAGE} />
+            </div>
+          </div>
+          <div className="nav-item">
+            <div className="nav-link">Sign up</div>
+          </div>
+          <div className="nav-link">One More</div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ const HotelList = ({ hotels, getHotelDetailsLink, getHotelImageLink }) => (
           <HotelInfo
             hotel={hotel}
             hotelDetailsLink={getHotelDetailsLink(hotel.hotelId)}
-            hotelImageLink={getHotelImageLink(hotel.hotelId) || null}
+            hotelImageLink={getHotelImageLink(hotel.hotelId)}
           />
         </div>
       ))}
