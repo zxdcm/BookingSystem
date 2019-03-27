@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +10,6 @@ namespace BookingSystem.WebApi.Controllers
     public class CountryController : ControllerBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
-
         public CountryController(IQueryDispatcher queryDispatcher)
         {
             _queryDispatcher = queryDispatcher;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Security.Claims;
 using System.Text;
+using Autofac;
 using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.MappingProfiles;
 using BookingSystem.Commands.Infrastructure;
@@ -36,12 +36,14 @@ namespace BookingSystem.WebApi
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<ICommandDispatcher, CommandDispatcher>();
             services.AddTransient<IQueryDispatcher, QueryDispatcher>();
+
             services.AddHandlers();
 
             services.AddDbContext<BookingWriteContext>
@@ -114,8 +116,8 @@ namespace BookingSystem.WebApi
                             .AllowCredentials();
                     });
             });
-
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -147,5 +149,16 @@ namespace BookingSystem.WebApi
             app.UseAuthentication();
             app.UseMvc();
         }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {      
+//            builder.RegisterGeneric(typeof(PagedQueryHandler<,>));
+//            builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
+//                .AsClosedTypesOf(typeof(IQueryHandler<,>)).AsImplementedInterfaces();
+//            builder.RegisterGenericDecorator(typeof(PagedQueryHandler<,>), typeof(IQueryHandler<,>));
+        }
+
+
+
     }
 }

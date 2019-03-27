@@ -15,4 +15,10 @@
     <Folder Include="Queries\AccountQueries\Queries\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\..\..\..\..\..\..\.nuget\packages\autofac\4.9.2\lib\netstandard2.0\Autofac.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
