@@ -100,12 +100,21 @@ namespace BookingSystem.WebApi
             services.AddScoped(provider => new JwtGenerator(new JwtOptions(tokenValidationParameters, expirationTime)));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = tokenValidationParameters;
-                    options.SaveToken = true;
-                    options.RequireHttpsMetadata = false;
-                });
+                .AddJwtBearer(options => { options.TokenValidationParameters = tokenValidationParameters; });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORSPolicy",
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin()
+                            .AllowCredentials();
+                    });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -131,6 +140,8 @@ namespace BookingSystem.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookingSystem API V1");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseCors("CORSPolicy");
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
