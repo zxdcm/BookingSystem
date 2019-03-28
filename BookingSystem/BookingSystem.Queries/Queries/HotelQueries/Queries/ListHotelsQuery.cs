@@ -57,8 +57,9 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                        (b.Status == BookingStatus.Pending && (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
                 where (room.Quantity > bookings.Count())
                 select room;
-            return rooms;
+            return rooms.Distinct();
         }
+
 
         public Task<IQueryable<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
@@ -73,11 +74,20 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 .WhereIf(query.IsActive.HasValue, h => h.IsActive == query.IsActive)
                 .WhereIf(query.CityId.HasValue, h => h.CityId == query.CityId)
                 .WhereIf(query.CountryId.HasValue, h => h.CountryId == query.CountryId);
+       
 
-            // TODO: ask. EF cant execute join.. 
-            var hotels = from hotel in filteredHotels
+            var images = from image in _dataContext.Images
+                join hotelImage in _dataContext.HotelImages on image.ImageId equals hotelImage.ImageId
+                group image.Url by hotelImage.HotelId
+                into grImages
+                select new { HotelId = grImages.Key, imageUrl = grImages.FirstOrDefault() };
+
+            var hotels = (from hotel in filteredHotels
                 join room in filteredRooms
                     on hotel.HotelId equals room.HotelId
+                join image in images
+                    on hotel.HotelId equals image.HotelId into jImages
+                from hImage in jImages.DefaultIfEmpty()
                 select new HotelPreView()
                 {
                     HotelId = hotel.HotelId,
@@ -86,7 +96,9 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                     CountryName = hotel.Name,
                     CityName = hotel.Name,
                     IsActive = hotel.IsActive,
-                };
+                    ImageUrl = hImage.imageUrl
+                });
+
             return Task.FromResult(hotels);
         }
     }
