@@ -1,5 +1,6 @@
 const config = {
-  basePath: "https://localhost:44353/api"
+  basePath: "https://localhost:44353/api",
+  pageSize: 5
 };
 
 export { config };

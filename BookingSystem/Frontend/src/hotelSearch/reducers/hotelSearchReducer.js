@@ -1,7 +1,7 @@
 import { handleActions } from "redux-actions";
 import { combineReducers } from "redux";
 import { hotelSearchActionType as actionType } from "../actions/";
-
+import { config } from "../../shared/settings/config";
 const fetchHotelsMap = {
   [actionType.FETCH_HOTELS_REQUEST]: state => ({
     ...state,
@@ -22,7 +22,7 @@ const fetchHotelsMap = {
 
 const hotelsInitialState = {
   hotels: [],
-  pageInfo: {},
+  pageInfo: { page: 1, pageSize: config.pageSize, totalPages: null },
   error: null,
   isFetching: false
 };

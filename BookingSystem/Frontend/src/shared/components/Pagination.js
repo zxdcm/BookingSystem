@@ -40,13 +40,11 @@ class Pagination extends Component {
         <ul className="pagination">
           <li className={"page-item " + (currentPage === 1 ? "active" : "")}>
             <a className="page-link" onClick={() => setPage(1)}>
-              First
+              1
             </a>
           </li>
           <li className={"page-item " + (currentPage === 1 ? "disabled" : "")}>
-            <a className="page-link" onClick={() => setPage(currentPage - 1)}>
-              Previous
-            </a>
+            <a className="page-link" onClick={() => setPage(currentPage - 1)} />
           </li>
           {pages.map((page, index) => (
             <li
@@ -64,7 +62,7 @@ class Pagination extends Component {
             }
           >
             <a className="page-link" onClick={() => setPage(currentPage + 1)}>
-              Next
+              &gt
             </a>
           </li>
           <li
@@ -73,7 +71,7 @@ class Pagination extends Component {
             }
           >
             <a className="page-link" onClick={() => setPage(totalPages)}>
-              Last
+              {totalPages}
             </a>
           </li>
         </ul>

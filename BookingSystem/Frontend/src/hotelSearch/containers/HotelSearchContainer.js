@@ -48,7 +48,7 @@ class HotelSearchContainer extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const data = this.getFormRequestData();
-    data.page = 1;
+    data.pageInfo = this.props.pageInfo;
     this.props.getHotels(data);
   };
 
@@ -116,6 +116,7 @@ class HotelSearchContainer extends Component {
   handleSetPage = page => {
     const data = this.getFormRequestData();
     data.page = page;
+    data.pageSize = this.props.pageInfo.pageSize;
     this.props.getHotels(data);
   };
 
@@ -168,7 +169,7 @@ const mapDispatchToProps = dispatch => {
       search: QueryService.hotelQueryFromData(data)
     }),
     getHotelImageLink: hotelId => {
-      ImageService.getHotelImageLink(hotelId);
+      return ImageService.getHotelImageLink(hotelId);
     }
   };
 };

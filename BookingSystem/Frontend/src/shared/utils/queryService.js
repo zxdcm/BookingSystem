@@ -17,6 +17,7 @@ class QueryService {
     }
     if (data.page) {
       formattedData.page = data.page;
+      formattedData.pageSize = data.pageSize;
     }
     return QueryService.buildQuery(formattedData);
   };
