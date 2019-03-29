@@ -48,30 +48,22 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
             _lockTimeOut = config.LockTimeOutMinutes;
         }
 
-        private IQueryable<Room> GetAvailableRooms(ListHotelsQuery query)
-        {
-
-            var rooms = from room in _dataContext.Rooms
-                join booking in _dataContext.Bookings
-                    on room.RoomId equals booking.RoomId into bookings
-                from b in bookings.DefaultIfEmpty()
-                select room;
-
-            return rooms;
-//                        from b in bookings
-//                        where ((query.MoveInDate > b.MoveOutDate || query.MoveOutDate < b.MoveInDate) ||
-//                               (b.Status == BookingStatus.Failed) ||
-//                               (b.Status == BookingStatus.Pending && (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
-//                        where (room.Quantity > bookings.Count())
-//                        select room;
-            return rooms;
-        }
-
-
         public async Task<Paged<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
-            
-            var rooms = GetAvailableRooms(query);
+            var rooms = from room in _dataContext.Rooms
+                join booking in _dataContext.Bookings on room.RoomId equals booking.RoomId into bookings
+                from b in bookings.DefaultIfEmpty()
+                where (b == null ||
+                       (query.MoveInDate > b.MoveOutDate ||
+                        query.MoveInDate < b.MoveOutDate) ||
+                       (b.Status == BookingStatus.Failed) ||
+                       (b.Status == BookingStatus.Pending &&
+                        (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
+                group bookings by new { room.RoomId, room.Quantity, room.Size, room.HotelId }
+                into grRooms
+                from b in grRooms
+                where b.Count() < grRooms.Key.Quantity
+                select new { grRooms.Key.RoomId, grRooms.Key.Size, grRooms.Key.HotelId };
 
             var filteredRooms = rooms
                 .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
@@ -84,7 +76,6 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 .WhereIf(query.CityId.HasValue, h => h.CityId == query.CityId)
                 .WhereIf(query.CountryId.HasValue, h => h.CountryId == query.CountryId);
        
-
             var images = from image in _dataContext.Images
                 join hotelImage in _dataContext.HotelImages on image.ImageId equals hotelImage.ImageId
                 group image.Url by hotelImage.HotelId
@@ -97,18 +88,21 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 join image in images
                     on hotel.HotelId equals image.HotelId into jImages
                 from hImage in jImages.DefaultIfEmpty()
+                join city in _dataContext.Cities
+                    on hotel.CityId equals city.CityId
+                join country in _dataContext.Countries 
+                    on hotel.CountryId equals country.CountryId
                 select new HotelPreView()
                 {
                     HotelId = hotel.HotelId,
                     Name = hotel.Name,
                     Address = hotel.Address,
-                    CountryName = hotel.Name,
-                    CityName = hotel.Name,
+                    CountryName = country.Name,
+                    CityName = city.Name,
                     IsActive = hotel.IsActive,
                     ImageUrl = hImage.imageUrl
                 });
             return await hotels.PaginateAsync(query.PageInfo);
-            //return Task.FromResult(hotels);
         }
     }
 }
