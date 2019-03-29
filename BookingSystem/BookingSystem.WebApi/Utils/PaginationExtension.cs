@@ -8,8 +8,6 @@ namespace BookingSystem.WebApi.Utils
 {
     public static class PaginationExtension
     {
-        public static IServiceProvider _provider;
-
         public static async Task<Paged<T>> PaginateAsync<T>(this IQueryable<T> query, PageInfo pageInfo)
         {
             var totalItems = await query.CountAsync();
@@ -19,7 +17,11 @@ namespace BookingSystem.WebApi.Utils
                 {Page = pageInfo.Page,
                 PageSize = pageInfo.PageSize,
                     TotalPages = totalPages};
-            return new Paged<T>(){ Items = queryResult, PageInfo = newPageInfo};
+            return new Paged<T>()
+                {
+                  Items = queryResult,
+                  PageInfo = newPageInfo
+                };
         }
     }
 }

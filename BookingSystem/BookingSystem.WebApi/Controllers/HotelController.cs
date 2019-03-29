@@ -52,7 +52,6 @@ namespace BookingSystem.WebApi.Controllers
             var query = hotelRequestModel.ToQuery();
             var queryResult =  await _queryDispatcher.DispatchAsync(query);
             return Ok(queryResult);
-            //return Ok(queryResult.PaginateAsync(new PageInfo(){ PageSize = hotelRequestModel.PageSize, Page = hotelRequestModel.Page}));
         }
 
         [HttpGet("{hotelId}/extraservices")]

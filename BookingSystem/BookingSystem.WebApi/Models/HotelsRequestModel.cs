@@ -18,6 +18,11 @@ namespace BookingSystem.WebApi.Models
 
         public ListHotelsQuery ToQuery() 
             => new ListHotelsQuery(Name, MoveInDate, MoveOutDate, 
-                                   IsActive, CountryId, CityId, RoomSize, new PageInfo(){ Page = Page, PageSize = PageSize != 0 ? PageSize : 20 });
+                                   IsActive, CountryId, CityId, RoomSize, 
+                                   new PageInfo()
+                                   {
+                                     Page = Page,
+                                     PageSize = PageSize != 0 ? PageSize : 20
+                                   });
     }
 }
