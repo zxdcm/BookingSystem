@@ -63,26 +63,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(fetchHotelsFailure(error));
-        // const responce = {
-        //   hotels: [
-        //     {
-        //       hotelId: 1,
-        //       name: "Test hotel",
-        //       address: "address",
-        //       countryName: "country",
-        //       cityName: "city"
-        //     },
-        //     {
-        //       hotelId: 2,
-        //       name: "Test hotel 2",
-        //       address: "address 2",
-        //       countryName: "country 2",
-        //       cityName: "city 2"
-        //     }
-        //   ],
-        //   pageInfo: { page: 1, pageSize: 2, totalPages: 1 }
-        // };
-        // dispatch(fetchHotelsSuccess(responce));
       });
   };
 
@@ -118,18 +98,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCityOptionsFailure(error));
-        dispatch(
-          loadCityOptionsSuccess(
-            OptionsService.getOptions(
-              [
-                { cityName: "Minsk", cityId: 1 },
-                { cityName: "Moscow", cityId: 2 }
-              ],
-              "cityName",
-              "cityId"
-            )
-          )
-        );
       });
   };
 
@@ -153,18 +121,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCountryOptionsFailure(error));
-        dispatch(
-          loadCountryOptionsSuccess(
-            OptionsService.getOptions(
-              [
-                { countryName: "Belarus", countryId: 1 },
-                { cityName: "Russian", countryId: 2 }
-              ],
-              "countryName",
-              "countryId"
-            )
-          )
-        );
       });
   };
 
@@ -181,11 +137,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadRoomSizeOptionsFailure(error));
-        dispatch(
-          loadRoomSizeOptionsSuccess(
-            OptionsService.getNumericOptionsFromArray([1, 2, 3, 4])
-          )
-        );
       });
   };
 }

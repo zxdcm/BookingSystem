@@ -33,7 +33,7 @@ const HotelSearch = props => {
   return (
     <div className="row">
       <div className="col-4">
-        <div className="filterBox">
+        <div className="filter-box">
           <SearchForm
             startDate={startDate}
             endDate={endDate}
@@ -57,7 +57,7 @@ const HotelSearch = props => {
           />
         </div>
       </div>
-      <div className="col d-flex justify-content-center align-items-center">
+      <div className="col align-items-center-container ">
         {isLoading ? (
           <div>
             <div
@@ -68,7 +68,7 @@ const HotelSearch = props => {
         ) : (
           <Fragment>
             {hotels.length ? (
-              <div className="col-8 searchResultBox">
+              <div className="col-12 search-result-box">
                 <HotelList
                   hotels={hotels}
                   getHotelDetailsLink={getHotelDetailsLink}
@@ -76,7 +76,7 @@ const HotelSearch = props => {
                 <Pagination pageInfo={pageInfo} setPage={handleSetPage} />
               </div>
             ) : (
-              <div className="searchResultBox alert alert-info" role="alert">
+              <div className="search-result-box alert alert-info" role="alert">
                 <h4>No hotels match : ( </h4>
               </div>
             )}

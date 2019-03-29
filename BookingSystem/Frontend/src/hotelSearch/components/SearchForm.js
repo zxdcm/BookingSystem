@@ -28,8 +28,8 @@ const SearchForm = props => {
   return (
     <div className="form">
       <div className="form-group">
-        <div className="alignItemsRight">
-          <button className="btn btn-danger resetBtn" onClick={handleReset}>
+        <div className="align-items-right-container">
+          <button className="btn btn-secondary resetBtn" onClick={handleReset}>
             Reset
           </button>
         </div>
@@ -83,9 +83,11 @@ const SearchForm = props => {
           placeholder="Select room size"
         />
       </div>
-      <button className="findBtn" onClick={handleSubmit}>
-        Find
-      </button>
+      <div className="align-items-right-container">
+        <button className="btn btn-success find-btn" onClick={handleSubmit}>
+          Find
+        </button>
+      </div>
     </div>
   );
 };

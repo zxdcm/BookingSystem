@@ -51,7 +51,6 @@ class HotelSearchContainer extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const data = this.getFormRequestData();
-    console.log(data);
     this.props.getHotels(data);
   };
 
