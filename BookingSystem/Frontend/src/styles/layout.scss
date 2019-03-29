@@ -1,20 +1,19 @@
-
-#booking {
-	font-family: 'Montserrat', sans-serif;
-	background-image: $background-image-url;
-    background-size: 100%;
-    background-repeat: no-repeat;
-	background-position: center;
-}
-
 #header {
     margin-bottom: 20px;
     width: 100%;
 }
 
-#background-image{
+#booking {
+    font-family: 'Montserrat', sans-serif;
+}
+
+%background-image {
     background-image: $background-image-url;
     background-size: 100%;
     background-repeat: no-repeat;
-	background-position: center;
+    background-position: center;
+}
+
+body {
+    @extend %background-image
 }

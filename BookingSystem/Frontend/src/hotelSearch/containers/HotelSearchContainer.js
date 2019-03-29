@@ -4,8 +4,7 @@ import { bindActionCreators } from "redux";
 import { HotelSearchActions } from "../actions";
 import HotelSearch from "../components/HotelSearch";
 import { links } from "../../shared/settings/links";
-import { QueryService, ImageService, OptionsService } from "../../shared/utils";
-import { format } from "moment";
+import { QueryService } from "../../shared/utils";
 
 const mapStateToProps = state => {
   const hotels = state.hotelSearch.hotels;
