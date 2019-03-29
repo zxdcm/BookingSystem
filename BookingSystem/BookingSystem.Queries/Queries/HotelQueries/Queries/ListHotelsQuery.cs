@@ -50,8 +50,11 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 
         public async Task<Paged<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
-            var rooms = from room in _dataContext.Rooms
-                join booking in _dataContext.Bookings on room.RoomId equals booking.RoomId into bookings
+            var filteredRooms = _dataContext.Rooms
+                .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
+
+            var newFilteredRooms = from room in filteredRooms
+                        join booking in _dataContext.Bookings on room.RoomId equals booking.RoomId into bookings
                 from b in bookings.DefaultIfEmpty()
                 where (b == null ||
                        (query.MoveInDate > b.MoveOutDate ||
@@ -65,10 +68,7 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 where b.Count() < grRooms.Key.Quantity
                 select new { grRooms.Key.RoomId, grRooms.Key.Size, grRooms.Key.HotelId };
 
-            var filteredRooms = rooms
-                .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
-
-            var roomsHotelsIds = filteredRooms.Select(r => r.HotelId).Distinct();
+            var roomsHotelsIds = newFilteredRooms.Select(r => r.HotelId).Distinct();
 
             var filteredHotels = _dataContext.Hotels
                 .WhereIf(!string.IsNullOrWhiteSpace(query.Name), h => h.Name.StartsWith(query.Name))
@@ -82,25 +82,27 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 into grImages
                 select new { HotelId = grImages.Key, imageUrl = grImages.FirstOrDefault() };
 
-            var hotels = (from hotel in filteredHotels
-                join hotelId in roomsHotelsIds
-                    on hotel.HotelId equals hotelId
-                join image in images
-                    on hotel.HotelId equals image.HotelId into jImages
-                from hImage in jImages.DefaultIfEmpty()
+            var hotels = (from hotel in _dataContext.Hotels
+                //join hotelId in roomsHotelsIds
+                  //  on hotel.HotelId equals hotelId
+                join image in _dataContext.HotelImages
+                  on hotel.HotelId equals image.HotelId into jImages
+               from hImage in jImages.DefaultIfEmpty()
                 join city in _dataContext.Cities
                     on hotel.CityId equals city.CityId
                 join country in _dataContext.Countries 
                     on hotel.CountryId equals country.CountryId
+                    group new { images } by new { hotel.HotelId, hotelName = hotel.Name, hotel.Address, cityName = city.Name, countryName = country.Name } into grHotels
                 select new HotelPreView()
                 {
-                    HotelId = hotel.HotelId,
-                    Name = hotel.Name,
-                    Address = hotel.Address,
-                    CountryName = country.Name,
-                    CityName = city.Name,
-                    IsActive = hotel.IsActive,
-                    ImageUrl = hImage.imageUrl
+                    HotelId = grHotels.Key.HotelId,
+                    Name = grHotels.Key.hotelName,
+                    Address = grHotels.Key.Address,
+                    CountryName = grHotels.Key.countryName,
+                    CityName = grHotels.Key.cityName,
+                    ImageUrl = images.Select(i => i.imageUrl),
+                    //IsActive = hotel.IsActive,
+                 //   ImageUrl = hImage.imageUrl
                 });
             return await hotels.PaginateAsync(query.PageInfo);
         }
