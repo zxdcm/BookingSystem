@@ -8,7 +8,7 @@ const Layout = props => {
       <div className="row">
         <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
       </div>
-      <div className="container">{children}</div>
+      <div className="container full-height">{children}</div>
       <div className="row">
         <Footer />
       </div>
