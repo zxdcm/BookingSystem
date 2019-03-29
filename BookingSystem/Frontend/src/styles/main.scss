@@ -1,1 +1,74 @@
- 
+
+@import "./../../node_modules//bootstrap/scss/bootstrap.scss";
+@import "./../../node_modules/bootstrap/scss//variables.scss";
+
+$background-color: #98878F;
+$main-color: #192231;
+$accent-color: rgb(196, 159, 38);
+$menu-color: #FFFFFF;
+$line-color: #b2b2b2;
+$border-color:  #d1d1d1;
+$img-color: #7cfcd1;
+$title-color: #000000;
+$card-color: #808080;
+$button-color: #dd8613;
+.card {
+    border: 1px solid $card-color;  
+    box-sizing: border-box;
+}
+
+
+.searchResultBox {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.filterBox {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.custom-select__control{
+    @include form-control-focus()
+}
+
+.custom-select__indicators{
+    display: none;
+}
+
+#booking {
+	font-family: 'Montserrat', sans-serif;
+	background-image: url('../img/background.jpg');
+	background-size: cover;
+	background-position: center;
+}
+
+#header {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.findBtn{
+    border: none;
+    background-color: $button-color;
+    border-radius: 5px;
+    color: $menu-color;
+    font-size: 16px;
+    padding: 15px 30px;
+    color: 4menu-color;
+    text-decoration: none; 
+    letter-spacing: normal;  
+    font-size: 18px;
+    margin-top: 40px;
+    margin-left: 180px;
+}
+
+.findBtn:hover{
+    background-color: $accent-color;  
+    transition: background-color 700ms ease;
+    cursor: pointer;
+}
+
+
