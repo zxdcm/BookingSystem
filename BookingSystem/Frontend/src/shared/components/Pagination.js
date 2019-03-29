@@ -32,14 +32,16 @@ class Pagination extends Component {
     const { page, pageSize, totalPages } = pageInfo;
     const currentPage = page;
     var pages = this.getPages(totalPages, page, pageSize);
-    // if (!pages || pages.length < 2) {
-    //   return null;
-    // }
+    if (!pages || pages.length < 1) {
+      return null;
+    }
     return (
       <div className="container">
         <nav>
-          <ul className="pagination">
-            <li className={"page-item " + (currentPage === 1 ? "active" : "")}>
+          <ul className="pagination d-flex justify-content-center ">
+            <li
+              className={"page-item " + (currentPage === 1 ? "disabled" : "")}
+            >
               <a className="page-link" onClick={() => setPage(1)}>
                 First
               </a>

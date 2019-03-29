@@ -28,6 +28,11 @@ const SearchForm = props => {
   return (
     <div className="form">
       <div className="form-group">
+        <div className="alignItemsRight">
+          <button className="btn btn-danger resetBtn" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
         <label>Destination country</label>
         <Select
           classNamePrefix="custom-select"

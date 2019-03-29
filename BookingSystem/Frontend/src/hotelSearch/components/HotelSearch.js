@@ -66,13 +66,21 @@ const HotelSearch = props => {
             />
           </div>
         ) : (
-          <div className="col-8 searchResultBox">
-            <HotelList
-              hotels={hotels}
-              getHotelDetailsLink={getHotelDetailsLink}
-            />
-            <Pagination pageInfo={pageInfo} setPage={handleSetPage} />
-          </div>
+          <Fragment>
+            {hotels.length ? (
+              <div className="col-8 searchResultBox">
+                <HotelList
+                  hotels={hotels}
+                  getHotelDetailsLink={getHotelDetailsLink}
+                />
+                <Pagination pageInfo={pageInfo} setPage={handleSetPage} />
+              </div>
+            ) : (
+              <div className="searchResultBox alert alert-info" role="alert">
+                <h4>No hotels match : ( </h4>
+              </div>
+            )}
+          </Fragment>
         )}
       </div>
     </div>

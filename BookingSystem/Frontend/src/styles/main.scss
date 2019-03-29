@@ -12,11 +12,16 @@ $img-color: #7cfcd1;
 $title-color: #000000;
 $card-color: #808080;
 $button-color: #dd8613;
+
 .card {
     border: 1px solid $card-color;  
+    margin-bottom: 10%;
     box-sizing: border-box;
 }
 
+.card-img {
+    margin-bottom: 5%;
+}
 
 .searchResultBox {
     background-color: #FFFFFF;
@@ -32,7 +37,13 @@ $button-color: #dd8613;
 
 .custom-select__control{
     @include form-control-focus()
+    
 }
+
+.custom-select__control:hover{
+    border-color: #80bdff
+}
+
 
 .custom-select__indicators{
     display: none;
@@ -50,6 +61,9 @@ $button-color: #dd8613;
     width: 100%;
 }
 
+.react-datepicker__input-container{
+    width: 310px;
+}
 .findBtn{
     border: none;
     background-color: $button-color;
@@ -57,7 +71,7 @@ $button-color: #dd8613;
     color: $menu-color;
     font-size: 16px;
     padding: 15px 30px;
-    color: 4menu-color;
+    color: $menu-color;
     text-decoration: none; 
     letter-spacing: normal;  
     font-size: 18px;
@@ -71,4 +85,15 @@ $button-color: #dd8613;
     cursor: pointer;
 }
 
+.btn.resetBtn{
+    height: 40px;
+}
 
+.resetBtnDiv {
+    display: flex;
+    justify-content: flex-end; 
+}
+.alignItemsRight {
+    display: flex;
+    justify-content: flex-end; 
+}
