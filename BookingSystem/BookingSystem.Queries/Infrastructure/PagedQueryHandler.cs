@@ -7,13 +7,13 @@ namespace BookingSystem.Queries.Infrastructure
 {
     public class Paged<T>
     {
-        public PageInfo Paging { get; set; }
+        public PageInfo PageInfo { get; set; }
         public T[] Items { get; set; }
     }
 
     public class PageInfo
     {
-        public int PageIndex { get; set; }
+        public int Page { get; set; }
         public int PageSize { get; set; } = 20;
         public int TotalPages { get; set; }
     }
@@ -39,14 +39,14 @@ namespace BookingSystem.Queries.Infrastructure
         {
             var paging = query.PageInfo ?? new PageInfo();
             IQueryable<TItem> queryItems = await  _handler.ExecuteAsync(query.Query);
-            var items = await queryItems.Skip(paging.PageIndex * paging.PageSize)
+            var items = await queryItems.Skip(paging.Page * paging.PageSize)
                 .Take(paging.PageSize).ToArrayAsync();
             var totalItems = await queryItems.CountAsync();
-            paging.TotalPages = totalItems / paging.PageSize;
+            paging.TotalPages = (totalItems + paging.PageSize - 1) / paging.PageSize;
             return new Paged<TItem>
             {
                 Items = items,
-                Paging = paging
+                PageInfo = paging
             };
         }
     }

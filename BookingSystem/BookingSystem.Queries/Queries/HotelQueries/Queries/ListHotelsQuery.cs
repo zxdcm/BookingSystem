@@ -10,7 +10,7 @@ using BookingSystem.ReadPersistence.ReadModels;
 
 namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 {
-    public class ListHotelsQuery : IQuery<IQueryable<HotelPreView>>
+    public class ListHotelsQuery : IQuery<Paged<HotelPreView>>
     {
         public string Name { get; }
         public DateTime MoveInDate { get; }
@@ -19,9 +19,10 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
         public int? CountryId { get; }
         public int? CityId { get; }
         public int? RoomSize { get; }
+        public PageInfo PageInfo { get; }
 
         public ListHotelsQuery(string name, DateTime moveIntDate, DateTime moveOutDate,
-            bool? isActive, int? countryId, int? cityId, int? roomSize)
+            bool? isActive, int? countryId, int? cityId, int? roomSize, PageInfo pageInfo)
         {
             Name = name;
             MoveInDate = moveIntDate;
@@ -30,11 +31,12 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
             CountryId = countryId;
             CityId = cityId;
             RoomSize = roomSize;
+            PageInfo = pageInfo;
         }
 
     }
 
-    public class ListHotelsQueryHandler : IQueryHandler<ListHotelsQuery, IQueryable<HotelPreView>>
+    public class ListHotelsQueryHandler : IQueryHandler<ListHotelsQuery, Paged<HotelPreView>>
     {
         private readonly BookingReadContext _dataContext;
         private readonly int _lockTimeOut;
@@ -48,26 +50,33 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 
         private IQueryable<Room> GetAvailableRooms(ListHotelsQuery query)
         {
+
             var rooms = from room in _dataContext.Rooms
                 join booking in _dataContext.Bookings
                     on room.RoomId equals booking.RoomId into bookings
                 from b in bookings.DefaultIfEmpty()
-                where ((query.MoveInDate > b.MoveOutDate || query.MoveOutDate < b.MoveInDate) ||
-                       (b.Status == BookingStatus.Failed) ||
-                       (b.Status == BookingStatus.Pending && (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
-                where (room.Quantity > bookings.Count())
                 select room;
-            return rooms.Distinct();
+
+            return rooms;
+//                        from b in bookings
+//                        where ((query.MoveInDate > b.MoveOutDate || query.MoveOutDate < b.MoveInDate) ||
+//                               (b.Status == BookingStatus.Failed) ||
+//                               (b.Status == BookingStatus.Pending && (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
+//                        where (room.Quantity > bookings.Count())
+//                        select room;
+            return rooms;
         }
 
 
-        public Task<IQueryable<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
+        public async Task<Paged<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
             
             var rooms = GetAvailableRooms(query);
 
             var filteredRooms = rooms
                 .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
+
+            var roomsHotelsIds = filteredRooms.Select(r => r.HotelId).Distinct();
 
             var filteredHotels = _dataContext.Hotels
                 .WhereIf(!string.IsNullOrWhiteSpace(query.Name), h => h.Name.StartsWith(query.Name))
@@ -83,8 +92,8 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 select new { HotelId = grImages.Key, imageUrl = grImages.FirstOrDefault() };
 
             var hotels = (from hotel in filteredHotels
-                join room in filteredRooms
-                    on hotel.HotelId equals room.HotelId
+                join hotelId in roomsHotelsIds
+                    on hotel.HotelId equals hotelId
                 join image in images
                     on hotel.HotelId equals image.HotelId into jImages
                 from hImage in jImages.DefaultIfEmpty()
@@ -98,8 +107,8 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                     IsActive = hotel.IsActive,
                     ImageUrl = hImage.imageUrl
                 });
-
-            return Task.FromResult(hotels);
+            return await hotels.PaginateAsync(query.PageInfo);
+            //return Task.FromResult(hotels);
         }
     }
 }

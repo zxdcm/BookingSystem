@@ -8,9 +8,9 @@ namespace BookingSystem.WebApi.Models
 {
     public class CountryRequestModel
     {
-        public string CountryNameLike { get; set; }
+        public string CountryName { get; set; }
         public int Amount { get; set; }
         public ListCountriesQuery ToQuery() 
-            => new ListCountriesQuery(CountryNameLike, Amount);
+            => new ListCountriesQuery(CountryName, Amount);
     }
 }

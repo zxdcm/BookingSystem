@@ -14,5 +14,7 @@ namespace BookingSystem.WebApi.Controllers
         {
             return result.IsSuccessful ? Ok() : Error(result.ErrorMessage);
         }
+
+
     }
 }

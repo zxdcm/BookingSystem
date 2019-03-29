@@ -4,12 +4,14 @@ using BookingSystem.Commands.Commands.HotelCommands.Commands;
 using BookingSystem.Commands.Commands.HotelCommands.DTOs;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Common.Utils;
+using BookingSystem.Queries.Infrastructure;
 using BookingSystem.Queries.Queries.ExtraServiceQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
 using BookingSystem.Queries.Queries.ImageQueries.Queries;
 using BookingSystem.Queries.Queries.RoomQueries.Queries;
 using BookingSystem.WebApi.Models;
+using BookingSystem.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +52,7 @@ namespace BookingSystem.WebApi.Controllers
             var query = hotelRequestModel.ToQuery();
             var queryResult =  await _queryDispatcher.DispatchAsync(query);
             return Ok(queryResult);
+            //return Ok(queryResult.PaginateAsync(new PageInfo(){ PageSize = hotelRequestModel.PageSize, Page = hotelRequestModel.Page}));
         }
 
         [HttpGet("{hotelId}/extraservices")]
