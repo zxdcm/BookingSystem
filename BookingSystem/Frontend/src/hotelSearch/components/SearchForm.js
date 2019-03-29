@@ -11,6 +11,7 @@ const SearchForm = props => {
     endDate,
     country,
     city,
+    roomSize,
     roomSizeOptions,
     countryOptions,
     cityOptions,
@@ -25,10 +26,12 @@ const SearchForm = props => {
     handleCityChange
   } = props;
   return (
-    <div className="form" onSubmit={handleSubmit}>
+    <div className="form">
       <div className="form-group">
-        <label>Country</label>
+        <label>Destination country</label>
         <Select
+          classNamePrefix="custom-select"
+          value={country}
           options={countryOptions}
           onInputChange={handleCountryOptionsChange}
           onChange={handleCountryChange}
@@ -36,25 +39,20 @@ const SearchForm = props => {
         />
       </div>
       <div className="form-group">
-        <label>City</label>
+        <label>Destination city</label>
         <Select
+          classNamePrefix="custom-select"
           options={cityOptions}
+          value={city}
           onInputChange={handleCityOptionsChange}
           onChange={handleCityChange}
           placeholder="Select city"
         />
       </div>
       <div className="form-group">
-        <label>Room size</label>
-        <Select
-          options={roomSizeOptions}
-          onChange={handleRoomSizeChange}
-          placeholder="Select room size"
-        />
-      </div>
-      <div className="form-group">
-        <label>Start date</label>
+        <label>Move in date</label>
         <DatePicker
+          className="form-control"
           minDate={startDate}
           selected={startDate}
           onChange={handleStartDateChange}
@@ -62,27 +60,27 @@ const SearchForm = props => {
         />
       </div>
       <div className="form-group">
-        <label>End date</label>
+        <label>Move out date</label>
         <DatePicker
+          className="form-control"
           minDate={startDate}
           selected={endDate}
           onChange={handleEndDateChange}
           dateFormat={dateFormat.CALENDAR_DISPLAY_FORMAT}
         />
       </div>
-
-      <div className="btn-group">
-        <button className="btn btn-primary" type="submit">
-          Find
-        </button>
-        <button
-          className="btn btn-secondary"
-          type="button"
-          onClick={handleReset}
-        >
-          Reset
-        </button>
+      <div className="form-group">
+        <label>Room size</label>
+        <Select
+          value={roomSize}
+          options={roomSizeOptions}
+          onChange={handleRoomSizeChange}
+          placeholder="Select room size"
+        />
       </div>
+      <button className="findBtn" onClick={handleSubmit}>
+        Find
+      </button>
     </div>
   );
 };

@@ -27,28 +27,31 @@ class HotelSearchContainer extends Component {
   state = {
     startDate: new Date(),
     endDate: new Date(),
-    roomSize: 1,
+    roomSize: { label: 1, value: 1 },
     city: "",
     country: ""
   };
 
   componentDidMount() {
-    this.props.getHotels({});
+    const data = this.getFormRequestData();
+    this.props.getHotels(data);
     this.props.loadRoomSizeOptions();
   }
 
   getFormRequestData = () => ({
     startDate: this.state.startDate,
     endDate: this.state.endDate,
-    roomSize: this.state.roomSize,
-    cityId: this.state.city.cityId,
-    countryId: this.state.country.countryId
+    roomSize: this.state.roomSize.value,
+    cityId: this.state.city.value,
+    countryId: this.state.country.value,
+    page: this.props.pageInfo.page,
+    pageSize: this.props.pageInfo.pageSize
   });
 
   handleSubmit = event => {
     event.preventDefault();
     const data = this.getFormRequestData();
-    data.pageInfo = this.props.pageInfo;
+    console.log(data);
     this.props.getHotels(data);
   };
 
@@ -56,11 +59,14 @@ class HotelSearchContainer extends Component {
     this.setState({
       startDate: new Date(),
       endDate: new Date(),
-      roomSize: 1,
+      roomSize: { label: 1, value: 1 },
       city: "",
       country: ""
     });
-    this.props.getHotels();
+    this.props.resetCountryOptions();
+    this.props.resetCityOptions();
+    const data = this.getFormRequestData();
+    this.props.getHotels(data);
   };
 
   handleStartDateChange = date => {
@@ -83,25 +89,24 @@ class HotelSearchContainer extends Component {
 
   handleCityOptionsChange = search => {
     if (search === "") return;
-    const countryName = this.state.country.name;
+    const countryId = this.state.country.value;
     this.props.loadCityOptions({
       cityName: search,
-      countryName: countryName
+      countryId: countryId
     });
   };
 
   handleRoomSizeChange = data => {
-    this.setState({ roomSize: data.value });
+    this.setState({ roomSize: data });
   };
 
   handleCountryChange = data => {
-    const country = { countryId: data.value, name: data.label };
-    this.setState({ country: country });
+    this.setState({ country: data, city: { value: "", label: "" } });
+    this.props.resetCityOptions();
   };
 
   handleCityChange = data => {
-    const city = { cityId: data.value, name: data.label };
-    this.setState({ city: city });
+    this.setState({ city: data });
   };
 
   getHotelDetailsLink = hotelId => {
@@ -109,14 +114,9 @@ class HotelSearchContainer extends Component {
     return this.props.getHotelDetailsLink(hotelId, searchData);
   };
 
-  getHotelImageLink = hotelId => {
-    return this.props.getHotelImageLink(hotelId);
-  };
-
   handleSetPage = page => {
     const data = this.getFormRequestData();
     data.page = page;
-    data.pageSize = this.props.pageInfo.pageSize;
     this.props.getHotels(data);
   };
 
@@ -127,6 +127,7 @@ class HotelSearchContainer extends Component {
         endDate={this.state.endDate}
         city={this.state.city}
         country={this.state.country}
+        roomSize={this.state.roomSize}
         roomSizeOptions={this.props.roomSizeOptions}
         countryOptions={this.props.countryOptions}
         cityOptions={this.props.cityOptions}
@@ -143,7 +144,6 @@ class HotelSearchContainer extends Component {
         hotels={this.props.hotels}
         pageInfo={this.props.pageInfo}
         getHotelDetailsLink={this.getHotelDetailsLink}
-        getHotelImageLink={this.getHotelImageLink}
         isLoading={this.props.isLoading}
       />
     );
@@ -158,7 +158,9 @@ const mapDispatchToProps = dispatch => {
       setCountry: HotelSearchActions.setCountry,
       loadCountryOptions: HotelSearchActions.loadCountryOptions,
       loadCityOptions: HotelSearchActions.loadCityOptions,
-      loadRoomSizeOptions: HotelSearchActions.loadRoomSizeOptions
+      loadRoomSizeOptions: HotelSearchActions.loadRoomSizeOptions,
+      resetCityOptions: HotelSearchActions.resetCityOptions,
+      resetCountryOptions: HotelSearchActions.resetCountryOptions
     },
     dispatch
   );
@@ -167,10 +169,7 @@ const mapDispatchToProps = dispatch => {
     getHotelDetailsLink: (hotelId, data) => ({
       pathname: links.getHotel(hotelId),
       search: QueryService.hotelQueryFromData(data)
-    }),
-    getHotelImageLink: hotelId => {
-      return ImageService.getHotelImageLink(hotelId);
-    }
+    })
   };
 };
 

@@ -10,6 +10,7 @@ const HotelSearch = props => {
     endDate,
     country,
     city,
+    roomSize,
     roomSizeOptions,
     countryOptions,
     cityOptions,
@@ -27,50 +28,51 @@ const HotelSearch = props => {
     hotels,
     pageInfo,
     getHotelDetailsLink,
-    getHotelImageLink,
     isLoading
   } = props;
   return (
     <div className="row">
       <div className="col-4">
-        <SearchForm
-          startDate={startDate}
-          endDate={endDate}
-          country={country}
-          city={city}
-          roomSizeOptions={roomSizeOptions}
-          countryOptions={countryOptions}
-          cityOptions={cityOptions}
-          handleSubmit={handleSubmit}
-          handleReset={handleReset}
-          handleInputChange={handleInputChange}
-          handleStartDateChange={handleStartDateChange}
-          handleEndDateChange={handleEndDateChange}
-          handleCountryOptionsChange={handleCountryOptionsChange}
-          handleCityOptionsChange={handleCityOptionsChange}
-          handleRoomSizeChange={handleRoomSizeChange}
-          handleCountryChange={handleCountryChange}
-          handleCityChange={handleCityChange}
-          handleSetPage={handleSetPage}
-        />
+        <div className="filterBox">
+          <SearchForm
+            startDate={startDate}
+            endDate={endDate}
+            country={country}
+            city={city}
+            roomSize={roomSize}
+            roomSizeOptions={roomSizeOptions}
+            countryOptions={countryOptions}
+            cityOptions={cityOptions}
+            handleSubmit={handleSubmit}
+            handleReset={handleReset}
+            handleInputChange={handleInputChange}
+            handleStartDateChange={handleStartDateChange}
+            handleEndDateChange={handleEndDateChange}
+            handleCountryOptionsChange={handleCountryOptionsChange}
+            handleCityOptionsChange={handleCityOptionsChange}
+            handleRoomSizeChange={handleRoomSizeChange}
+            handleCountryChange={handleCountryChange}
+            handleCityChange={handleCityChange}
+            handleSetPage={handleSetPage}
+          />
+        </div>
       </div>
       <div className="col d-flex justify-content-center align-items-center">
         {isLoading ? (
           <div>
             <div
-              className="spinner-border"
-              style={{ size: "lg", color: "secondary" }}
+              className="spinner-border text-light"
+              style={{ size: "lg", color: "light" }}
             />
           </div>
         ) : (
-          <Fragment>
+          <div className="col-8 searchResultBox">
             <HotelList
               hotels={hotels}
               getHotelDetailsLink={getHotelDetailsLink}
-              getHotelImageLink={getHotelImageLink}
             />
             <Pagination pageInfo={pageInfo} setPage={handleSetPage} />
-          </Fragment>
+          </div>
         )}
       </div>
     </div>

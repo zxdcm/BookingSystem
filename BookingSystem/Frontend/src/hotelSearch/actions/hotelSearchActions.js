@@ -3,6 +3,7 @@ import { hotelSearchActionType as actionType } from "./hotelSearchActionType";
 import { HotelSearchService } from "../services/";
 import { handleError } from "../../shared/utils/";
 import { OptionsService } from "../../shared/utils/optionsService";
+import { config } from "../../shared/settings/config";
 
 const fetchHotelsRequest = createAction(actionType.FETCH_HOTELS_REQUEST);
 const fetchHotelsSuccess = createAction(
@@ -59,30 +60,29 @@ class HotelSearchActions {
       .then(result => result.json())
       .then(jsonResult => {
         dispatch(fetchHotelsSuccess(jsonResult));
-        return jsonResult;
       })
       .catch(error => {
         dispatch(fetchHotelsFailure(error));
-        const responce = {
-          hotels: [
-            {
-              hotelId: 1,
-              name: "Test hotel",
-              address: "address",
-              countryName: "country",
-              cityName: "city"
-            },
-            {
-              hotelId: 2,
-              name: "Test hotel 2",
-              address: "address 2",
-              countryName: "country 2",
-              cityName: "city 2"
-            }
-          ],
-          pageInfo: { page: 1, pageSize: 2, totalPages: 10 }
-        };
-        dispatch(fetchHotelsSuccess(responce));
+        // const responce = {
+        //   hotels: [
+        //     {
+        //       hotelId: 1,
+        //       name: "Test hotel",
+        //       address: "address",
+        //       countryName: "country",
+        //       cityName: "city"
+        //     },
+        //     {
+        //       hotelId: 2,
+        //       name: "Test hotel 2",
+        //       address: "address 2",
+        //       countryName: "country 2",
+        //       cityName: "city 2"
+        //     }
+        //   ],
+        //   pageInfo: { page: 1, pageSize: 2, totalPages: 1 }
+        // };
+        // dispatch(fetchHotelsSuccess(responce));
       });
   };
 
@@ -97,11 +97,14 @@ class HotelSearchActions {
     })
   );
 
+  static resetCityOptions = createAction(actionType.RESET_CITY_OPTIONS);
+
   static loadCityOptions = search => dispatch => {
     dispatch(loadCityOptionsRequest);
     return HotelSearchService.fetchCities({
       cityName: search.cityName,
-      countryName: search.countryName
+      countryId: search.countryId,
+      amount: search.amount || config.optionsAmount
     })
       .then(handleError)
       .then(result => result.json())
@@ -115,7 +118,6 @@ class HotelSearchActions {
       })
       .catch(error => {
         dispatch(loadCityOptionsFailure(error));
-        console.log("Test");
         dispatch(
           loadCityOptionsSuccess(
             OptionsService.getOptions(
@@ -131,10 +133,13 @@ class HotelSearchActions {
       });
   };
 
+  static resetCountryOptions = createAction(actionType.RESET_COUNTRY_OPTIONS);
+
   static loadCountryOptions = search => dispatch => {
     dispatch(loadCountryOptionsRequest);
     return HotelSearchService.fetchCountries({
-      countryName: search.countryName
+      countryName: search.countryName,
+      amount: search.amount || config.optionsAmount
     })
       .then(handleError)
       .then(result => result.json())

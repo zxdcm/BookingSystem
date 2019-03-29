@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const HotelInfo = ({ hotel, hotelDetailsLink, hotelImageLink }) => (
+const HotelInfo = ({ hotel, hotelDetailsLink }) => (
   <div className="card">
-    {hotelImageLink && <img className="card-img" src={hotelImageLink} />}
+    {hotel.imageUrl && <img className="card-img" src={hotel.imageUrl} />}
     <div className="card-body body outline">
       {hotel.name && <div className="card-title">{hotel.name}</div>}
       {hotel.address && <div className="card-text">{hotel.address}</div>}
