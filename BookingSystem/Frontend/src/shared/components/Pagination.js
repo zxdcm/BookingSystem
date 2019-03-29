@@ -32,50 +32,58 @@ class Pagination extends Component {
     const { page, pageSize, totalPages } = pageInfo;
     const currentPage = page;
     var pages = this.getPages(totalPages, page, pageSize);
-    if (!pages || pages.length < 2) {
-      return null;
-    }
+    // if (!pages || pages.length < 2) {
+    //   return null;
+    // }
     return (
-      <nav>
-        <ul className="pagination">
-          <li className={"page-item " + (currentPage === 1 ? "active" : "")}>
-            <a className="page-link" onClick={() => setPage(1)}>
-              1
-            </a>
-          </li>
-          <li className={"page-item " + (currentPage === 1 ? "disabled" : "")}>
-            <a className="page-link" onClick={() => setPage(currentPage - 1)} />
-          </li>
-          {pages.map((page, index) => (
-            <li
-              key={index}
-              className={"page-item " + (currentPage === page ? "active" : "")}
-            >
-              <a className="page-link" onClick={() => setPage(page)}>
-                {page}
+      <div className="container">
+        <nav>
+          <ul className="pagination">
+            <li className={"page-item " + (currentPage === 1 ? "active" : "")}>
+              <a className="page-link" onClick={() => setPage(1)}>
+                First
               </a>
             </li>
-          ))}
-          <li
-            className={
-              "page-item " + (currentPage === totalPages ? "disabled" : "")
-            }
-          >
-            <a className="page-link" onClick={() => setPage(currentPage + 1)}>
-              &gt
-            </a>
-          </li>
-          <li
-            className={
-              "page-item " + (currentPage === totalPages ? "disabled" : "")
-            }
-          >
-            <a className="page-link" onClick={() => setPage(totalPages)}>
-              {totalPages}
-            </a>
-          </li>
-        </ul>
-      </nav>
+            <li
+              className={"page-item " + (currentPage === 1 ? "disabled" : "")}
+            >
+              <a className="page-link" onClick={() => setPage(currentPage - 1)}>
+                Prev
+              </a>
+            </li>
+            {pages.map((page, index) => (
+              <li
+                key={index}
+                className={
+                  "page-item " + (currentPage === page ? "active" : "")
+                }
+              >
+                <a className="page-link" onClick={() => setPage(page)}>
+                  {page}
+                </a>
+              </li>
+            ))}
+            <li
+              className={
+                "page-item " + (currentPage === totalPages ? "disabled" : "")
+              }
+            >
+              <a className="page-link" onClick={() => setPage(currentPage + 1)}>
+                Next
+              </a>
+            </li>
+            <li
+              className={
+                "page-item " + (currentPage === totalPages ? "disabled" : "")
+              }
+            >
+              <a className="page-link" onClick={() => setPage(totalPages)}>
+                Last
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     );
   }
 }

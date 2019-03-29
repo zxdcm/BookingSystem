@@ -7,6 +7,7 @@ const links = {
   getHotelRooms: id => `hotel/${id}/rooms`,
   getHotelSearch: () => "/search/",
   getHotelImage: id => `/hotel/${id}/image`,
+  getHotelImages: id => `/hotel/${id}/images`,
   getRoomSizes: () => "/room/roomSizes/"
 };
 

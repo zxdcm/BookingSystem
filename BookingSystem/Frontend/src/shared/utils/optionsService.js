@@ -1,11 +1,6 @@
 class OptionsService {
   static getEmptyOption() {
-    return [
-      {
-        value: "",
-        label: ""
-      }
-    ];
+    return [];
   }
 
   static getNumericOptionsFromArray(nums) {
