@@ -1,26 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  CardText,
-  CardImg
-} from "reactstrap";
 import { Link } from "react-router-dom";
 
-const HotelInfo = ({ hotel, hotelDetailsLink, hotelImageLink }) => (
+const HotelInfo = ({ hotel, hotelDetailsLink }) => (
   <div className="card">
-    {hotelImageLink && <img className="card-img" src={hotelImageLink} />}
-    <div className="card-body body outline">
-      {hotel.name && <div className="card-title">{hotel.name}</div>}
-      {hotel.address && <div className="card-text">{hotel.address}</div>}
-      {hotel.countryName && (
-        <div className="card-text">{hotel.countryName}</div>
+    <div className="row card-body body outline">
+      {hotel.imageUrl && (
+        <img className="col-5 card-img" src={hotel.imageUrl} />
       )}
-      {hotel.cityName && <div className="card-text">{hotel.cityName}</div>}
-      <Link to={hotelDetailsLink}>Details</Link>
+      <div className="col">
+        {hotel.name && <h5 className="card-title text-center">{hotel.name}</h5>}
+        {hotel.address && <div className="card-text">{hotel.address}</div>}
+        {hotel.countryName && (
+          <div className="card-text">{hotel.countryName}</div>
+        )}
+        {hotel.cityName && <div className="card-text">{hotel.cityName}</div>}
+        <div className="align-items-center-container">
+          <Link className="btn btn-outline-secondary" to={hotelDetailsLink}>
+            Details
+          </Link>
+        </div>
+      </div>
     </div>
   </div>
 );

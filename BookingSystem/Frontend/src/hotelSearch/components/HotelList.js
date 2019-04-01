@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import HotelInfo from "./HotelInfo";
 
-const HotelList = ({ hotels, getHotelDetailsLink, getHotelImageLink }) => (
+const HotelList = ({ hotels, getHotelDetailsLink }) => (
   <div>
     {hotels &&
       hotels.map(hotel => (
@@ -10,7 +10,6 @@ const HotelList = ({ hotels, getHotelDetailsLink, getHotelImageLink }) => (
           <HotelInfo
             hotel={hotel}
             hotelDetailsLink={getHotelDetailsLink(hotel.hotelId)}
-            hotelImageLink={getHotelImageLink(hotel.hotelId)}
           />
         </div>
       ))}

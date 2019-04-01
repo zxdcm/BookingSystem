@@ -1,0 +1,10 @@
+.card {
+    border: 1px solid $card-color;  
+    margin-bottom: 10%;
+    box-sizing: border-box;
+    
+    .card-img {
+        margin-bottom: 5%;
+        height: 50%;
+    }
+}

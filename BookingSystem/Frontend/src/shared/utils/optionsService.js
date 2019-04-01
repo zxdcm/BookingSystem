@@ -1,18 +1,10 @@
 class OptionsService {
   static getEmptyOption() {
-    return [
-      {
-        value: "",
-        label: ""
-      }
-    ];
+    return [];
   }
 
-  static getNumericOptions(max = 20) {
-    return Array.from(new Array(max), (val, index) => ({
-      label: index + 1,
-      value: index + 1
-    }));
+  static getNumericOptionsFromArray(nums) {
+    return nums.map(item => ({ label: item, value: item }));
   }
 
   static getOptions(options, labelProperty, valueProperty = null) {

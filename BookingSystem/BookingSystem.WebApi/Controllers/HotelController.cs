@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BookingSystem.Commands.Commands.HotelCommands.Commands;
 using BookingSystem.Commands.Commands.HotelCommands.DTOs;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Common.Utils;
 using BookingSystem.Queries.Queries.ExtraServiceQueries.Queries;
 using BookingSystem.Queries.Queries.HotelQueries.Queries;
-using BookingSystem.Queries.Queries.HotelQueries.Views;
+using BookingSystem.Queries.Queries.ImageQueries.Queries;
 using BookingSystem.Queries.Queries.RoomQueries.Queries;
 using BookingSystem.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.WebApi.Controllers
 {
@@ -63,6 +61,14 @@ namespace BookingSystem.WebApi.Controllers
         public async Task<IActionResult> GetHotelRoomsAsync(int hotelId)
         {
             var query = new ListRoomsQuery(hotelId);
+            var queryResult = await _queryDispatcher.DispatchAsync(query);
+            return Ok(queryResult);
+        }
+
+        [HttpGet("{hotelId}/images")]
+        public async Task<IActionResult> GetHotelImagesAsync(int hotelId)
+        {
+            var query = new ListHotelImagesQuery(hotelId);
             var queryResult = await _queryDispatcher.DispatchAsync(query);
             return Ok(queryResult);
         }

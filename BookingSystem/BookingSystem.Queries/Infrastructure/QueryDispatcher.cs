@@ -17,8 +17,7 @@ namespace BookingSystem.Queries.Infrastructure
         {
             Type type = typeof(IQueryHandler<,>);
             Type[] typeArgs = { query.GetType(), typeof(T) };
-            Type handlerType = type.MakeGenericType(typeArgs);
-
+            Type handlerType = type.MakeGenericType(typeArgs);   
             dynamic handler = _provider.GetService(handlerType);
             T result = await handler.ExecuteAsync((dynamic)query);
             return result;

@@ -17,7 +17,20 @@ module.exports = {
         test: /\.css$/,
         loader: "style-loader!css-loader"
       },
-
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader"
+          },
+          {
+            loader: "sass-loader"
+          }
+        ]
+      },
       {
         test: /\.(jpg|png|gif|jpeg|woff|woff2|eot|ttf|svg)$/,
         loader: "url-loader?limit=100000"
@@ -57,7 +70,6 @@ module.exports = {
   plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     contentBase: "./dist",
-    // historyApiFallback: true,
     hot: true
   }
 };

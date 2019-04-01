@@ -1,0 +1,34 @@
+.react-datepicker__input-container {
+    width: 310px;
+}
+
+.align-items-right-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.align-items-center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-result-box {
+    background-color: $background-color;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.filter-box {
+    background-color: $background-color;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.custom-select__indicators {
+    display: none;
+}
+
+.full-height {
+    height: 100%;
+}

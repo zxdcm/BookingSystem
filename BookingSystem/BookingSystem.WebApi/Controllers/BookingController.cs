@@ -3,7 +3,6 @@ using BookingSystem.Commands.Commands.BookingCommands.Commands;
 using BookingSystem.Commands.Commands.BookingCommands.DTOs;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Common.Utils;
-using BookingSystem.Queries.Infrastructure;
 using BookingSystem.Queries.Queries.BookingQueries.Queries;
 using BookingSystem.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;

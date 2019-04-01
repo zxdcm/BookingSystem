@@ -10,7 +10,7 @@ class HotelApp extends Component {
     return (
       <Layout isLoggedIn={true} isAdmin={true}>
         <Switch>
-          <Route exact path="/" component={HotelSearch} />
+          <Route exact path="/index.html" component={HotelSearch} />
           <Route
             exact
             path={routePath.HOTEL_SEARCH_PAGE}

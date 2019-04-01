@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Security.Claims;
 using System.Text;
+using Autofac;
 using AutoMapper;
 using BookingSystem.Commands.Commands.HotelCommands.MappingProfiles;
 using BookingSystem.Commands.Infrastructure;
@@ -36,12 +36,14 @@ namespace BookingSystem.WebApi
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<ICommandDispatcher, CommandDispatcher>();
             services.AddTransient<IQueryDispatcher, QueryDispatcher>();
+
             services.AddHandlers();
 
             services.AddDbContext<BookingWriteContext>
@@ -100,13 +102,22 @@ namespace BookingSystem.WebApi
             services.AddScoped(provider => new JwtGenerator(new JwtOptions(tokenValidationParameters, expirationTime)));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = tokenValidationParameters;
-                    options.SaveToken = true;
-                    options.RequireHttpsMetadata = false;
-                });
+                .AddJwtBearer(options => { options.TokenValidationParameters = tokenValidationParameters; });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORSPolicy",
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin()
+                            .AllowCredentials();
+                    });
+            });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -132,9 +143,22 @@ namespace BookingSystem.WebApi
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseCors("CORSPolicy");
+
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
         }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {      
+//            builder.RegisterGeneric(typeof(PagedQueryHandler<,>));
+//            builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
+//                .AsClosedTypesOf(typeof(IQueryHandler<,>)).AsImplementedInterfaces();
+//            builder.RegisterGenericDecorator(typeof(PagedQueryHandler<,>), typeof(IQueryHandler<,>));
+        }
+
+
+
     }
 }

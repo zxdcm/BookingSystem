@@ -57,5 +57,13 @@ namespace BookingSystem.WebApi.Controllers
             return Ok(result.Value);
         }
 
+        [HttpGet("roomSizes")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetRoomSizesAsync()
+        {
+            var query = new ListRoomSizesQuery();
+            var queryResult = await _queryDispatcher.DispatchAsync(query);
+            return Ok(queryResult);
+        }
     }
 }

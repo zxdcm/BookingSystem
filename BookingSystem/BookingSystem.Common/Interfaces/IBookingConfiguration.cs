@@ -3,5 +3,6 @@
     public interface IBookingConfiguration
     {
         int LockTimeOutMinutes { get; }
+        int MaxRoomSize { get; }
     }
 }

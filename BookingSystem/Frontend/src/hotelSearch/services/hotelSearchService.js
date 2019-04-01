@@ -18,6 +18,11 @@ class HotelSearchService {
     const requestUrl = `${links.getCountry()}${query}`;
     return RequestService.get(requestUrl);
   };
+
+  static fetchRoomSizes = () => {
+    const requestUrl = links.getRoomSizes();
+    return RequestService.get(requestUrl);
+  };
 }
 
 export { HotelSearchService };

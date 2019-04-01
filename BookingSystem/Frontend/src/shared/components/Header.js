@@ -5,8 +5,8 @@ import { routePath } from "../settings/routePath";
 const Header = props => {
   const { isLoggedIn, isAdmin } = props;
   return (
-    <div>
-      <div className="navbar">
+    <div id="header">
+      <div className="navbar navbar-light bg-light">
         <div className="navbar-brand">
           <NavLink to="/">Brand</NavLink>
         </div>
