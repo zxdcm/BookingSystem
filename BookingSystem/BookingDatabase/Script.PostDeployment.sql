@@ -37,12 +37,13 @@ BEGIN
 	ON [Countries].row_num = [Cities].row_num
 END
 
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[usp_GetAvailableHotels] 
-	@LockTime TINYINT= 30,
+	@LockTime TINYINT = 30,
 	@MoveInDate DATETIME2 = NULL, 
 	@MoveOutDate DATETIME2 = NULL,
 	@Name NVARCHAR(80) = NULL,
@@ -52,24 +53,28 @@ CREATE PROCEDURE [dbo].[usp_GetAvailableHotels]
 	@RoomSize TINYINT = NULL,
 	@PageSize INT = 10,
 	@Page INT = 1,
-	@TotalPages INT OUTPUT
+	@TotalItems INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @ItemsCount INT = 0;
 	DECLARE @Pending TINYINT = 1;
 	DECLARE @Failed TINYINT = 3;
 	DECLARE @FilteredHotels TABLE 
 		                    (HotelId INT NOT NULL,
 							 BookingsAmount INT);
 
+	IF @Page < 1
+		SET @Page = 1;
+	IF @PageSize < 1
+		SET @PageSize = 1;
+
 	WITH 
 	FilteredRooms AS 
 	(SELECT Rooms.* FROM Rooms 
 	WHERE @RoomSize IS NULL OR Rooms.Size = @RoomSize),
 
-        AvailableHotels AS
+	AvailableHotels AS
 	(SELECT Rooms.HotelId as HotelId, COUNT(Bookings.BookingID) as BookingsAmount
 	FROM FilteredRooms AS Rooms
 	LEFT JOIN Bookings ON Bookings.RoomId = Rooms.RoomId
@@ -94,9 +99,8 @@ BEGIN
 		  (@IsActive IS NULL OR Hotels.IsActive = @IsActive) AND 
 		  (@Name IS NULL OR Hotels.Name = @Name)
 
-	SELECT @ItemsCount = Count(HotelId) FROM @FilteredHotels;
-	SELECT @TotalPages = (@ItemsCount + @PageSize - 1) / @PageSize;
-
+	SELECT @TotalItems = Count(HotelId) FROM @FilteredHotels;
+	
 	WITH 
 	PaginatedHotelsId AS
 	(SELECT Hotels.HotelId  FROM @FilteredHotels as Hotels
@@ -110,11 +114,11 @@ BEGIN
 	LEFT JOIN 
 	  (SELECT Images.URL, HotelImage.HotelId FROM Images
 	  JOIN (SELECT HotelImages.HotelId, MIN(HotelImages.ImageId) AS ImageId FROM HotelImages 
-			JOIN Hotels ON Hotels.HotelId = HotelImages.HotelId -- may i rm that ?
+			JOIN Hotels ON Hotels.HotelId = HotelImages.HotelId 
 			GROUP BY HotelImages.HotelId) AS HotelImage 
 	  ON HotelImage.ImageId = Images.ImageId) AS HotelImage
-        ON HotelImage.HotelId = Hotels.HotelId
+    ON HotelImage.HotelId = Hotels.HotelId
 	JOIN Cities on Cities.CityId = Hotels.CityId
 	JOIN Countries on Countries.CountryId = Hotels.CountryId;
-	
+
 END

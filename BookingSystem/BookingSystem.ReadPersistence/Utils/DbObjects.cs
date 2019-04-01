@@ -12,7 +12,7 @@ namespace BookingSystem.ReadPersistence.Utils
             "@LockTime, @MoveInDate, @MoveOutDate, " +
             "@Name, @IsActive, @CityId, " +
             "@CountryId, @RoomSize, @PageSize, " +
-            "@Page, @TotalPages OUTPUT";
+            "@Page, @TotalItems OUTPUT";
 
         public const string LockTime = "@LockTime";
         public const string MoveInDate = "@MoveIndate";
@@ -24,7 +24,7 @@ namespace BookingSystem.ReadPersistence.Utils
         public const string RoomSize = "@RoomSize";
         public const string PageSize = "@PageSize";
         public const string Page = "@Page";
-        public const string TotalPages = "@TotalPages";
+        public const string TotalItems = "@TotalItems";
 
     }
 }

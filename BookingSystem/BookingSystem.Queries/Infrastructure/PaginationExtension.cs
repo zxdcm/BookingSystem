@@ -13,13 +13,12 @@ namespace BookingSystem.Queries.Infrastructure
         public static async Task<Paged<T>> PaginateAsync<T>(this IQueryable<T> query, PageInfo pageInfo)
         {
             var totalItems = await query.CountAsync();
-            var totalPages = (totalItems + pageInfo.PageSize - 1) / pageInfo.PageSize;
             var queryResult = await query.Skip(pageInfo.PageSize * (pageInfo.Page - 1)).Take(pageInfo.PageSize).ToArrayAsync();
             var newPageInfo = new PageInfo()
             {
                 Page = pageInfo.Page == 0 ? 1 : pageInfo.Page,
                 PageSize = pageInfo.PageSize,
-                TotalPages = totalPages
+                TotalItems = totalItems
             };
             return new Paged<T>() { Items = queryResult, PageInfo = newPageInfo };
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using BookingSystem.Queries.Infrastructure;
 using BookingSystem.Queries.Queries.HotelQueries.Queries.ListHotelsQueryUtils;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
 using BookingSystem.ReadPersistence;
-using BookingSystem.ReadPersistence.Enums;
 using BookingSystem.ReadPersistence.ReadModels;
 using Microsoft.EntityFrameworkCore;
 using BookingSystem.ReadPersistence.Utils;
@@ -56,22 +54,19 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 
         public Task<Paged<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
-            query.PageInfo.PageSize = query.PageInfo.PageSize > 0 ? query.PageInfo.PageSize : 1;
-            query.PageInfo.Page = query.PageInfo.Page > 0 ? query.PageInfo.Page : 1;
-
             string sqlQuery = DbActions.ExecuteGetAvailableHotelsSp;
             var sqlParams = SpCommand.CreateInputParams(query, _lockTimeOut);
-            var totalPagesParam = new SqlParameter
+            var totalItemsParam = new SqlParameter
             {
-                ParameterName = DbObjects.TotalPages,
+                ParameterName = DbObjects.TotalItems,
                 SqlDbType = SqlDbType.Int,
                 Direction = ParameterDirection.Output
             };
-            sqlParams.Add(totalPagesParam);
+            sqlParams.Add(totalItemsParam);
 
             var hotels = _dataContext.Query<SpListHotelDetails>().FromSql(sqlQuery, sqlParams.ToArray()).ToList(); //Requires params [] not collection.
 
-            int totalPages = totalPagesParam.Value as int? ?? default(int);
+            int totalItems = totalItemsParam.Value as int? ?? default(int);
 
             return Task.FromResult(new Paged<HotelPreView>()
             {
@@ -87,9 +82,9 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
                 }).ToArray(),
                 PageInfo = new PageInfo()
                 {
-                    Page = query.PageInfo.Page,
-                    PageSize = query.PageInfo.PageSize,
-                    TotalPages = totalPages
+                    Page = query.PageInfo.Page > 0 ? query.PageInfo.Page : 1,
+                    PageSize = query.PageInfo.PageSize > 0 ? query.PageInfo.PageSize : 1,                    
+                    TotalItems = totalItems
                 }
             });
         }

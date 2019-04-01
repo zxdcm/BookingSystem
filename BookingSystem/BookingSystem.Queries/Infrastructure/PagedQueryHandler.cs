@@ -15,7 +15,7 @@ namespace BookingSystem.Queries.Infrastructure
     {
         public int Page { get; set; }
         public int PageSize { get; set; } 
-        public int TotalPages { get; set; }
+        public int TotalItems { get; set; }
     }
 
     public class PagedQuery<TQuery, TItem> : IQuery<Paged<TItem>>
@@ -41,8 +41,7 @@ namespace BookingSystem.Queries.Infrastructure
             IQueryable<TItem> queryItems = await  _handler.ExecuteAsync(query.Query);
             var items = await queryItems.Skip(paging.Page * paging.PageSize)
                 .Take(paging.PageSize).ToArrayAsync();
-            var totalItems = await queryItems.CountAsync();
-            paging.TotalPages = (totalItems + paging.PageSize - 1) / paging.PageSize;
+            paging.TotalItems = await queryItems.CountAsync();
             return new Paged<TItem>
             {
                 Items = items,
