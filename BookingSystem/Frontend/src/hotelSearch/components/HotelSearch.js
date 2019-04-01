@@ -60,10 +60,7 @@ const HotelSearch = props => {
       <div className="col align-items-center-container ">
         {isLoading ? (
           <div>
-            <div
-              className="spinner-border text-light"
-              style={{ size: "lg", color: "light" }}
-            />
+            <div className="spinner-border text-light" />
           </div>
         ) : (
           <Fragment>

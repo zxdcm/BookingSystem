@@ -12,20 +12,13 @@ class QueryService {
     formattedData.endDate = moment(data.endDate).format(
       dateFormat.REQUEST_DATE_FORMAT
     );
-    // if (data.roomSize) {
-    //   formattedData.roomSize = data.roomSize;
-    // }
-    // if (data.page) {
-    //   formattedData.page = data.page;
-    //   formattedData.pageSize = data.pageSize;
-    // }
     return QueryService.buildQuery(formattedData);
   };
 
   static buildQuery = data =>
     "?" +
     Object.keys(data)
-      .filter(key => data[key] != null && data[key] !== "")
+      .filter(key => data[key])
       .map(key => [key, data[key]].map(encodeURIComponent).join("="))
       .join("&");
 }

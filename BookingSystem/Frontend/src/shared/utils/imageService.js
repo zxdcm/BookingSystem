@@ -4,9 +4,7 @@ import { RequestService } from "./requestService";
 
 class ImageService {
   static getHotelImageLink(hotelId) {
-    RequestService.get(links.getHotelImage(hotelId)).then(img => {
-      return img;
-    });
+    RequestService.get(links.getHotelImage(hotelId));
   }
 }
 
