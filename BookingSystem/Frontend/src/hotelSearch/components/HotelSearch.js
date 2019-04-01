@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { Fragment } from "react";
 import HotelList from "./HotelList";
 import SearchForm from "./SearchForm";
 import { Pagination } from "../../shared/components/Pagination";
@@ -82,10 +81,6 @@ const HotelSearch = props => {
       </div>
     </div>
   );
-};
-HotelSearch.propTypes = {
-  hotels: PropTypes.array,
-  getHotels: PropTypes.func
 };
 
 export default HotelSearch;

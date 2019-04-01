@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
 class Pagination extends Component {
-  getPages(totalPages, currentPage, pageSize) {
+  getPages(totalItems, currentPage, pageSize) {
     currentPage = currentPage || 1;
-    pageSize = pageSize || 10;
-    var startPage, endPage;
+    let totalPages = (totalItems + pageSize - 1) / pageSize;
+    let startPage, endPage;
     if (totalPages <= 10) {
       startPage = 1;
       endPage = totalPages;
@@ -21,17 +21,17 @@ class Pagination extends Component {
       }
     }
 
-    var pages = [...Array(endPage + 1 - startPage).keys()].map(
+    let pages = [...Array(endPage + 1 - startPage).keys()].map(
       i => startPage + i
     );
-    return pages;
+    return { pages, totalPages };
   }
 
   render() {
     const { setPage, pageInfo } = this.props;
-    const { page, pageSize, totalPages } = pageInfo;
+    const { page, pageSize, totalItems } = pageInfo;
     const currentPage = page;
-    var pages = this.getPages(totalPages, page, pageSize);
+    const { pages, totalPages } = this.getPages(totalItems, page, pageSize);
     if (!pages || pages.length < 1) {
       return null;
     }

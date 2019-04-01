@@ -22,7 +22,7 @@ namespace BookingSystem.WebApi.Models
                                    new PageInfo()
                                    {
                                      Page = Page,
-                                     PageSize = PageSize != 0 ? PageSize : 20
+                                     PageSize = PageSize, 
                                    });
     }
 }

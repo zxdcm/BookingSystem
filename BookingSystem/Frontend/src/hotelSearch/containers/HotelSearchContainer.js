@@ -10,6 +10,11 @@ const mapStateToProps = state => {
   const hotels = state.hotelSearch.hotels;
   const form = state.hotelSearch.searchForm;
   return {
+    startDate: form.startDate,
+    endDate: form.endDate,
+    roomSize: form.roomSize,
+    city: form.city,
+    country: form.country,
     hotels: hotels.hotels,
     pageInfo: hotels.pageInfo,
     isFetching: hotels.isFetching,
@@ -23,61 +28,29 @@ const mapStateToProps = state => {
 };
 
 class HotelSearchContainer extends Component {
-  state = {
-    startDate: new Date(),
-    endDate: new Date(),
-    roomSize: { label: 1, value: 1 },
-    city: "",
-    country: ""
-  };
-
   componentDidMount() {
-    const data = this.getFormRequestData();
-    this.props.getHotels(data);
+    this.props.getHotels();
     this.props.loadRoomSizeOptions();
   }
 
-  getFormRequestData = () => ({
-    startDate: this.state.startDate,
-    endDate: this.state.endDate,
-    roomSize: this.state.roomSize.value,
-    cityId: this.state.city.value,
-    countryId: this.state.country.value,
-    page: this.props.pageInfo.page,
-    pageSize: this.props.pageInfo.pageSize
-  });
-
   handleSubmit = event => {
     event.preventDefault();
-    const data = this.getFormRequestData();
-    this.props.getHotels(data);
+    this.props.resetPage();
+    this.props.getHotels();
   };
 
   handleReset = event => {
-    this.setState({
-      startDate: new Date(),
-      endDate: new Date(),
-      roomSize: { label: 1, value: 1 },
-      city: "",
-      country: ""
-    });
-    this.props.resetCountryOptions();
-    this.props.resetCityOptions();
-    const data = this.getFormRequestData();
-    this.props.getHotels(data);
+    this.props.reset();
+    this.props.loadRoomSizeOptions();
+    this.props.getHotels();
   };
 
   handleStartDateChange = date => {
-    this.setState({
-      startDate: date,
-      endDate: date
-    });
+    this.props.setStartDate(date);
   };
 
   handleEndDateChange = date => {
-    this.setState({
-      endDate: date
-    });
+    this.props.setEndDate(date);
   };
 
   handleCountryOptionsChange = search => {
@@ -87,45 +60,47 @@ class HotelSearchContainer extends Component {
 
   handleCityOptionsChange = search => {
     if (search === "") return;
-    const countryId = this.state.country.value;
     this.props.loadCityOptions({
-      cityName: search,
-      countryId: countryId
+      cityName: search
     });
   };
 
   handleRoomSizeChange = data => {
-    this.setState({ roomSize: data });
+    this.props.setRoomSize(data);
   };
 
   handleCountryChange = data => {
-    this.setState({ country: data, city: { value: "", label: "" } });
-    this.props.resetCityOptions();
+    this.props.setCountry(data);
   };
 
   handleCityChange = data => {
-    this.setState({ city: data });
+    this.props.setCity(data);
   };
 
   getHotelDetailsLink = hotelId => {
-    const searchData = { ...this.state };
+    const searchData = {
+      startDate: this.props.startDate,
+      endDate: this.props.endDate,
+      roomSize: this.props.roomSize.value,
+      cityId: this.props.city.value,
+      countryId: this.props.country.value
+    };
     return this.props.getHotelDetailsLink(hotelId, searchData);
   };
 
   handleSetPage = page => {
-    const data = this.getFormRequestData();
-    data.page = page;
-    this.props.getHotels(data);
+    this.props.setPage(page);
+    this.props.getHotels();
   };
 
   render() {
     return (
       <HotelSearch
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-        city={this.state.city}
-        country={this.state.country}
-        roomSize={this.state.roomSize}
+        startDate={this.props.startDate}
+        endDate={this.props.endDate}
+        city={this.props.city}
+        country={this.props.country}
+        roomSize={this.props.roomSize}
         roomSizeOptions={this.props.roomSizeOptions}
         countryOptions={this.props.countryOptions}
         cityOptions={this.props.cityOptions}
@@ -154,9 +129,15 @@ const mapDispatchToProps = dispatch => {
       getHotels: HotelSearchActions.fetchHotels,
       setCity: HotelSearchActions.setCity,
       setCountry: HotelSearchActions.setCountry,
+      setStartDate: HotelSearchActions.setStartDate,
+      setEndDate: HotelSearchActions.setEndDate,
+      setRoomSize: HotelSearchActions.setRoomSize,
+      setPage: HotelSearchActions.setPage,
       loadCountryOptions: HotelSearchActions.loadCountryOptions,
       loadCityOptions: HotelSearchActions.loadCityOptions,
       loadRoomSizeOptions: HotelSearchActions.loadRoomSizeOptions,
+      reset: HotelSearchActions.reset,
+      resetPage: HotelSearchActions.resetPage,
       resetCityOptions: HotelSearchActions.resetCityOptions,
       resetCountryOptions: HotelSearchActions.resetCountryOptions
     },
