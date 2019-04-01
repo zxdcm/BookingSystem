@@ -142,6 +142,8 @@ namespace BookingSystem.ReadPersistence
             {
                 entity.HasKey(e => new { e.UserId, e.RoleId });
             });
+
+            modelBuilder.Query<SpListHotelDetails>();
         }
     }
 }

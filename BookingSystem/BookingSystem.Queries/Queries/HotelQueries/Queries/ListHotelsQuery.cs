@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingSystem.Common.Interfaces;
 using BookingSystem.Queries.Infrastructure;
+using BookingSystem.Queries.Queries.HotelQueries.Queries.ListHotelsQueryUtils;
 using BookingSystem.Queries.Queries.HotelQueries.Views;
 using BookingSystem.ReadPersistence;
 using BookingSystem.ReadPersistence.Enums;
 using BookingSystem.ReadPersistence.ReadModels;
+using Microsoft.EntityFrameworkCore;
+using BookingSystem.ReadPersistence.Utils;
 
 namespace BookingSystem.Queries.Queries.HotelQueries.Queries
 {
@@ -48,61 +54,44 @@ namespace BookingSystem.Queries.Queries.HotelQueries.Queries
             _lockTimeOut = config.LockTimeOutMinutes;
         }
 
-        public async Task<Paged<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
+        public Task<Paged<HotelPreView>> ExecuteAsync(ListHotelsQuery query)
         {
-            var rooms = from room in _dataContext.Rooms
-                join booking in _dataContext.Bookings on room.RoomId equals booking.RoomId into bookings
-                from b in bookings.DefaultIfEmpty()
-                where (b == null ||
-                       (query.MoveInDate > b.MoveOutDate ||
-                        query.MoveInDate < b.MoveOutDate) ||
-                       (b.Status == BookingStatus.Failed) ||
-                       (b.Status == BookingStatus.Pending &&
-                        (b.CreatedDate.AddMinutes(_lockTimeOut) > DateTime.UtcNow)))
-                group bookings by new { room.RoomId, room.Quantity, room.Size, room.HotelId }
-                into grRooms
-                from b in grRooms
-                where b.Count() < grRooms.Key.Quantity
-                select new { grRooms.Key.RoomId, grRooms.Key.Size, grRooms.Key.HotelId };
+            query.PageInfo.PageSize = query.PageInfo.PageSize > 0 ? query.PageInfo.PageSize : 1;
+            query.PageInfo.Page = query.PageInfo.Page > 0 ? query.PageInfo.Page : 1;
 
-            var filteredRooms = rooms
-                .WhereIf(query.RoomSize.HasValue, room => room.Size == query.RoomSize);
+            string sqlQuery = DbActions.ExecuteGetAvailableHotelsSp;
+            var sqlParams = SpCommand.CreateInputParams(query, _lockTimeOut);
+            var totalPagesParam = new SqlParameter
+            {
+                ParameterName = DbObjects.TotalPages,
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            sqlParams.Add(totalPagesParam);
 
-            var roomsHotelsIds = filteredRooms.Select(r => r.HotelId).Distinct();
+            var hotels = _dataContext.Query<SpListHotelDetails>().FromSql(sqlQuery, sqlParams.ToArray()).ToList(); //Requires params [] not collection.
 
-            var filteredHotels = _dataContext.Hotels
-                .WhereIf(!string.IsNullOrWhiteSpace(query.Name), h => h.Name.StartsWith(query.Name))
-                .WhereIf(query.IsActive.HasValue, h => h.IsActive == query.IsActive)
-                .WhereIf(query.CityId.HasValue, h => h.CityId == query.CityId)
-                .WhereIf(query.CountryId.HasValue, h => h.CountryId == query.CountryId);
-       
-            var images = from image in _dataContext.Images
-                join hotelImage in _dataContext.HotelImages on image.ImageId equals hotelImage.ImageId
-                group image.Url by hotelImage.HotelId
-                into grImages
-                select new { HotelId = grImages.Key, imageUrl = grImages.FirstOrDefault() };
+            int totalPages = totalPagesParam.Value as int? ?? default(int);
 
-            var hotels = (from hotel in filteredHotels
-                join hotelId in roomsHotelsIds
-                    on hotel.HotelId equals hotelId
-                join image in images
-                    on hotel.HotelId equals image.HotelId into jImages
-                from hImage in jImages.DefaultIfEmpty()
-                join city in _dataContext.Cities
-                    on hotel.CityId equals city.CityId
-                join country in _dataContext.Countries 
-                    on hotel.CountryId equals country.CountryId
-                select new HotelPreView()
+            return Task.FromResult(new Paged<HotelPreView>()
+            {
+                Items = hotels.Select(h => new HotelPreView()
                 {
-                    HotelId = hotel.HotelId,
-                    Name = hotel.Name,
-                    Address = hotel.Address,
-                    CountryName = country.Name,
-                    CityName = city.Name,
-                    IsActive = hotel.IsActive,
-                    ImageUrl = hImage.imageUrl
-                });
-            return await hotels.PaginateAsync(query.PageInfo);
+                    HotelId = h.HotelId,
+                    Name = h.Name,
+                    Address = h.Address,
+                    CityName = h.CityName,
+                    CountryName = h.CountryName,
+                    IsActive = h.IsActive,
+                    ImageUrl = h.ImageUrl
+                }).ToArray(),
+                PageInfo = new PageInfo()
+                {
+                    Page = query.PageInfo.Page,
+                    PageSize = query.PageInfo.PageSize,
+                    TotalPages = totalPages
+                }
+            });
         }
     }
 }
