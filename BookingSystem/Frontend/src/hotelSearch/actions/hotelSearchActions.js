@@ -53,9 +53,20 @@ const loadRoomSizeOptionsFailure = createAction(
 );
 
 class HotelSearchActions {
-  static fetchHotels = data => dispatch => {
+  static fetchHotels = () => (dispatch, getState) => {
     dispatch(fetchHotelsRequest());
-    HotelSearchService.fetchHotels(data)
+    const searchForm = getState().hotelSearch.searchForm;
+    const pageInfo = getState().hotelSearch.hotels.pageInfo;
+    const requestData = {
+      startDate: searchForm.startDate,
+      endDate: searchForm.endDate,
+      roomSize: searchForm.roomSize.value,
+      cityId: searchForm.city.value,
+      countryId: searchForm.country.value,
+      page: pageInfo.page,
+      pageSize: pageInfo.pageSize
+    };
+    HotelSearchService.fetchHotels(requestData)
       .then(handleError)
       .then(result => result.json())
       .then(jsonResult => {
@@ -77,13 +88,42 @@ class HotelSearchActions {
     })
   );
 
+  static setCity = createAction(actionType.SET_CITY, data => ({ city: data }));
+
+  static setCountry = createAction(actionType.SET_COUNTRY, data => ({
+    country: data
+  }));
+
+  static setStartDate = createAction(actionType.SET_START_DATE, data => ({
+    startDate: data
+  }));
+  static setEndDate = createAction(actionType.SET_END_DATE, data => ({
+    endDate: data
+  }));
+
+  static setRoomSize = createAction(actionType.SET_ROOM_SIZE, data => ({
+    roomSize: data
+  }));
+
+  static setPage = createAction(actionType.SET_PAGE, data => ({ page: data }));
+
+  static resetPage = createAction(actionType.RESET_PAGE);
+
+  static resetSearchForm = createAction(actionType.RESET_SEARCH_FORM);
+
+  static reset = () => dispatch => {
+    dispatch(HotelSearchActions.resetSearchForm);
+    dispatch(HotelSearchActions.resetPage);
+  };
+
   static resetCityOptions = createAction(actionType.RESET_CITY_OPTIONS);
 
-  static loadCityOptions = search => dispatch => {
+  static loadCityOptions = search => (dispatch, getState) => {
     dispatch(loadCityOptionsRequest);
+    const countryId = getState().hotelSearch.searchForm.country.value;
     return HotelSearchService.fetchCities({
       cityName: search.cityName,
-      countryId: search.countryId,
+      countryId: countryId,
       amount: search.amount || config.optionsAmount
     })
       .then(handleError)

@@ -1,4 +1,4 @@
-const fetchHotelsActionsType = {
+const fetchHotelsActionType = {
   FETCH_HOTELS_REQUEST: "FETCH_HOTELS_REQUEST",
   FETCH_HOTELS_SUCCESS: "FETCH_HOTELS_SUCCESS",
   FETCH_HOTELS_FAILURE: "FETCH_HOTELS_FAILURE"
@@ -22,15 +22,31 @@ const loadRoomSizeOptionsActionType = {
   LOAD_ROOM_SIZE_OPTIONS_FAILURE: "LOAD_ROOM_SIZE_OPTIONS_FAILURE"
 };
 
+const setActionType = {
+  SET_CITY_OPTIONS: "SET_CITY_OPTIONS",
+  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS",
+  SET_CITY: "SET_CITY",
+  SET_COUNTRY: "SET_COUNTRY",
+  SET_START_DATE: "SET_START_DATE",
+  SET_END_DATE: "SET_END_DATE",
+  SET_ROOM_SIZE: "SET_ROOM_SIZE",
+  SET_PAGE: "SET_PAGE"
+};
+
+const resetActionType = {
+  RESET_CITY_OPTIONS: "RESET_CITY_OPTIONS",
+  RESET_COUNTRY_OPTIONS: "RESET_COUNTRY_OPTIONS",
+  RESET_SEARCH_FORM: "RESET_SEARCH_FORM",
+  RESET_PAGE: "RESET_PAGE"
+};
+
 const hotelSearchActionType = {
-  ...fetchHotelsActionsType,
+  ...fetchHotelsActionType,
   ...loadCitiesOptionsActionType,
   ...loadCountryOptionsActionType,
   ...loadRoomSizeOptionsActionType,
-  SET_CITY_OPTIONS: "SET_CITY_OPTIONS",
-  SET_COUNTRY_OPTIONS: "SET_COUNTRY_OPTIONS",
-  RESET_CITY_OPTIONS: "RESET_CITY_OPTIONS",
-  RESET_COUNTRY_OPTIONS: "RESET_COUNTRY_OPTIONS"
+  ...setActionType,
+  ...resetActionType
 };
 
 export { hotelSearchActionType };

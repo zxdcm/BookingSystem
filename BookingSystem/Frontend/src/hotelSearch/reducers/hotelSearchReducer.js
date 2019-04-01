@@ -22,21 +22,36 @@ const fetchHotelsMap = {
 
 const hotelsInitialState = {
   hotels: [],
-  pageInfo: { page: 1, pageSize: config.pageSize, totalPages: 1 },
+  pageInfo: { page: 1, pageSize: config.pageSize, totalItems: 0 },
   error: null,
   isFetching: false
 };
 
+const pageMap = {
+  [actionType.SET_PAGE]: (state, action) => ({
+    ...state,
+    pageInfo: { ...state.pageInfo, page: action.payload.page }
+  }),
+  [actionType.RESET_PAGE]: (state, action) => ({
+    ...state,
+    pageInfo: { page: 1, pageSize: config.pageSize, totalItems: 0 }
+  })
+};
+
 const fetchHotelsReducer = handleActions(
   {
-    ...fetchHotelsMap
+    ...fetchHotelsMap,
+    ...pageMap
   },
   hotelsInitialState
 );
 
 const searchFormInitialState = {
-  cities: [],
-  countries: [],
+  startDate: new Date(),
+  endDate: new Date(),
+  roomSize: { label: 1, value: 1 },
+  city: "",
+  country: "",
   cityOptions: [],
   countryOptions: [],
   roomSizeOptions: [],
@@ -95,7 +110,7 @@ const searchFormRoomSizeOptionsMap = {
   })
 };
 
-const resetOptionsMap = {
+const resetMap = {
   [actionType.RESET_CITY_OPTIONS]: state => ({
     ...state,
     cityOptions: []
@@ -103,6 +118,51 @@ const resetOptionsMap = {
   [actionType.RESET_COUNTRY_OPTIONS]: state => ({
     ...state,
     countryOptions: []
+  }),
+  [actionType.RESET_SEARCH_FORM]: state => ({
+    ...state,
+    startDate: new Date(),
+    endDate: new Date(),
+    roomSize: { label: 1, value: 1 },
+    city: "",
+    country: "",
+    countriesOptions: [],
+    cityOptions: [],
+    roomSizeOptions: []
+  })
+};
+
+const setMap = {
+  [actionType.SET_CITY]: (state, action) => ({
+    ...state,
+    city: action.payload.city
+  }),
+  [actionType.SET_COUNTRY]: (state, action) => ({
+    ...state,
+    country: action.payload.country
+  }),
+  [actionType.SET_START_DATE]: (state, action) => ({
+    ...state,
+    startDate: action.payload.startDate,
+    endDate: action.payload.startDate
+  }),
+  [actionType.SET_END_DATE]: (state, action) => ({
+    ...state,
+    endDate: action.payload.endDate
+  }),
+  [actionType.SET_ROOM_SIZE]: (state, action) => ({
+    ...state,
+    roomSize: action.payload.roomSize
+  }),
+  [actionType.SET_CITY]: (state, action) => ({
+    ...state,
+    city: action.payload.city
+  }),
+  [actionType.SET_COUNTRY]: (state, action) => ({
+    ...state,
+    country: action.payload.country,
+    city: "",
+    cityOptions: []
   })
 };
 
@@ -111,7 +171,8 @@ const searchFormReducer = handleActions(
     ...searchFormCityOptionsMap,
     ...searchFormCountryOptionsMap,
     ...searchFormRoomSizeOptionsMap,
-    ...resetOptionsMap
+    ...setMap,
+    ...resetMap
   },
   searchFormInitialState
 );
