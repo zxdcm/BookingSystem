@@ -65,14 +65,6 @@ namespace BookingSystem.WebApi.Controllers
             return Ok(queryResult);
         }
 
-        [HttpGet("{hotelId}/image")]
-        public async Task<IActionResult> GetHotelImageAsync(int hotelId)
-        {
-            var query = new HotelImageQuery(hotelId);
-            var queryResult = await _queryDispatcher.DispatchAsync(query);
-            return Ok(queryResult);
-        }
-
         [HttpGet("{hotelId}/images")]
         public async Task<IActionResult> GetHotelImagesAsync(int hotelId)
         {

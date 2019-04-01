@@ -36,13 +36,13 @@ namespace BookingSystem.Queries.Queries.CountryQueries.Queries
         public async Task<IEnumerable<CountryView>> ExecuteAsync(ListCountriesQuery query)
         {
             return await _dataContext.Countries
+                .WhereIf(!string.IsNullOrWhiteSpace(query.CountryNameLike),
+                    country => country.Name.StartsWith(query.CountryNameLike))
                 .Select(country => new CountryView()
                 {
                     CountryId = country.CountryId,
                     CountryName = country.Name
                 })
-                .WhereIf(!string.IsNullOrWhiteSpace(query.CountryNameLike),
-                    country => country.CountryName.StartsWith(query.CountryNameLike))
                 .Take(query.Amount)
                 .ToListAsync();
         }
