@@ -61,7 +61,13 @@ BEGIN
 	DECLARE @Pending TINYINT = 1;
 	DECLARE @Failed TINYINT = 3;
 	DECLARE @FilteredHotels TABLE 
-		                    (HotelId INT NOT NULL,
+                             (HotelId INT NOT NULL,
+							 Name NVARCHAR(80), 
+							 Address NVARCHAR(80), 
+							 IsActive BIT, 
+							 CityName NVARCHAR(80), 
+							 CountryName NVARCHAR(80), 
+							 ImageUrl NVARCHAR(80),
 							 BookingsAmount INT);
 
 	IF @Page < 1
@@ -70,55 +76,69 @@ BEGIN
 		SET @PageSize = 1;
 
 	WITH 
-	FilteredRooms AS 
-	(SELECT Rooms.* FROM Rooms 
-	WHERE @RoomSize IS NULL OR Rooms.Size = @RoomSize),
-
 	AvailableHotels AS
-	(SELECT Rooms.HotelId as HotelId, COUNT(Bookings.BookingID) as BookingsAmount
-	FROM FilteredRooms AS Rooms
+	(SELECT Rooms.HotelId AS HotelId,
+		    COUNT(Bookings.BookingID) AS BookingsAmount
+ 	FROM Rooms
 	LEFT JOIN Bookings ON Bookings.RoomId = Rooms.RoomId
-	WHERE (Bookings.BookingId IS NULL OR 
+	WHERE ((@RoomSize IS NULL OR Rooms.Size = @RoomSize) AND
+          ((Bookings.BookingId IS NULL) OR 
 		  (@MoveInDate > Bookings.MoveOutDate) OR
-		  (@MoveInDate < Bookings.MoveInDate) OR
-		  (Bookings.Status = @Failed) OR (Bookings.Status = @Pending AND
-		  DATEADD(Minute, @LockTime, Bookings.CreatedDate) > SYSDATETIME()))
-	GROUP BY Rooms.RoomId, Rooms.Quantity, Rooms.HotelId
+		  (@MoveOutDate < Bookings.MoveInDate) OR
+		  (Bookings.Status = @Failed) OR 
+		  (Bookings.Status = @Pending AND DATEADD(Minute, @LockTime, Bookings.CreatedDate) > SYSDATETIME())))
+	GROUP BY Rooms.RoomId,
+		     Rooms.Quantity, 
+		     Rooms.HotelId
 	HAVING COUNT(Bookings.BookingId) < Rooms.Quantity),
 
 	DistinctAvailableHotels AS
-	(SELECT Hotels.HotelId, SUM(Hotels.BookingsAmount) as BookingsAmount FROM AvailableHotels as Hotels
+	(SELECT Hotels.HotelId, 
+	        SUM(Hotels.BookingsAmount) AS BookingsAmount
+	 FROM AvailableHotels AS Hotels
 	 GROUP BY Hotels.HotelId)
 
-	INSERT INTO @FilteredHotels
-	SELECT Hotels.HotelId, DistinctAvailableHotels.BookingsAmount 
+	INSERT INTO @FilteredHotels 
+	SELECT Hotels.HotelId,
+	        Hotels.Name, 
+			Hotels.Address, 
+			Hotels.IsActive, 
+		    Cities.Name AS CityName, 
+			Countries.Name AS CountryName, 
+			HotelImage.URL AS ImageUrl,
+			DistinctAvailableHotels.BookingsAmount
 	FROM Hotels
 	JOIN DistinctAvailableHotels ON DistinctAvailableHotels.HotelId = Hotels.HotelId
+	LEFT JOIN 
+	(SELECT Images.URL, 
+	        HotelImage.HotelId 
+	 FROM Images
+	 JOIN (SELECT HotelImages.HotelId, 
+		   MIN(HotelImages.ImageId) AS ImageId 
+		   FROM HotelImages 
+		   JOIN DistinctAvailableHotels ON DistinctAvailableHotels.HotelId = HotelImages.HotelId -- rm?
+		   GROUP BY HotelImages.HotelId) AS HotelImage 
+	 ON HotelImage.ImageId = Images.ImageId) AS HotelImage
+	ON HotelImage.HotelId = Hotels.HotelId
+	JOIN Cities on Cities.CityId = Hotels.CityId
+	JOIN Countries on Countries.CountryId = Hotels.CountryId
 	WHERE (@CityId IS NULL OR Hotels.CityId = @CityId) AND 
 		  (@CountryId IS NULL OR Hotels.CountryId = @CountryId) AND 
 		  (@IsActive IS NULL OR Hotels.IsActive = @IsActive) AND 
-		  (@Name IS NULL OR Hotels.Name = @Name)
+		  (@Name IS NULL OR Hotels.Name = @Name);
 
-	SELECT @TotalItems = Count(HotelId) FROM @FilteredHotels;
+	SELECT @TotalItems = Count(HotelId) 
+	FROM @FilteredHotels;
 	
-	WITH 
-	PaginatedHotelsId AS
-	(SELECT Hotels.HotelId  FROM @FilteredHotels as Hotels
+	SELECT Hotels.HotelId,
+		   Hotels.Name,
+		   Hotels.Address, 
+		   Hotels.IsActive, 
+		   CityName, 
+		   CountryName,
+		   ImageUrl
+    FROM @FilteredHotels as Hotels
 	ORDER BY Hotels.BookingsAmount DESC
-	OFFSET (@Page-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY)
-
-	SELECT Hotels.HotelId, Hotels.Name, Hotels.Address, Hotels.IsActive, 
-		   Cities.Name as CityName, Countries.Name as CountryName, HotelImage.URL as ImageUrl
-	FROM Hotels
-	JOIN PaginatedHotelsId ON PaginatedHotelsId.HotelId = Hotels.HotelId
-	LEFT JOIN 
-	  (SELECT Images.URL, HotelImage.HotelId FROM Images
-	  JOIN (SELECT HotelImages.HotelId, MIN(HotelImages.ImageId) AS ImageId FROM HotelImages 
-			JOIN Hotels ON Hotels.HotelId = HotelImages.HotelId 
-			GROUP BY HotelImages.HotelId) AS HotelImage 
-	  ON HotelImage.ImageId = Images.ImageId) AS HotelImage
-    ON HotelImage.HotelId = Hotels.HotelId
-	JOIN Cities on Cities.CityId = Hotels.CityId
-	JOIN Countries on Countries.CountryId = Hotels.CountryId;
+	OFFSET (@Page-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY
 
 END
