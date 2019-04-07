@@ -31,28 +31,25 @@ namespace BookingSystem.Queries.Queries.UserQueries.Queries
 
         public Task<UserView> ExecuteAsync(UserDetailsQuery query)
         {
-            var users = from user in _dataContext.Users
+            var users = (from user in _dataContext.Users
                 where user.UserId == query.UserId
                 join userRoles in _dataContext.UserRoles on user.UserId equals userRoles.UserId
                 join role in _dataContext.Roles on userRoles.RoleId equals role.RoleId into roles
                 from role in roles.DefaultIfEmpty()
-                group role by new
-                {
-                    UserId = user.UserId,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    SecondName = user.SecondName,
-                }
-                into gr
-                select new UserView()
-                {
-                    UserId = gr.Key.UserId,
-                    Email = gr.Key.Email,
-                    FirstName = gr.Key.FirstName,
-                    SecondName = gr.Key.SecondName,
-                    Roles = gr.Select(r => r.Name),
-                };
-            return Task.FromResult(users.FirstOrDefault());
+                select new { user, roleName = role.Name }).ToList();
+            var userView =
+                (from user in users
+                    group user.roleName by user.user
+                    into gr
+                    select new UserView()
+                    {
+                        UserId = gr.Key.UserId,
+                        Email = gr.Key.Email,
+                        FirstName = gr.Key.FirstName,
+                        SecondName = gr.Key.SecondName,
+                        Roles = gr
+                    }).FirstOrDefault();
+            return Task.FromResult(userView);
         }
     }
 }
